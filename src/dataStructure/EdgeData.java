@@ -21,6 +21,7 @@ public class EdgeData implements edge_data{
 		WEIGHT = wEIGHT;
 		INFO = iNFO;
 		TAG = tAG;
+		
 	}
 	public EdgeData(int sRC, int dST, double wEIGHT) {
 		super();

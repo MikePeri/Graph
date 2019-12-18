@@ -2,23 +2,22 @@ package algorithms;
 
 import java.util.List;
 
+import dataStructure.DGraph;
 import dataStructure.graph;
 import dataStructure.node_data;
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
  * @author 
+ *
  */
-
-
-
 public class Graph_Algo implements graph_algorithms{
-
+	private DGraph Graph;
 	@Override
 	public void init(graph g) {
-		// TODO Auto-generated method stub
+		this.Graph=g.
 		
-	}
+	}//init
 
 	@Override
 	public void init(String file_name) {

@@ -91,6 +91,10 @@ public class DGraph implements graph{
 		EdgeData edge=new EdgeData(src,dest,w);
 		this.Edge_Hash.put(key, edge);
 		this.ModeCount++;
+		//Update
+		NodeData nodeSRC=(NodeData) getNode(src);
+		NodeData.setNeighbors(dest, );
+		
 	}//connect
 
 	/**
@@ -123,7 +127,12 @@ public class DGraph implements graph{
 	 */
 	public node_data removeNode(int key) {
 		this.ModeCount++;
+//		Collection<node_data> vertices=getV();
+//		for (node_data node : vertices) {
+//			if(connect(src, dest, w);)
+//		}//for
 		return this.Node_Hash.remove(key);
+		
 	}//removeNode
 
 	/**
