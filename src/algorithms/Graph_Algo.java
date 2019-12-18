@@ -15,7 +15,6 @@ public class Graph_Algo implements graph_algorithms{
 	private DGraph Graph;
 	@Override
 	public void init(graph g) {
-		this.Graph=g.
 		
 	}//init
 

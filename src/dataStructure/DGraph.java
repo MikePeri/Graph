@@ -3,27 +3,41 @@ package dataStructure;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import javax.management.RuntimeErrorException;
 
+
 public class DGraph implements graph{
 	private HashMap<Integer, node_data> Node_Hash;
-	private HashMap<String, edge_data> Edge_Hash;
+	private HashMap<Integer, HashMap<Integer, edge_data>> Edge_Hash;
 	private int ModeCount;
-	
+	private int EdgeHashSize;
+
 	/**
 	 * Empty Constructor
 	 */
 	public DGraph() {
 		this.Node_Hash=new HashMap<Integer, node_data>();
-		this.Edge_Hash=new HashMap<String, edge_data>();
+		this.Edge_Hash=new HashMap<Integer, HashMap<Integer, edge_data>>();
 		this.ModeCount=0;
+		this.EdgeHashSize=0;
 	}
-	
-	
-	
+
 	/**
-	 * return the node_data by the node_id,
+	 * Getters.
+	 */
+	public HashMap<Integer, node_data> get_Node_Hash(){
+		return this.Node_Hash;
+	}
+	public HashMap<Integer, HashMap<Integer, edge_data>> get_Edge_Hash(){
+		return this.Edge_Hash;
+	}
+
+
+	/**
+	 * Return the node_data by the node_id,
 	 * @param key - the node_id
 	 * @return the node_data by the node_id, null if none.
 	 */
@@ -43,9 +57,13 @@ public class DGraph implements graph{
 	public edge_data getEdge(int src, int dest) {
 		if(!Node_Hash.containsKey(src)||!Node_Hash.containsKey(dest))
 			return null;
-		String id=String.valueOf(src)+"->"+String.valueOf(dest);
-		if(this.Edge_Hash.containsKey(id))
-			return this.Edge_Hash.get(id);
+
+		if(this.Edge_Hash.containsKey(src)) {
+			HashMap<Integer,edge_data> h=Edge_Hash.get(src);
+			if(h.containsKey(dest)) {
+				return h.get(dest);
+			}
+		}	
 		return null;
 	}//getEdge
 
@@ -60,6 +78,7 @@ public class DGraph implements graph{
 			throw new RuntimeException("ERR: Weight cannot be negative");
 		if(Node_Hash.containsKey(key))
 			throw new RuntimeException("ERR: This node already exist");
+
 		Node_Hash.put(key,n);
 		this.ModeCount++;
 	}//addNode
@@ -72,29 +91,36 @@ public class DGraph implements graph{
 	 * @param w - positive weight representing the cost (aka time, price, etc) between src-->dest.
 	 */
 	public void connect(int src, int dest, double w) {
-		String key=keyParser(src, dest);
 		if(src==dest)
 			throw new RuntimeException("ERR: This isn't multy graph");
 		if(w<=0)
 			throw new RuntimeException("ERR: Weight cannot be 0 or negetive");
+
 		//if the nodes don't exist
 		if(!Node_Hash.containsKey(dest) || !Node_Hash.containsKey(src))
 			throw new RuntimeException("ERR:Cannot connect between unknown node");
-		
-		//change the existing edge
-		else if(getEdge(src,dest)!=null)
-		{
-			this.Edge_Hash.remove(key);
-		}//else if
-		
-		
+
 		EdgeData edge=new EdgeData(src,dest,w);
-		this.Edge_Hash.put(key, edge);
+		//if the src exist in the Edge_Hash
+		if(this.Edge_Hash.containsKey(src)) {
+			//if we want to change an existing edge, remove it and add it later
+			if(getEdge(src,dest)!=null){
+				this.Edge_Hash.get(src).remove(dest);
+			}//if
+
+			this.Edge_Hash.get(src).put(dest, edge);
+			this.ModeCount++;
+		}
+		else {
+			HashMap<Integer, edge_data> h=new HashMap<Integer,edge_data>();
+			h.put(dest, edge);
+			this.Edge_Hash.put(src, h);			
+		}
+		this.EdgeHashSize++;
 		this.ModeCount++;
-		//Update
-		NodeData nodeSRC=(NodeData) getNode(src);
-		NodeData.setNeighbors(dest, );
-		
+
+
+
 	}//connect
 
 	/**
@@ -115,7 +141,7 @@ public class DGraph implements graph{
 	 * @return Collection<edge_data>
 	 */
 	public Collection<edge_data> getE(int node_id) {
-		return this.Edge_Hash.values();
+		return this.Edge_Hash.get(node_id).values();
 	}//getE
 
 	/**
@@ -127,13 +153,22 @@ public class DGraph implements graph{
 	 */
 	public node_data removeNode(int key) {
 		this.ModeCount++;
-//		Collection<node_data> vertices=getV();
-//		for (node_data node : vertices) {
-//			if(connect(src, dest, w);)
-//		}//for
+		//remove all the edges that key is the source:
+		this.EdgeHashSize-=this.Edge_Hash.get(key).size();
+		this.Edge_Hash.remove(key);
+		//remove all the edges that key is the destination:
+		Iterator<Integer> it = this.Edge_Hash.keySet().iterator();
+		while (it.hasNext()) {
+			Integer src = it.next();
+			if(this.Edge_Hash.get(src).get(key)!=null) {
+				this.Edge_Hash.get(src).remove(key);
+				this.EdgeHashSize--;
+			}
+		}
 		return this.Node_Hash.remove(key);
-		
+
 	}//removeNode
+
 
 	/**
 	 * Delete the edge from the graph, 
@@ -143,9 +178,9 @@ public class DGraph implements graph{
 	 * @return the data of the removed edge (null if none).
 	 */
 	public edge_data removeEdge(int src, int dest) {
-		String key=keyParser(src,dest);
 		this.ModeCount++;
-		return this.Edge_Hash.remove(key);
+		this.EdgeHashSize--;
+		return this.Edge_Hash.get(src).remove(dest);
 	}//removeEdge
 
 	/** return the number of vertices (nodes) in the graph.
@@ -162,9 +197,9 @@ public class DGraph implements graph{
 	 * @return
 	 */
 	public int edgeSize() {
-		return Edge_Hash.size();
+		return this.EdgeHashSize;
 	}//edgeSize
-	
+
 
 	/**
 	 * return the Mode Count - for testing changes in the graph.
@@ -173,16 +208,5 @@ public class DGraph implements graph{
 	public int getMC() {
 		return this.ModeCount;
 	}
-	/**
-	 * Parser from (int src,int dst) to String key
-	 * @param src 
-	 * @param dst
-	 * @return The unique key for Edge Hash map
-	 */
-	private String keyParser(int src, int dst)
-	{
-		String id=String.valueOf(src)+"->"+String.valueOf(dst);
-		return id;
-	}//idParser
 
 }

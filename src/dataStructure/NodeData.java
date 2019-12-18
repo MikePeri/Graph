@@ -76,34 +76,38 @@ public class NodeData implements node_data {
 	
 	public String toString() {
 		String str="";
-		str+="ID: "+KEY+", Location: "+LOC.toString()+", Weight: "+WEIGHT;
+		str+="ID: "+KEY+", Location: ("+LOC.toString()+") , Weight: "+WEIGHT;
 		return str;
 	}
-	/**
-	 * Wonna set new neighbor
-	 * @param dest - id of destination
-	 * @param dst - destination Node
-	 */
-	public void setNeighbors(int keyDest,node_data node_Dest)
-	{
-		this.Neighbors.put(keyDest, node_Dest);
-	}//setNeighbors
-	/**
-	 * Wonna remove neighbor
-	 * @param dest - id of destination
-	 */
-	public void removeNeighbors(int keyDest)
-	{
-		this.Neighbors.remove(keyDest);
-	}//setNeighbors
-	/**
-	 * if dest is neighbor of this
-	 * @param dest
-	 * @return
-	 */
-	public boolean isNeighbors(int keyDest)
-	{
-		return this.Neighbors.containsKey(keyDest);
-	}//setNeighbors
+	
+	
+	
+//	/**
+//	 * Set new neighbor
+//	 * @param dest - id of destination
+//	 * @param dst - destination Node
+//	 */
+//	public void setNeighbors(int keyDest,node_data node_Dest)
+//	{
+//		this.Neighbors.put(keyDest, node_Dest);
+//	}//setNeighbors
+//	/**
+//	 * Remove neighbor
+//	 * @param dest - id of destination
+//	 */
+//	public void removeNeighbors(int keyDest)
+//	{
+//		this.Neighbors.remove(keyDest);
+//	}//setNeighbors
+//	
+//	/**
+//	 * if dest is neighbor of this
+//	 * @param dest
+//	 * @return true if dest is a neighbor of this
+//	 */
+//	public boolean isNeighbors(int keyDest)
+//	{
+//		return this.Neighbors.containsKey(keyDest);
+//	}//setNeighbors
 
 }
