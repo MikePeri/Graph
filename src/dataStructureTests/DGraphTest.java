@@ -66,7 +66,7 @@ class DGraphTest {
 	@Test
 	void testAddNode() {
 		boolean flag=false;
-		try {
+		try {//try adding a node which already exists
 			g.addNode(n3);
 		} catch (RuntimeException runtimeException) {
 			flag=true;
@@ -84,16 +84,6 @@ class DGraphTest {
 		ACTUAL=g.getEdge(n1.getKey(), n2.getKey()).toString();
 		assertEquals(ACTUAL,EXPECTED,"ERR: connect failed to compare between the same edges");
 
-	}
-
-	//	@Test
-	void testGetV() {
-		fail("Not yet implemented");
-	}
-
-	//	@Test
-	void testGetE() {
-		fail("Not yet implemented");
 	}
 
 	@Test
@@ -136,7 +126,11 @@ class DGraphTest {
 		int ACTUAL=g.nodeSize();
 		int EXPECTED=5;
 		assertEquals(ACTUAL,EXPECTED,"ERR: falied to return the right size of node graph");
-
+		g.removeNode(n1.getKey());
+		ACTUAL=g.nodeSize();
+		EXPECTED=4;
+		assertEquals(ACTUAL,EXPECTED,"ERR: falied to return the right size of node graph");
+		
 	}
 
 	@Test

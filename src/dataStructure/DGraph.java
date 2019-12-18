@@ -153,16 +153,19 @@ public class DGraph implements graph{
 	 */
 	public node_data removeNode(int key) {
 		this.ModeCount++;
-		//remove all the edges that key is the source:
-		this.EdgeHashSize-=this.Edge_Hash.get(key).size();
-		this.Edge_Hash.remove(key);
-		//remove all the edges that key is the destination:
-		Iterator<Integer> it = this.Edge_Hash.keySet().iterator();
-		while (it.hasNext()) {
-			Integer src = it.next();
-			if(this.Edge_Hash.get(src).get(key)!=null) {
-				this.Edge_Hash.get(src).remove(key);
-				this.EdgeHashSize--;
+		if(!this.Edge_Hash.isEmpty()) {
+			//remove all the edges that key is the source:
+			this.EdgeHashSize-=this.Edge_Hash.get(key).size();
+			this.Edge_Hash.remove(key);
+
+			//remove all the edges that key is the destination:
+			Iterator<Integer> it = this.Edge_Hash.keySet().iterator();
+			while (it.hasNext()) {
+				Integer src = it.next();
+				if(this.Edge_Hash.get(src).get(key)!=null) {
+					this.Edge_Hash.get(src).remove(key);
+					this.EdgeHashSize--;
+				}
 			}
 		}
 		return this.Node_Hash.remove(key);
