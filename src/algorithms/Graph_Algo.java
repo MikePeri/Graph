@@ -1,6 +1,11 @@
 package algorithms;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.List;
+
+import com.google.gson.Gson;
 
 import dataStructure.DGraph;
 import dataStructure.graph;
@@ -17,17 +22,39 @@ public class Graph_Algo implements graph_algorithms{
 	public void init(graph g) {
 		
 	}//init
-
-	@Override
+	
+	/**
+	 * Init a graph from file
+	 * @param file_name
+	 */
 	public void init(String file_name) {
-		// TODO Auto-generated method stub
+		Gson gson=new Gson();
+		try {
+			FileReader reader=new FileReader(file_name);
+			this.Graph=gson.fromJson(reader, DGraph.class);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}//cathc
 		
-	}
+	}//init
 
-	@Override
+	/** Saves the graph to a Json file.
+	 * Using external jar of Gson - Google implementation
+	 * @param file_name
+	 */
 	public void save(String file_name) {
 		// TODO Auto-generated method stub
+		Gson gson=new Gson();
+		String json=gson.toJson(Graph);
 		
+		try {
+			PrintWriter pw=new PrintWriter(file_name);
+			pw.write(json);
+			pw.close();	}//try
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return; }//catch
 	}
 
 	@Override
@@ -56,8 +83,8 @@ public class Graph_Algo implements graph_algorithms{
 
 	@Override
 	public graph copy() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		graph g= new DGraph(this.Graph);
+		return g;
+	}//copy
 
 }

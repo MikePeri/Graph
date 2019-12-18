@@ -25,6 +25,14 @@ public class DGraph implements graph{
 		this.EdgeHashSize=0;
 	}
 
+	public DGraph(DGraph g) {
+		
+		Node_Hash = (HashMap<Integer, node_data>) node_Hash.clone();
+		Edge_Hash = (HashMap<Integer, HashMap<Integer, edge_data>>) edge_Hash.clone();
+		ModeCount = modeCount;
+		EdgeHashSize = edgeHashSize;
+	}
+
 	/**
 	 * Getters.
 	 */
@@ -78,7 +86,6 @@ public class DGraph implements graph{
 			throw new RuntimeException("ERR: Weight cannot be negative");
 		if(Node_Hash.containsKey(key))
 			throw new RuntimeException("ERR: This node already exist");
-
 		Node_Hash.put(key,n);
 		this.ModeCount++;
 	}//addNode
@@ -91,6 +98,7 @@ public class DGraph implements graph{
 	 * @param w - positive weight representing the cost (aka time, price, etc) between src-->dest.
 	 */
 	public void connect(int src, int dest, double w) {
+		//Wrong inputs
 		if(src==dest)
 			throw new RuntimeException("ERR: This isn't multy graph");
 		if(w<=0)
@@ -110,17 +118,14 @@ public class DGraph implements graph{
 
 			this.Edge_Hash.get(src).put(dest, edge);
 			this.ModeCount++;
-		}
-		else {
+		}//if
+		else {//if the src doesn't exist in the Edge_Hash
 			HashMap<Integer, edge_data> h=new HashMap<Integer,edge_data>();
 			h.put(dest, edge);
 			this.Edge_Hash.put(src, h);			
 		}
 		this.EdgeHashSize++;
 		this.ModeCount++;
-
-
-
 	}//connect
 
 	/**
@@ -165,11 +170,10 @@ public class DGraph implements graph{
 				if(this.Edge_Hash.get(src).get(key)!=null) {
 					this.Edge_Hash.get(src).remove(key);
 					this.EdgeHashSize--;
-				}
-			}
-		}
+				}//if
+			}//while
+		}//if
 		return this.Node_Hash.remove(key);
-
 	}//removeNode
 
 
@@ -210,6 +214,6 @@ public class DGraph implements graph{
 	 */
 	public int getMC() {
 		return this.ModeCount;
-	}
+	}//getMC
 
 }
