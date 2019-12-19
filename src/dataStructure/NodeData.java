@@ -83,8 +83,7 @@ public class NodeData implements node_data {
 		String str="";
 		str+="ID: "+KEY+", Location: ("+LOC.toString()+") , Weight: "+WEIGHT;
 		return str;
-	}
-	
+	}//toString
 	
 
 }

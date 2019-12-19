@@ -25,6 +25,7 @@ import dataStructure.node_data;
  */
 public class Graph_Algo implements graph_algorithms{
 	private DGraph Graph;
+	private HashMap<node_data, node_data> predessesors;
 	@Override
 	public void init(graph g) {
 		
@@ -94,10 +95,13 @@ public class Graph_Algo implements graph_algorithms{
 			Collection<node_data> sptSet=new ArrayList<node_data>();
 			node_data start=this.Graph.getNode(src);
 			start.setWeight(0);
+			predessesors.put(start, null);
 			//Second step
 			while(sptSet.size()!=this.Graph.nodeSize())
 			{				
 				node_data min=chooseMin(this.Graph.getV(),sptSet);
+//				if(min.getKey()==dest)
+//					break;
 				sptSet.add(min);
 				updateNeighbors(this.Graph.get_Edge_Hash().get(min),min);
 			}//while
@@ -118,8 +122,15 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public List<node_data> shortestPath(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
+		double num=shortestPathDist(src, dest);
+		List<node_data> path=new ArrayList<node_data>();
+		node_data dst=this.Graph.getNode(dest);
+		while(dst.getKey()!=src)
+		{
+			path.add(dst);
+			dst=predessesors.get(dst);
+		}//while
+		return path;
 	}
 
 	/**
@@ -171,7 +182,13 @@ public class Graph_Algo implements graph_algorithms{
 			double srcValue=dst.getWeight();//src value
 			double edgeWeight=edge.getWeight();//Edge weight
 			if(srcValue>(minValue+edgeWeight))//If this source value isnt the min then change.
+			{
+				if(predessesors.containsKey(dst))
+					predessesors.replace(dst, min);
+				else
+					predessesors.put(dst, min);
 				this.Graph.getNode(dstKey).setWeight(minValue+edgeWeight);
+			}//if
 		}//for
 	}//updateNeighbors
 	
