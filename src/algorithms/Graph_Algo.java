@@ -35,7 +35,7 @@ public class Graph_Algo implements graph_algorithms{
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return;
-		}//cathc
+		}//catch
 		
 	}//init
 
@@ -57,25 +57,48 @@ public class Graph_Algo implements graph_algorithms{
 			return; }//catch
 	}
 
-	@Override
+	/**
+	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
+	 * other node. NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
+	 * @return
+	 */
 	public boolean isConnected() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
+	/**
+	 * returns the length of the shortest path between src to dest
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return
+	 */
 	public double shortestPathDist(int src, int dest) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
+	/**
+	 * returns the the shortest path between src to dest - as an ordered List of nodes:
+	 * src--> n1-->n2-->...dest
+	 * see: https://en.wikipedia.org/wiki/Shortest_path_problem
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return
+	 */
 	public List<node_data> shortestPath(int src, int dest) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	/**
+	 * computes a relatively short path which visit each node in the targets List.
+	 * Note: this is NOT the classical traveling salesman problem, 
+	 * as you can visit a node more than once, and there is no need to return to source node - 
+	 * just a simple path going over all nodes in the list. 
+	 * @param targets
+	 * @return
+	 */
 	public List<node_data> TSP(List<Integer> targets) {
 		// TODO Auto-generated method stub
 		return null;
