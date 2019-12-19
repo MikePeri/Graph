@@ -89,9 +89,12 @@ public class Graph_Algo implements graph_algorithms{
 			return this.Graph.get_Edge_Hash().get(src).get(dest).getWeight();
 		else//We need to find the path if it exist by Dijkstra Algo
 		{
+			//First Step
+			setNodeInfinity(this.Graph.get_Node_Hash());
 			Collection<node_data> sptSet=new ArrayList<node_data>();
 			node_data start=this.Graph.getNode(src);
 			start.setWeight(0);
+			//Second step
 			while(sptSet.size()!=this.Graph.nodeSize())
 			{				
 				node_data min=chooseMin(this.Graph.getV(),sptSet);
@@ -99,9 +102,11 @@ public class Graph_Algo implements graph_algorithms{
 				updateNeighbors(this.Graph.get_Edge_Hash().get(min),min);
 			}//while
 		}//else
-		
+		if(this.Graph.getNode(dest).getWeight()<Double.MAX_VALUE)
+			return this.Graph.getNode(dest).getWeight();
 		return -1;
 	}//shortestPathDist
+
 
 
 	/**
@@ -169,4 +174,15 @@ public class Graph_Algo implements graph_algorithms{
 				this.Graph.getNode(dstKey).setWeight(minValue+edgeWeight);
 		}//for
 	}//updateNeighbors
+	
+/**
+ * Set for all the node infinity weight.
+ * @param v - all the vertices
+ */
+	private void setNodeInfinity(HashMap<Integer, node_data> v) {
+		Collection<node_data> vertices=v.values();
+		for (node_data node : vertices) {
+			node.setWeight(Double.MAX_VALUE);
+		}//for
+	}//setNodeInfinity
 }
