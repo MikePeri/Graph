@@ -11,7 +11,6 @@ public class NodeData implements node_data {
 	private double WEIGHT;
 	private String INFO;
 	private int TAG;
-	private HashMap<Integer, node_data> Neighbors;
 	
 	public NodeData(int kEY, Point3D lOC, double wEIGHT, String iNFO, int tAG) {
 		KEY = kEY;
@@ -21,6 +20,12 @@ public class NodeData implements node_data {
 		TAG = tAG;
 	}//NodeData
 	
+	public NodeData(int key, Point3D loc) {
+		this.KEY = key;
+		this.LOC = loc;
+		this.WEIGHT=Double.MAX_VALUE;
+		this.TAG=1;
+	}
 	public NodeData(int key, Point3D loc, double w) {
 		KEY = key;
 		LOC = loc;
@@ -81,33 +86,5 @@ public class NodeData implements node_data {
 	}
 	
 	
-	
-//	/**
-//	 * Set new neighbor
-//	 * @param dest - id of destination
-//	 * @param dst - destination Node
-//	 */
-//	public void setNeighbors(int keyDest,node_data node_Dest)
-//	{
-//		this.Neighbors.put(keyDest, node_Dest);
-//	}//setNeighbors
-//	/**
-//	 * Remove neighbor
-//	 * @param dest - id of destination
-//	 */
-//	public void removeNeighbors(int keyDest)
-//	{
-//		this.Neighbors.remove(keyDest);
-//	}//setNeighbors
-//	
-//	/**
-//	 * if dest is neighbor of this
-//	 * @param dest
-//	 * @return true if dest is a neighbor of this
-//	 */
-//	public boolean isNeighbors(int keyDest)
-//	{
-//		return this.Neighbors.containsKey(keyDest);
-//	}//setNeighbors
 
 }

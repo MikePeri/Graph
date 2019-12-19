@@ -215,5 +215,6 @@ public class DGraph implements graph{
 	public int getMC() {
 		return this.ModeCount;
 	}//getMC
+	
 
 }
