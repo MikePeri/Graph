@@ -27,10 +27,10 @@ public class DGraph implements graph{
 
 	public DGraph(DGraph g) {
 		
-		Node_Hash = (HashMap<Integer, node_data>) node_Hash.clone();
-		Edge_Hash = (HashMap<Integer, HashMap<Integer, edge_data>>) edge_Hash.clone();
-		ModeCount = modeCount;
-		EdgeHashSize = edgeHashSize;
+		Node_Hash = (HashMap<Integer, node_data>) g.get_Node_Hash().clone();
+		Edge_Hash = (HashMap<Integer, HashMap<Integer, edge_data>>) g.get_Edge_Hash().clone();
+		ModeCount = g.getMC();
+		EdgeHashSize = g.edgeSize();
 	}
 
 	/**
