@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 
@@ -26,11 +28,14 @@ import dataStructure.node_data;
 public class Graph_Algo implements graph_algorithms{
 	private DGraph Graph;
 	private HashMap<node_data, node_data> predessesors;
+
+
 	@Override
 	public void init(graph g) {
-		
-	}//init
-	
+
+	}
+
+
 	/**
 	 * Init a graph from file
 	 * @param file_name
@@ -44,7 +49,7 @@ public class Graph_Algo implements graph_algorithms{
 			e.printStackTrace();
 			return;
 		}//catch
-		
+
 	}//init
 
 	/** Saves the graph to a Json file.
@@ -55,7 +60,7 @@ public class Graph_Algo implements graph_algorithms{
 		// TODO Auto-generated method stub
 		Gson gson=new Gson();
 		String json=gson.toJson(Graph);
-		
+
 		try {
 			PrintWriter pw=new PrintWriter(file_name);
 			pw.write(json);
@@ -71,8 +76,42 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public boolean isConnected() {
-		// TODO Auto-generated method stub
+		//the idea is to execute the scc algorithem and return true if Gscc has only one node in it.
 		return false;
+	}
+
+	public Queue<node_data> DFS(DGraph g) {
+		Queue<node_data> finish = null;
+		//initialize 
+		Iterator<Integer> itr=g.get_Node_Hash().keySet().iterator();
+		while(itr.hasNext()) {
+			int node=itr.next();
+			node_data n=g.getNode(node);
+			n.setTag(1);
+			predessesors.put(n, null);
+			
+		}
+
+
+		return finish;
+	}
+
+	public DGraph transpose(DGraph g) {
+		DGraph trans=new DGraph(g.get_Node_Hash(),new HashMap<Integer, HashMap<Integer,edge_data>>());
+		Iterator<Integer> itr=g.get_Edge_Hash().keySet().iterator();
+		while(itr.hasNext()) {
+			int s=itr.next();
+			HashMap<Integer,edge_data> src=g.get_Edge_Hash().get(s); 
+			Iterator<Integer> neighbors=src.keySet().iterator();
+			while(neighbors.hasNext()) {
+				int d=neighbors.next();
+				double weight=g.get_Edge_Hash().get(s).get(d).getWeight();
+				trans.connect(d, s, weight);
+				
+			}
+		}
+
+		return trans;
 	}
 
 	/**
@@ -100,8 +139,8 @@ public class Graph_Algo implements graph_algorithms{
 			while(sptSet.size()!=this.Graph.nodeSize())
 			{				
 				node_data min=chooseMin(this.Graph.getV(),sptSet);
-//				if(min.getKey()==dest)
-//					break;
+				//				if(min.getKey()==dest)
+				//					break;
 				sptSet.add(min);
 				updateNeighbors(this.Graph.get_Edge_Hash().get(min),min);
 			}//while
@@ -151,12 +190,12 @@ public class Graph_Algo implements graph_algorithms{
 		graph g= new DGraph(this.Graph);
 		return g;
 	}//copy
-/**
- * Choose the next min vertices from the rest vertices
- * @param vertices - Whole vertices
- * @param sptSet - Short Path vertices
- * @return next min vertices
- */
+	/**
+	 * Choose the next min vertices from the rest vertices
+	 * @param vertices - Whole vertices
+	 * @param sptSet - Short Path vertices
+	 * @return next min vertices
+	 */
 	private node_data chooseMin(Collection<node_data> vertices, Collection<node_data> sptSet) {
 		double min=Double.MAX_VALUE;
 		int keyMin=0;
@@ -191,11 +230,11 @@ public class Graph_Algo implements graph_algorithms{
 			}//if
 		}//for
 	}//updateNeighbors
-	
-/**
- * Set for all the node infinity weight.
- * @param v - all the vertices
- */
+
+	/**
+	 * Set for all the node infinity weight.
+	 * @param v - all the vertices
+	 */
 	private void setNodeInfinity(HashMap<Integer, node_data> v) {
 		Collection<node_data> vertices=v.values();
 		for (node_data node : vertices) {

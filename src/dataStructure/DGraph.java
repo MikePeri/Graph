@@ -24,6 +24,14 @@ public class DGraph implements graph{
 		this.ModeCount=0;
 		this.EdgeHashSize=0;
 	}
+	
+	public DGraph(HashMap<Integer, node_data> Node_Hash, HashMap<Integer, HashMap<Integer, edge_data>>Edge_Hash) {
+		this.Node_Hash=Node_Hash;
+		this.Edge_Hash = Edge_Hash;
+		
+		
+	}
+	
 
 	public DGraph(DGraph g) {
 		
@@ -119,6 +127,7 @@ public class DGraph implements graph{
 			this.Edge_Hash.get(src).put(dest, edge);
 			this.ModeCount++;
 		}//if
+		
 		else {//if the src doesn't exist in the Edge_Hash
 			HashMap<Integer, edge_data> h=new HashMap<Integer,edge_data>();
 			h.put(dest, edge);
