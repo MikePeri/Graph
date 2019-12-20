@@ -224,6 +224,19 @@ public class DGraph implements graph{
 	public int getMC() {
 		return this.ModeCount;
 	}//getMC
-	
-
+	/**
+	 * 
+	 */
+	@Override
+	public boolean equals(Object a)
+	{
+		if(a instanceof DGraph)
+		{
+			if(((DGraph) a).get_Edge_Hash().equals(this.Edge_Hash) && ((DGraph) a).get_Node_Hash().equals(this.Node_Hash))
+				return true;
+			return false;
+		}//if
+		else
+			throw new RuntimeException("ERR: Compare between two different elements");
+	}//equals
 }
