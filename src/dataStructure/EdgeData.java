@@ -77,5 +77,23 @@ public class EdgeData implements edge_data{
 	{
 		return this.ID;
 	}//String
+	@Override
+	public boolean equals(Object edge)
+	{
+		if(edge instanceof EdgeData)
+		{
+			if(((EdgeData) edge).getDest()==this.DST && 
+					((EdgeData) edge).getID()==this.ID&&
+					((EdgeData) edge).getInfo()==this.INFO &&
+					((EdgeData) edge).getSrc()==this.SRC &&
+					((EdgeData) edge).getTag()==this.getTag()&&
+					((EdgeData) edge).getWeight()==this.WEIGHT)
+				return true;
+			return false;
+		}//if
+		else
+			return false;
+	}//equals
+	
 
 }

@@ -236,7 +236,6 @@ public class DGraph implements graph{
 				return true;
 			return false;
 		}//if
-		else
-			throw new RuntimeException("ERR: Compare between two different elements");
+		return false;
 	}//equals
 }
