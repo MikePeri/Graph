@@ -117,6 +117,7 @@ public class DGraph implements graph{
 			throw new RuntimeException("ERR:Cannot connect between unknown node");
 
 		EdgeData edge=new EdgeData(src,dest,w);
+		
 		//if the src exist in the Edge_Hash
 		if(this.Edge_Hash.containsKey(src)) {
 			//if we want to change an existing edge, remove it and add it later
@@ -224,6 +225,7 @@ public class DGraph implements graph{
 	public int getMC() {
 		return this.ModeCount;
 	}//getMC
+	
 	/**
 	 * 
 	 */
