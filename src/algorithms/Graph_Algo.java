@@ -183,7 +183,8 @@ public class Graph_Algo implements graph_algorithms{
 			dst=predessesors.get(dst);
 			path.add(dst);
 		}//while
-		return path;
+		ArrayList<node_data> short_path=Reverse(path);
+		return short_path;
 	}//shortestPath
 
 	/**
@@ -259,4 +260,17 @@ public class Graph_Algo implements graph_algorithms{
 		}//for
 //		System.out.println(this.Graph.get_Node_Hash());
 	}//setNodeInfinity
+	/**
+	 * Reverse the List for proper shortest path
+	 * @param path - The shortest path from the end
+	 * @return The shortest path from the begining
+	 */
+	public ArrayList<node_data> Reverse(List<node_data> path)
+	{
+		ArrayList<node_data> reverse=new ArrayList<node_data>();
+		for (int i = path.size()-1; i >=0; i--) {
+			reverse.add(path.get(i));
+		}//for
+		return reverse;
+	}//reverse
 }

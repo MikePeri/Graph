@@ -86,8 +86,8 @@ class Graph_AlgoTest {
 		this.EXPECTED.connect(0, 4, 4);
 		this.graph_algo= new Graph_Algo((DGraph) this.EXPECTED);
 		List<node_data> expected=new ArrayList<node_data>();
-		expected.add(this.EXPECTED.get_Node_Hash().get(4));
 		expected.add(this.EXPECTED.get_Node_Hash().get(0));
+		expected.add(this.EXPECTED.get_Node_Hash().get(4));
         //Need to save in lexographic way
 		List<node_data> actual=this.graph_algo.shortestPath(0, 4);
 		assertEquals(expected, actual,"ERR: Failing to save the shortest path. Expected: "+expected+" Actual: "+actual);
