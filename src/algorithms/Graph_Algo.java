@@ -26,6 +26,13 @@ import dataStructure.node_data;
 public class Graph_Algo implements graph_algorithms{
 	private DGraph Graph;
 	private HashMap<node_data, node_data> predessesors;
+	/**
+	 * Constructor:
+	 */
+	public Graph_Algo (DGraph graph)
+	{
+		this.Graph=new DGraph(graph);
+	}//Graph_Algo
 	@Override
 	public void init(graph g) {
 		
@@ -84,22 +91,25 @@ public class Graph_Algo implements graph_algorithms{
 	 */
 	public double shortestPathDist(int src, int dest) {
 		boolean isDirectConnect=this.Graph.get_Edge_Hash().get(src).containsKey(dest);
-		if(src==dest)//If they are the same vertices
+		if(!this.Graph.get_Node_Hash().containsKey(src) || !this.Graph.get_Node_Hash().containsKey(dest))
+			throw new RuntimeException("ERR: One of the nodes aren't exist!");
+		else if(src==dest)//If they are the same vertices
 			return 0;
-		else if(isDirectConnect)//If they are directly connected
-			return this.Graph.get_Edge_Hash().get(src).get(dest).getWeight();
-		else//We need to find the path if it exist by Dijkstra Algo
+		else//We need to find the path if it's exist by Dijkstra Algo
 		{
 			//First Step
 			setNodeInfinity(this.Graph.get_Node_Hash());
 			Collection<node_data> sptSet=new ArrayList<node_data>();
 			node_data start=this.Graph.getNode(src);
 			start.setWeight(0);
+			predessesors=new HashMap<node_data, node_data>();
 			predessesors.put(start, null);
 			//Second step
 			while(sptSet.size()!=this.Graph.nodeSize())
 			{				
+				System.out.println(sptSet+"\n");
 				node_data min=chooseMin(this.Graph.getV(),sptSet);
+				System.out.println(min.getLocation()+"\n");
 //				if(min.getKey()==dest)
 //					break;
 				sptSet.add(min);
@@ -131,7 +141,7 @@ public class Graph_Algo implements graph_algorithms{
 			dst=predessesors.get(dst);
 		}//while
 		return path;
-	}
+	}//shortestPath
 
 	/**
 	 * computes a relatively short path which visit each node in the targets List.
@@ -197,9 +207,11 @@ public class Graph_Algo implements graph_algorithms{
  * @param v - all the vertices
  */
 	private void setNodeInfinity(HashMap<Integer, node_data> v) {
+//		System.out.println(this.Graph.get_Node_Hash()+"\n");
 		Collection<node_data> vertices=v.values();
 		for (node_data node : vertices) {
 			node.setWeight(Double.MAX_VALUE);
 		}//for
+//		System.out.println(this.Graph.get_Node_Hash());
 	}//setNodeInfinity
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 
+import algorithms.Graph_Algo;
 import dataStructure.DGraph;
 import dataStructure.NodeData;
 import dataStructure.graph;
@@ -13,19 +14,27 @@ import dataStructure.node_data;
 import utils.Point3D;
 
 class Graph_AlgoTest {
-	graph ACTUAL=new DGraph();
+	
+	graph ACTUAL;
+	graph EXPEXTED=new DGraph();
 	Point3D p0=new Point3D(0,0);
 	Point3D p1=new Point3D(1,1);
 	Point3D p2=new Point3D(2,2);
 	Point3D p3=new Point3D(3,3);
 	Point3D p4=new Point3D(4,4);
 	{
-	ACTUAL.addNode(new NodeData(0, p0));
-	ACTUAL.addNode(new NodeData(1, p1));
-	ACTUAL.addNode(new NodeData(2, p2));
-	ACTUAL.addNode(new NodeData(3, p3));
-	ACTUAL.addNode(new NodeData(4, p4));
+		this.EXPEXTED.addNode(new NodeData(0, p0));
+		this.EXPEXTED.addNode(new NodeData(1, p1));
+		this.EXPEXTED.connect(0, 1, 1);
+		this.EXPEXTED.addNode(new NodeData(2, p2));
+		this.EXPEXTED.connect(1, 2, 2);
+		this.EXPEXTED.addNode(new NodeData(3, p3));
+		this.EXPEXTED.connect(2, 3, 3);
+		this.EXPEXTED.addNode(new NodeData(4, p4));
+		this.EXPEXTED.connect(3, 4, 4);
+		this.EXPEXTED.connect(0, 4, 4);
 	}
+	Graph_Algo graph_algo= new Graph_Algo((DGraph) this.EXPEXTED);
 	//@Test
 	void testInitGraph() {
 		fail("Not yet implemented");
@@ -36,9 +45,9 @@ class Graph_AlgoTest {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	//@Test
 	void testSave() {
-		fail("Not yet implemented");
+		
 	}
 
 //	@Test
@@ -46,10 +55,12 @@ class Graph_AlgoTest {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	@Test
 	void testShortestPathDist() {
-		fail("Not yet implemented");
-	}
+		double actual=this.graph_algo.shortestPathDist(0, 4);
+		double expected=4;
+		assertEquals(expected, actual,"ERR: Failing to get length of shortest path distination");
+	}//testShortestPathDist
 
 //	@Test
 	void testShortestPath() {
@@ -61,9 +72,10 @@ class Graph_AlgoTest {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	@Test
 	void testCopy() {
-		
+		this.ACTUAL=new DGraph((DGraph) this.EXPEXTED);
+		assertEquals(this.EXPEXTED, this.ACTUAL,"ERR: Failing to copy Graph");
 	}//testCopy
 
 }
