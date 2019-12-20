@@ -59,7 +59,6 @@ class DGraphTest {
 		g.connect(n1.getKey(), n5.getKey(), 5);
 		ACTUAL=g.getEdge(n2.getKey(), n3.getKey()).toString();
 		EXPECTED=new EdgeData(n2.getKey(),n3.getKey(),4).toString();
-		System.out.println(g.get_Edge_Hash().get(n2.getKey()).containsKey(n3.getKey()));
 		assertEquals(ACTUAL,EXPECTED,"ERR: GetEdge failed to compare between the same edges");
 
 	}

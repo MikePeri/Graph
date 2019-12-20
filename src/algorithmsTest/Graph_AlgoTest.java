@@ -3,12 +3,15 @@ package algorithmsTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
+import java.util.Queue;
 
 import org.junit.jupiter.api.Test;
 
 import algorithms.Graph_Algo;
 import dataStructure.DGraph;
+import dataStructure.EdgeData;
 import dataStructure.NodeData;
+import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
 import utils.Point3D;
@@ -16,7 +19,7 @@ import utils.Point3D;
 class Graph_AlgoTest {
 	
 	graph ACTUAL;
-	graph EXPEXTED=new DGraph();
+	DGraph EXPEXTED=new DGraph();
 	Point3D p0=new Point3D(0,0);
 	Point3D p1=new Point3D(1,1);
 	Point3D p2=new Point3D(2,2);
@@ -32,9 +35,9 @@ class Graph_AlgoTest {
 		this.EXPEXTED.connect(2, 3, 3);
 		this.EXPEXTED.addNode(new NodeData(4, p4));
 		this.EXPEXTED.connect(3, 4, 4);
-		this.EXPEXTED.connect(0, 4, 4);
+		this.EXPEXTED.connect(4, 0, 4);
 	}
-	Graph_Algo graph_algo= new Graph_Algo((DGraph) this.EXPEXTED);
+	Graph_Algo graph_algo= new Graph_Algo( this.EXPEXTED);
 	//@Test
 	void testInitGraph() {
 		fail("Not yet implemented");
@@ -50,12 +53,14 @@ class Graph_AlgoTest {
 		
 	}
 
-//	@Test
+	@Test
 	void testIsConnected() {
-		fail("Not yet implemented");
+		boolean e=this.graph_algo.isConnected();
+		assertTrue(e,"ERR:Failed to return false when graph is not connected");
+		
 	}
 
-	@Test
+//	@Test
 	void testShortestPathDist() {
 		double actual=this.graph_algo.shortestPathDist(0, 4);
 		double expected=4;
@@ -72,7 +77,7 @@ class Graph_AlgoTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
+//	@Test
 	void testCopy() {
 		this.ACTUAL=new DGraph((DGraph) this.EXPEXTED);
 		assertEquals(this.EXPEXTED, this.ACTUAL,"ERR: Failing to copy Graph");

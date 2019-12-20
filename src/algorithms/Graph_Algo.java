@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -81,27 +82,89 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public boolean isConnected() {
-		//the idea is to execute the scc algorithem and return true if Gscc has only one node in it.
+		Queue<Integer> finished=DFS(this.Graph);
+		DGraph transpose = transpose(Graph);
+		int count=0;
+		Queue<Integer> forDFS=new LinkedList<>();
+
+		//initialize
+		Iterator<Integer> itr=transpose.get_Node_Hash().keySet().iterator();
+		while(itr.hasNext()) {
+			int node=itr.next();
+			transpose.getNode(node).setTag(1);
+		}
+
+		//check all the nodes: if they are still white, do dfsVisit
+		while(finished.peek()!=null) {
+			int node=finished.poll();
+			count++;
+			//if the node is white
+			if(transpose.getNode(node).getTag()==1) {
+				dfsVisit(transpose,node,forDFS);
+				//remove all the nodes that are not white.
+				while(finished.peek()!=null && transpose.get_Node_Hash().get(finished.peek()).getTag()!=1)
+					finished.remove();
+			}
+		}
+		if(count==1)
+			return true;
+
+
 		return false;
 	}
 
-	public Queue<node_data> DFS(DGraph g) {
-		Queue<node_data> finish = null;
+	public Queue<Integer> DFS(DGraph g) {
+		Queue<Integer> finish = new LinkedList<>();
+
 		//initialize
 		Iterator<Integer> itr=g.get_Node_Hash().keySet().iterator();
 		while(itr.hasNext()) {
 			int node=itr.next();
-			node_data n=g.getNode(node);
-			n.setTag(1);
-			predessesors.put(n, null);
-
+			g.getNode(node).setTag(1);
+		}
+		//check all the nodes: if they are still white, do dfsVisit
+		itr=g.get_Node_Hash().keySet().iterator();
+		while(itr.hasNext()) {
+			int node=itr.next();
+			//if the node is white
+			if(g.getNode(node).getTag()==1)
+				dfsVisit(g,node,finish);
 		}
 
 
 		return finish;
 	}
 
-	public DGraph transpose(DGraph g) {
+	public void dfsVisit(DGraph g,int node, Queue<Integer> finish){
+		HashMap<Integer, edge_data> neighbors=g.get_Edge_Hash().get(node);
+
+		//change color to gray
+		g.get_Node_Hash().get(node).setTag(2);
+
+
+		//if node doesn't have any neighbors
+		if(neighbors==null) {
+			finish.add(node);
+			g.get_Node_Hash().get(node).setTag(3);
+			return;
+		}
+
+		Iterator<Integer> itr=neighbors.keySet().iterator();
+		while (itr.hasNext()) {
+			int u=itr.next();
+			//if the neighbors are white 
+			if(g.get_Node_Hash().get(u).getTag()==1)
+				dfsVisit(g, u, finish);			
+		}
+		finish.add(node);
+		g.get_Node_Hash().get(node).setTag(3);
+		return;
+
+	}
+
+
+
+	public static DGraph transpose(DGraph g) {
 		DGraph trans=new DGraph(g.get_Node_Hash(),new HashMap<Integer, HashMap<Integer,edge_data>>());
 		Iterator<Integer> itr=g.get_Edge_Hash().keySet().iterator();
 		while(itr.hasNext()) {
@@ -147,8 +210,8 @@ public class Graph_Algo implements graph_algorithms{
 				System.out.println(sptSet+"\n");
 				node_data min=chooseMin(this.Graph.getV(),sptSet);
 				System.out.println(min.getLocation()+"\n");
-//				if(min.getKey()==dest)
-//					break;
+				//				if(min.getKey()==dest)
+				//					break;
 				sptSet.add(min);
 				updateNeighbors(this.Graph.get_Edge_Hash().get(min),min);
 			}//while
@@ -244,11 +307,11 @@ public class Graph_Algo implements graph_algorithms{
 	 * @param v - all the vertices
 	 */
 	private void setNodeInfinity(HashMap<Integer, node_data> v) {
-//		System.out.println(this.Graph.get_Node_Hash()+"\n");
+		//		System.out.println(this.Graph.get_Node_Hash()+"\n");
 		Collection<node_data> vertices=v.values();
 		for (node_data node : vertices) {
 			node.setWeight(Double.MAX_VALUE);
 		}//for
-//		System.out.println(this.Graph.get_Node_Hash());
+		//		System.out.println(this.Graph.get_Node_Hash());
 	}//setNodeInfinity
 }
