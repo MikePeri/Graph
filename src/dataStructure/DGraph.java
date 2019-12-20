@@ -35,8 +35,10 @@ public class DGraph implements graph{
 
 	public DGraph(DGraph g) {
 		
-		Node_Hash = (HashMap<Integer, node_data>) g.get_Node_Hash().clone();
-		Edge_Hash = (HashMap<Integer, HashMap<Integer, edge_data>>) g.get_Edge_Hash().clone();
+		Node_Hash=new HashMap<Integer, node_data>(); 
+		Node_Hash.putAll(g.get_Node_Hash());
+		Edge_Hash=new HashMap<Integer, HashMap<Integer,edge_data>>();
+		Edge_Hash.putAll(g.get_Edge_Hash());
 		ModeCount = g.getMC();
 		EdgeHashSize = g.edgeSize();
 	}
