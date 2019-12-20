@@ -84,6 +84,20 @@ public class NodeData implements node_data {
 		str+="ID: "+KEY+", Location: ("+LOC.toString()+") , Weight: "+WEIGHT;
 		return str;
 	}//toString
-	
+	@Override
+	public boolean equals(Object node)
+	{
+		if(node instanceof NodeData)
+		{
+			if(((NodeData) node).getInfo()==this.INFO&&
+					((NodeData) node).getKey()==this.KEY&&
+					((NodeData) node).getLocation()==this.LOC&&
+					((NodeData) node).getTag()==this.TAG&&
+					((NodeData) node).getWeight()==this.WEIGHT)
+				return true;
+			return false;
+		}//if
+		return false;
+	}//equals
 
 }

@@ -152,9 +152,9 @@ public class Graph_Algo implements graph_algorithms{
 		Iterator<Integer> itr=neighbors.keySet().iterator();
 		while (itr.hasNext()) {
 			int u=itr.next();
-			//if the neighbors are white 
+			//if the neighbors are white
 			if(g.get_Node_Hash().get(u).getTag()==1)
-				dfsVisit(g, u, finish);			
+				dfsVisit(g, u, finish);
 		}
 		finish.add(node);
 		g.get_Node_Hash().get(node).setTag(3);
@@ -190,7 +190,6 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return If exist then positive Otherwise we will return -1
 	 */
 	public double shortestPathDist(int src, int dest) {
-		boolean isDirectConnect=this.Graph.get_Edge_Hash().get(src).containsKey(dest);
 		if(!this.Graph.get_Node_Hash().containsKey(src) || !this.Graph.get_Node_Hash().containsKey(dest))
 			throw new RuntimeException("ERR: One of the nodes aren't exist!");
 		else if(src==dest)//If they are the same vertices
@@ -207,13 +206,19 @@ public class Graph_Algo implements graph_algorithms{
 			//Second step
 			while(sptSet.size()!=this.Graph.nodeSize())
 			{
-				System.out.println(sptSet+"\n");
+				//System.out.println("sptSet: "+sptSet+"\n");
 				node_data min=chooseMin(this.Graph.getV(),sptSet);
-				System.out.println(min.getLocation()+"\n");
-				//				if(min.getKey()==dest)
-				//					break;
+				//System.out.println("key min node: "+min.getKey()+"\n");
+				if(min.getKey()==dest)
+					break;
 				sptSet.add(min);
-				updateNeighbors(this.Graph.get_Edge_Hash().get(min),min);
+				//System.out.println("Before: "+this.Graph.get_Node_Hash().values());
+				if(this.Graph.get_Edge_Hash().containsKey(min.getKey()))
+				{
+					//System.out.println("Neighbors of min: "+this.Graph.get_Edge_Hash().get(min.getKey()).values());
+					updateNeighbors(this.Graph.get_Edge_Hash().get(min.getKey()),min);
+				}//if
+				//System.out.println("After: "+this.Graph.get_Node_Hash().values()+"\n");
 			}//while
 		}//else
 		if(this.Graph.getNode(dest).getWeight()<Double.MAX_VALUE)
@@ -235,12 +240,14 @@ public class Graph_Algo implements graph_algorithms{
 		double num=shortestPathDist(src, dest);
 		List<node_data> path=new ArrayList<node_data>();
 		node_data dst=this.Graph.getNode(dest);
+		path.add(dst);
 		while(dst.getKey()!=src)
 		{
-			path.add(dst);
 			dst=predessesors.get(dst);
+			path.add(dst);
 		}//while
-		return path;
+		ArrayList<node_data> short_path=Reverse(path);
+		return short_path;
 	}//shortestPath
 
 	/**
@@ -269,7 +276,7 @@ public class Graph_Algo implements graph_algorithms{
 	 */
 	private node_data chooseMin(Collection<node_data> vertices, Collection<node_data> sptSet) {
 		double min=Double.MAX_VALUE;
-		int keyMin=0;
+		int keyMin=Integer.MAX_VALUE;
 		for (node_data node : vertices) {
 			if(!sptSet.contains(node) && node.getWeight()<min)
 			{
@@ -284,22 +291,24 @@ public class Graph_Algo implements graph_algorithms{
 	 * @param hashMap
 	 */
 	private void updateNeighbors(HashMap<Integer, edge_data> n,node_data min) {
-		double minValue=min.getWeight();
-		Collection<edge_data> neighbors=n.values();
-		for (edge_data edge : neighbors) {
-			int dstKey=edge.getDest();
-			node_data dst=this.Graph.getNode(dstKey);
-			double srcValue=dst.getWeight();//src value
-			double edgeWeight=edge.getWeight();//Edge weight
-			if(srcValue>(minValue+edgeWeight))//If this source value isnt the min then change.
-			{
-				if(predessesors.containsKey(dst))
-					predessesors.replace(dst, min);
-				else
-					predessesors.put(dst, min);
-				this.Graph.getNode(dstKey).setWeight(minValue+edgeWeight);
-			}//if
-		}//for
+			double minValue=min.getWeight();
+			Collection<edge_data> neighbors=n.values();
+			for (edge_data edge : neighbors) {
+				int dstKey=edge.getDest();
+				node_data dst=this.Graph.getNode(dstKey);
+				double srcValue=dst.getWeight();//src value
+				double edgeWeight=edge.getWeight();//Edge weight
+				if(srcValue>(minValue+edgeWeight))//If this source value isnt the min then change.
+				{
+					if(predessesors.containsKey(dst))
+						predessesors.replace(dst, min);
+					else
+						predessesors.put(dst, min);
+					this.Graph.getNode(dstKey).setWeight(minValue+edgeWeight);
+				}//if
+				//System.out.println(edge.getSrc()+" weight: "+this.Graph.getNode(dstKey).getWeight());
+			}//for
+			//System.out.println("After: "+n.values());
 	}//updateNeighbors
 
 	/**
@@ -310,8 +319,21 @@ public class Graph_Algo implements graph_algorithms{
 		//		System.out.println(this.Graph.get_Node_Hash()+"\n");
 		Collection<node_data> vertices=v.values();
 		for (node_data node : vertices) {
-			node.setWeight(Double.MAX_VALUE);
+			node.setWeight(Integer.MAX_VALUE);
 		}//for
 		//		System.out.println(this.Graph.get_Node_Hash());
 	}//setNodeInfinity
+	/**
+	 * Reverse the List for proper shortest path
+	 * @param path - The shortest path from the end
+	 * @return The shortest path from the begining
+	 */
+	public ArrayList<node_data> Reverse(List<node_data> path)
+	{
+		ArrayList<node_data> reverse=new ArrayList<node_data>();
+		for (int i = path.size()-1; i >=0; i--) {
+			reverse.add(path.get(i));
+		}//for
+		return reverse;
+	}//reverse
 }

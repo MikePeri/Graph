@@ -82,6 +82,7 @@ class DGraphTest {
 		edge_data e=new EdgeData(n1.getKey(), n2.getKey(), 3);
 		EXPECTED=e.toString();
 		ACTUAL=g.getEdge(n1.getKey(), n2.getKey()).toString();
+		//System.out.println(g.get_Edge_Hash().get(n1.getKey()).containsKey(n2.getKey()));
 		assertEquals(ACTUAL,EXPECTED,"ERR: connect failed to compare between the same edges");
 
 	}
@@ -160,4 +161,5 @@ class DGraphTest {
 		assertEquals(ACTUAL,EXPECTED,"ERR: falied to return the MC");
 	}
 
+	
 }
