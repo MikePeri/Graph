@@ -38,7 +38,7 @@ public class Graph_Algo implements graph_algorithms{
 	}//Graph_Algo
 	@Override
 	public void init(graph g) {
-
+		this.Graph=new DGraph((DGraph) g);
 	}
 
 
