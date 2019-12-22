@@ -42,7 +42,7 @@ class Graph_AlgoTest {
 		this.EXPECTED.addNode(new NodeData(3, p3));
 		this.EXPECTED.addNode(new NodeData(4, p4));
 
-		}
+	}
 
 
 	//@Test
@@ -50,7 +50,7 @@ class Graph_AlgoTest {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	//	@Test
 	void testInitString() {
 		fail("Not yet implemented");
 	}
@@ -62,12 +62,20 @@ class Graph_AlgoTest {
 
 	@Test
 	void testIsConnected() {
+		graph_Factory();
+		this.EXPECTED.connect(0, 1, 1);
+		this.EXPECTED.connect(1, 2, 2);
+		this.EXPECTED.connect(2, 3, 3);
+		this.EXPECTED.connect(3, 4, 4);
+		this.EXPECTED.connect(0, 4, 4);
+		this.graph_algo= new Graph_Algo((DGraph) this.EXPECTED);
+		
 		boolean e=this.graph_algo.isConnected();
 		assertTrue(e,"ERR:Failed to return false when graph is not connected");
 
 	}
 
-//	@Test
+	//	@Test
 	void testShortestPathDist() {
 
 		graph_Factory();
@@ -96,17 +104,17 @@ class Graph_AlgoTest {
 		List<node_data> expected=new ArrayList<node_data>();
 		expected.add(this.EXPECTED.get_Node_Hash().get(0));
 		expected.add(this.EXPECTED.get_Node_Hash().get(4));
-        //Need to save in lexographic way
+		//Need to save in lexographic way
 		List<node_data> actual=this.graph_algo.shortestPath(0, 4);
 		assertEquals(expected, actual,"ERR: Failing to save the shortest path. Expected: "+expected+" Actual: "+actual);
 	}
 
-//	@Test
+	//	@Test
 	void testTSP() {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	//	@Test
 	void testCopy() {
 		graph_Factory();
 		this.ACTUAL=new DGraph(this.EXPECTED);
