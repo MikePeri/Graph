@@ -196,37 +196,40 @@ public class Graph_Algo implements graph_algorithms{
 			return 0;
 		else//We need to find the path if it's exist by Dijkstra Algo
 		{
-			//First Step
-			setNodeInfinity(this.Graph.get_Node_Hash());
-			Collection<node_data> sptSet=new ArrayList<node_data>();
-			node_data start=this.Graph.getNode(src);
-			start.setWeight(0);
-			predessesors=new HashMap<node_data, node_data>();
-			predessesors.put(start, null);
-			//Second step
-			while(sptSet.size()!=this.Graph.nodeSize())
-			{
-				//System.out.println("sptSet: "+sptSet+"\n");
-				node_data min=chooseMin(this.Graph.getV(),sptSet);
-				//System.out.println("key min node: "+min.getKey()+"\n");
-				if(min.getKey()==dest)
-					break;
-				sptSet.add(min);
-				//System.out.println("Before: "+this.Graph.get_Node_Hash().values());
-				if(this.Graph.get_Edge_Hash().containsKey(min.getKey()))
-				{
-					//System.out.println("Neighbors of min: "+this.Graph.get_Edge_Hash().get(min.getKey()).values());
-					updateNeighbors(this.Graph.get_Edge_Hash().get(min.getKey()),min);
-				}//if
-				//System.out.println("After: "+this.Graph.get_Node_Hash().values()+"\n");
-			}//while
+			Dijkstra(src);
 		}//else
 		if(this.Graph.getNode(dest).getWeight()<Double.MAX_VALUE)
 			return this.Graph.getNode(dest).getWeight();
 		return -1;
 	}//shortestPathDist
-
-
+	/**
+	 * 
+	 * @param src - SRC node to start the Algo
+	 */
+	public void Dijkstra(int src)
+	{
+		setNodeInfinity(this.Graph.get_Node_Hash());
+		Collection<node_data> sptSet=new ArrayList<node_data>();
+		node_data start=this.Graph.getNode(src);
+		start.setWeight(0);
+		predessesors=new HashMap<node_data, node_data>();
+		predessesors.put(start, null);
+		//Second step
+		while(sptSet.size()!=this.Graph.nodeSize())
+		{
+			//System.out.println("sptSet: "+sptSet+"\n");
+			node_data min=chooseMin(this.Graph.getV(),sptSet);
+			//System.out.println("key min node: "+min.getKey()+"\n");
+			sptSet.add(min);
+			//System.out.println("Before: "+this.Graph.get_Node_Hash().values());
+			if(this.Graph.get_Edge_Hash().containsKey(min.getKey()))
+			{
+				//System.out.println("Neighbors of min: "+this.Graph.get_Edge_Hash().get(min.getKey()).values());
+				updateNeighbors(this.Graph.get_Edge_Hash().get(min.getKey()),min);
+			}//if
+			//System.out.println("After: "+this.Graph.get_Node_Hash().values()+"\n");
+		}//while
+	}//Dijkstra
 
 	/**
 	 * returns the the shortest path between src to dest - as an ordered List of nodes:
@@ -259,7 +262,16 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
+		int listSize=targets.size();
+		targets.sort(null);
+		List <node_data> ans=new ArrayList<node_data>();
+		double sum=0;
+		for (int i = 0; i < listSize; i++) {
+			int src=targets.get(i);
+			Dijkstra(src);
+			
+			
+		}//for
 		return null;
 	}
 
@@ -291,24 +303,24 @@ public class Graph_Algo implements graph_algorithms{
 	 * @param hashMap
 	 */
 	private void updateNeighbors(HashMap<Integer, edge_data> n,node_data min) {
-			double minValue=min.getWeight();
-			Collection<edge_data> neighbors=n.values();
-			for (edge_data edge : neighbors) {
-				int dstKey=edge.getDest();
-				node_data dst=this.Graph.getNode(dstKey);
-				double srcValue=dst.getWeight();//src value
-				double edgeWeight=edge.getWeight();//Edge weight
-				if(srcValue>(minValue+edgeWeight))//If this source value isnt the min then change.
-				{
-					if(predessesors.containsKey(dst))
-						predessesors.replace(dst, min);
-					else
-						predessesors.put(dst, min);
-					this.Graph.getNode(dstKey).setWeight(minValue+edgeWeight);
-				}//if
-				//System.out.println(edge.getSrc()+" weight: "+this.Graph.getNode(dstKey).getWeight());
-			}//for
-			//System.out.println("After: "+n.values());
+		double minValue=min.getWeight();
+		Collection<edge_data> neighbors=n.values();
+		for (edge_data edge : neighbors) {
+			int dstKey=edge.getDest();
+			node_data dst=this.Graph.getNode(dstKey);
+			double srcValue=dst.getWeight();//src value
+			double edgeWeight=edge.getWeight();//Edge weight
+			if(srcValue>(minValue+edgeWeight))//If this source value isnt the min then change.
+			{
+				if(predessesors.containsKey(dst))
+					predessesors.replace(dst, min);
+				else
+					predessesors.put(dst, min);
+				this.Graph.getNode(dstKey).setWeight(minValue+edgeWeight);
+			}//if
+			//System.out.println(edge.getSrc()+" weight: "+this.Graph.getNode(dstKey).getWeight());
+		}//for
+		//System.out.println("After: "+n.values());
 	}//updateNeighbors
 
 	/**
@@ -336,4 +348,5 @@ public class Graph_Algo implements graph_algorithms{
 		}//for
 		return reverse;
 	}//reverse
+
 }
