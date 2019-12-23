@@ -27,13 +27,17 @@ public class Graph_GUI {
 		if(width<=0 || height<=0) {
 			throw new RuntimeException("The input was not legal");
 		}
+		
 		Range rx=this.rangeX();
 		Range ry=this.rangeY();
+		
 		StdDraw.setCanvasSize(width,height);
 		StdDraw.setXscale(-width/2, width/2);
 		StdDraw.setYscale(-height/2, height/2);
-
 		
+		StdDraw.setPenColor(Color.BLACK);
+		StdDraw.setFont(new Font("Calibri", Font.ROMAN_BASELINE, 15));
+		StdDraw.setPenRadius(0.006);
 
 
 		Iterator<Integer> it = Graph.get_Edge_Hash().keySet().iterator();
@@ -42,9 +46,18 @@ public class Graph_GUI {
 			Point3D src=Graph.get_Node_Hash().get(v).getLocation();
 			Iterator<Integer> neighbors = Graph.get_Edge_Hash().get(v).keySet().iterator();
 			while(neighbors.hasNext()) {
-				Integer u=it.next();
+				Integer u=neighbors.next();
 				Point3D dest=Graph.get_Node_Hash().get(u).getLocation();
-				StdDraw.line(src.x(), src.y(), dest.x(), dest.y());
+				
+				double x0=src.x()*(width/2)/rx.get_max();
+				double y0=src.y()*(height/2)/ry.get_max();
+				double x1=dest.x()*(width/2)/rx.get_max();
+				double y1=dest.y()*(height/2)/ry.get_max();
+				StdDraw.line(x0, y0, x1, y1);
+				StdDraw.text(x0, y0+10, Integer.toString(Graph.get_Node_Hash().get(v).getKey()));
+				StdDraw.text(x1, y1+10, Integer.toString(Graph.get_Node_Hash().get(u).getKey()));
+				StdDraw.text(x1*3/4, y1*3/4, Double.toString(Graph.get_Edge_Hash().get(v).get(u).getWeight()));
+				
 			}
 		}
 	}
@@ -61,6 +74,8 @@ public class Graph_GUI {
 			else if(Graph.get_Node_Hash().get(node).getLocation().x()<min)
 				min=Graph.get_Node_Hash().get(node).getLocation().x();
 		}
+		max+=50;
+		min-=50;
 		Range rx=new Range(min,max);
 		return rx;
 	}
@@ -77,6 +92,8 @@ public class Graph_GUI {
 			else if(Graph.get_Node_Hash().get(node).getLocation().y()<min)
 				min=Graph.get_Node_Hash().get(node).getLocation().y();
 		}
+		max+=50;
+		min-=50;
 		Range ry=new Range(min,max);
 		return ry;
 	}
