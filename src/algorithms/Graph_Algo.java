@@ -16,6 +16,7 @@ import java.util.Set;
 import com.google.gson.Gson;
 
 import dataStructure.DGraph;
+import dataStructure.EdgeData;
 import dataStructure.NodeData;
 import dataStructure.edge_data;
 import dataStructure.graph;
@@ -28,6 +29,7 @@ import dataStructure.node_data;
  */
 public class Graph_Algo implements graph_algorithms{
 	private DGraph Graph;
+	private HashMap<edge_data, List<node_data>> tspTable=new HashMap<edge_data, List<node_data>>();
 	private HashMap<node_data, node_data> predessesors;
 	/**
 	 * Constructor:
@@ -196,7 +198,7 @@ public class Graph_Algo implements graph_algorithms{
 			return 0;
 		else//We need to find the path if it's exist by Dijkstra Algo
 		{
-			Dijkstra(src);
+			Dijkstra(src,dest);
 		}//else
 		if(this.Graph.getNode(dest).getWeight()<Double.MAX_VALUE)
 			return this.Graph.getNode(dest).getWeight();
@@ -206,7 +208,7 @@ public class Graph_Algo implements graph_algorithms{
 	 * 
 	 * @param src - SRC node to start the Algo
 	 */
-	public void Dijkstra(int src)
+	public void Dijkstra(int src,int dest)
 	{
 		setNodeInfinity(this.Graph.get_Node_Hash());
 		Collection<node_data> sptSet=new ArrayList<node_data>();
@@ -219,6 +221,8 @@ public class Graph_Algo implements graph_algorithms{
 		{
 			//System.out.println("sptSet: "+sptSet+"\n");
 			node_data min=chooseMin(this.Graph.getV(),sptSet);
+			if(min.getKey()==dest)
+				break;
 			//System.out.println("key min node: "+min.getKey()+"\n");
 			sptSet.add(min);
 			//System.out.println("Before: "+this.Graph.get_Node_Hash().values());
@@ -241,7 +245,11 @@ public class Graph_Algo implements graph_algorithms{
 	 */
 	public List<node_data> shortestPath(int src, int dest) {
 		double num=shortestPathDist(src, dest);
+		System.out.println("("+src+","+dest+")= "+num);
 		List<node_data> path=new ArrayList<node_data>();
+		if(this.Graph.getNode(dest).getWeight()==Integer.MAX_VALUE)
+			return path;
+		
 		node_data dst=this.Graph.getNode(dest);
 		path.add(dst);
 		while(dst.getKey()!=src)
@@ -249,8 +257,12 @@ public class Graph_Algo implements graph_algorithms{
 			dst=predessesors.get(dst);
 			path.add(dst);
 		}//while
+		if(path.size()>0) {
 		ArrayList<node_data> short_path=Reverse(path);
 		return short_path;
+		}
+		System.out.println("The isn't such a shortest path");
+		return path;
 	}//shortestPath
 
 	/**
@@ -262,18 +274,35 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public List<node_data> TSP(List<Integer> targets) {
-		int listSize=targets.size();
-		targets.sort(null);
-		List <node_data> ans=new ArrayList<node_data>();
-		double sum=0;
-		for (int i = 0; i < listSize; i++) {
-			int src=targets.get(i);
-			Dijkstra(src);
+		this.tspTable.clear();
+		int targetSize=targets.size();
+		//Update shortest path for all pairs of nodes
+		for (int j = 0; j < targetSize; j++) {
+			int startKey=targets.get(j);
+			List <Integer> tar=new ArrayList<Integer>();//Target without the start
+			tar.addAll(targets);
+			tar.remove(j);
+//			System.out.println(tar.toString());
 			
-			
+			for (int i = 0; i < tar.size(); i++) {
+				int currentKey=tar.get(i);
+				List <node_data> sp=shortestPath(startKey, currentKey);
+				System.out.println("("+startKey+","+currentKey+"): "+sp.toString());
+				//System.out.println(sp);
+				List <Integer> keys=new ArrayList<Integer>();
+				for (node_data node : sp) {
+					keys.add(node.getKey());
+				}
+				if(keys.containsAll(targets))//if the is available path thar contains all the target elemnts
+					return sp;
+				edge_data edge=new EdgeData(startKey,currentKey,-1);
+				this.tspTable.put(edge, sp);
+			}//for
 		}//for
+		//If there is not in the shortest path
+		
 		return null;
-	}
+	}//TSP
 
 	@Override
 	public graph copy() {

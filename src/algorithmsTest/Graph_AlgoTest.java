@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+
 import algorithms.Graph_Algo;
 import dataStructure.DGraph;
 import dataStructure.EdgeData;
@@ -75,7 +76,7 @@ class Graph_AlgoTest {
 
 	}
 
-	//	@Test
+		@Test
 	void testShortestPathDist() {
 
 		graph_Factory();
@@ -109,9 +110,22 @@ class Graph_AlgoTest {
 		assertEquals(expected, actual,"ERR: Failing to save the shortest path. Expected: "+expected+" Actual: "+actual);
 	}
 
-	//	@Test
+	@Test
 	void testTSP() {
-		fail("Not yet implemented");
+		graph_Factory();
+		this.EXPECTED.connect(0, 1, 1);
+		this.EXPECTED.connect(1, 2, 2);
+		this.EXPECTED.connect(2, 3, 3);
+		this.EXPECTED.connect(3, 4, 4);
+		this.EXPECTED.connect(0, 4, 4);
+		this.graph_algo= new Graph_Algo((DGraph) this.EXPECTED);
+		List<Integer> targets=new ArrayList<Integer>();
+		targets.add(0);
+		targets.add(4);
+		//System.out.println(targets);
+		List<node_data> actual=this.graph_algo.TSP(targets);
+		List<node_data> expected=new ArrayList<node_data>();
+		//System.out.println(actual);
 	}
 
 	//	@Test
