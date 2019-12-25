@@ -114,21 +114,23 @@ class Graph_AlgoTest {
 	void testTSP() {
 		graph_Factory();
 		this.EXPECTED.connect(0, 1, 1);
-		this.EXPECTED.connect(1, 2, 2);
-		this.EXPECTED.connect(2, 3, 3);
-		this.EXPECTED.connect(3, 4, 4);
-		this.EXPECTED.connect(0, 4, 4);
-		this.graph_algo= new Graph_Algo((DGraph) this.EXPECTED);
+		this.EXPECTED.connect(1, 0, 2);
+		this.EXPECTED.connect(0, 2, 3);
+		this.EXPECTED.connect(2, 0, 4);
+		this.EXPECTED.connect(0, 3, 4);
+		this.graph_algo= new Graph_Algo(this.EXPECTED);
 		List<Integer> targets=new ArrayList<Integer>();
 		targets.add(0);
-		targets.add(4);
+		targets.add(1);
+		targets.add(2);
+		targets.add(3);
 		//System.out.println(targets);
 		List<node_data> actual=this.graph_algo.TSP(targets);
 		List<node_data> expected=new ArrayList<node_data>();
-		//System.out.println(actual);
+		System.out.println(actual);
 	}
 
-	//	@Test
+		@Test
 	void testCopy() {
 		graph_Factory();
 		this.ACTUAL=new DGraph(this.EXPECTED);

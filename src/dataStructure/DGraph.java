@@ -94,8 +94,11 @@ public class DGraph implements graph{
 		int key=n.getKey();
 		if(n.getWeight()<0)
 			throw new RuntimeException("ERR: Weight cannot be negative");
-		if(Node_Hash.containsKey(key))
-			throw new RuntimeException("ERR: This node already exist");
+		if(Node_Hash.containsKey(key)) {
+			//throw new RuntimeException("ERR: This node already exist");
+			System.out.println("This node already exist. Please try again!");
+			return;
+		}
 		Node_Hash.put(key,n);
 		this.ModeCount++;
 	}//addNode
