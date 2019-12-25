@@ -10,8 +10,6 @@ public class EdgeData implements edge_data{
 	
 	
 	
-	
-	
 	public EdgeData(int sRC, int dST, double wEIGHT, String iNFO, int tAG) {
 		if(sRC==dST)
 			throw new RuntimeException("ERR: This isn't ,multy graph");

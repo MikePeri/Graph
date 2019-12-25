@@ -1,11 +1,3 @@
-/.classpath
-/.project
-/algorithms/
 /algorithmsTest/
-/algorithmsTests/
+/algorithms/
 /dataStructure/
-/dataStructureTests/
-/gui/
-/lib/
-/utils/
-/graph_gui/

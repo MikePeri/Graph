@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -29,7 +30,6 @@ import dataStructure.node_data;
  */
 public class Graph_Algo implements graph_algorithms{
 	private DGraph Graph;
-	private HashMap<edge_data, List<node_data>> tspTable=new HashMap<edge_data, List<node_data>>();
 	private HashMap<node_data, node_data> predessesors;
 	/**
 	 * Constructor:
@@ -274,34 +274,42 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public List<node_data> TSP(List<Integer> targets) {
-		this.tspTable.clear();
-		int targetSize=targets.size();
-		//Update shortest path for all pairs of nodes
-		for (int j = 0; j < targetSize; j++) {
-			int startKey=targets.get(j);
-			List <Integer> tar=new ArrayList<Integer>();//Target without the start
-			tar.addAll(targets);
-			tar.remove(j);
-//			System.out.println(tar.toString());
-			
-			for (int i = 0; i < tar.size(); i++) {
-				int currentKey=tar.get(i);
-				List <node_data> sp=shortestPath(startKey, currentKey);
-				System.out.println("("+startKey+","+currentKey+"): "+sp.toString());
-				//System.out.println(sp);
-				List <Integer> keys=new ArrayList<Integer>();
-				for (node_data node : sp) {
-					keys.add(node.getKey());
-				}
-				if(keys.containsAll(targets))//if the is available path thar contains all the target elemnts
-					return sp;
-				edge_data edge=new EdgeData(startKey,currentKey,-1);
-				this.tspTable.put(edge, sp);
+		if(targets.size()==0 ||targets.size()==1)
+			return null;
+		else if(targets.size()==2)
+			{
+				List<node_data> sp1=shortestPath(targets.get(0), targets.get(1));
+				List<node_data> sp2=shortestPath(targets.get(1), targets.get(0));
+				if(sp1.size()!=0)
+					return sp1;
+				else if(sp2.size()!=0)
+					return sp2;
+				else
+					return null;
+			}//else if
+		else
+		{
+			for (int j = 0; j < 1000; j++) {
+				List<node_data> sp=new ArrayList<node_data>();
+				List<Integer> spKeys=new ArrayList<Integer>();
+				//System.out.println("Original List: ");
+				//System.out.println(targets);
+				for (int i = 1; i < targets.size(); i++) {
+					List<node_data> path=shortestPath(targets.get(i-1), targets.get(i));
+					//System.out.println("This path: "+path);
+					if(path.size()==0)//If there isnt shortest path next shuffle
+						i=targets.size();
+					sp.addAll(path);
+					spKeys.add(targets.get(i-1));
+					spKeys.add(targets.get(i));
+					//System.out.println("Whole path: "+sp);
+					if (spKeys.containsAll(targets))
+						return sp;
+				}//for
+				Collections.shuffle(targets);
 			}//for
-		}//for
-		//If there is not in the shortest path
-		
-		return null;
+			return null;
+		}//else
 	}//TSP
 
 	@Override
@@ -377,5 +385,4 @@ public class Graph_Algo implements graph_algorithms{
 		}//for
 		return reverse;
 	}//reverse
-
 }
