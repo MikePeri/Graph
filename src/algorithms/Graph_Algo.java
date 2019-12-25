@@ -245,7 +245,7 @@ public class Graph_Algo implements graph_algorithms{
 	 */
 	public List<node_data> shortestPath(int src, int dest) {
 		double num=shortestPathDist(src, dest);
-		System.out.println("("+src+","+dest+")= "+num);
+		//System.out.println("("+src+","+dest+")= "+num);
 		List<node_data> path=new ArrayList<node_data>();
 		if(this.Graph.getNode(dest).getWeight()==Integer.MAX_VALUE)
 			return path;
@@ -259,8 +259,9 @@ public class Graph_Algo implements graph_algorithms{
 		}//while
 		if(path.size()>0) {
 		ArrayList<node_data> short_path=Reverse(path);
+		printForIlana(short_path);
 		return short_path;
-		}
+		}//if
 		System.out.println("The isn't such a shortest path");
 		return path;
 	}//shortestPath
@@ -281,9 +282,15 @@ public class Graph_Algo implements graph_algorithms{
 				List<node_data> sp1=shortestPath(targets.get(0), targets.get(1));
 				List<node_data> sp2=shortestPath(targets.get(1), targets.get(0));
 				if(sp1.size()!=0)
+				{
+					printForIlana(sp1);
 					return sp1;
+				}//if
 				else if(sp2.size()!=0)
+				{
+					printForIlana(sp2);
 					return sp2;
+				}//else if
 				else
 					return null;
 			}//else if
@@ -304,7 +311,10 @@ public class Graph_Algo implements graph_algorithms{
 					spKeys.add(targets.get(i));
 					//System.out.println("Whole path: "+sp);
 					if (spKeys.containsAll(targets))
+					{
+						printForIlana(sp);
 						return sp;
+					}//if
 				}//for
 				Collections.shuffle(targets);
 			}//for
@@ -385,4 +395,14 @@ public class Graph_Algo implements graph_algorithms{
 		}//for
 		return reverse;
 	}//reverse
+	/**
+	 * For ilana print the given path in easy way
+	 */
+	public void printForIlana(List<node_data> path)
+	{
+		for (node_data node : path) {
+			System.out.print("->"+node.getKey());
+		}//for
+		System.out.println("");
+	}//printForIlana
 }
