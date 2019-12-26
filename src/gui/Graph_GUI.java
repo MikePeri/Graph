@@ -1,6 +1,7 @@
 package gui;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Menu;
 import java.awt.MenuBar;
@@ -9,8 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -123,9 +126,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		double proportionX=width/rx.get_length();
 		double proportionY=(0-height)/ry.get_length();
 
-		//		g.setColor(Color.RED);
-		//		g.fillOval((int)((0-rx.get_min())*proportionX), (int)((0-ry.get_max())*proportionY), 10, 10);
-
 		g.setColor(Color.BLACK);
 
 
@@ -148,9 +148,17 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				while(neighbors.hasNext()) {
 
 					Integer u=neighbors.next();
+
 					Point3D dest=graph.get_Node_Hash().get(u).getLocation();
 					int x1=(int) ((dest.x()-rx.get_min())*proportionX);
 					int y1=(int) ((dest.y()-ry.get_max())*proportionY);
+
+					if(graph.get_Edge_Hash().get(v).get(u).getInfo()!=null &&
+							graph.get_Edge_Hash().get(v).get(u).getInfo().equals("Selected")) {
+						//g.setFont(Font.decode("BOLD"));
+						g.setColor(Color.RED);
+					}
+
 					g.drawLine(x0, y0, x1, y1);
 					g.drawString(Integer.toString(graph.get_Node_Hash().get(u).getKey()), x1, y1+20);
 
@@ -159,21 +167,33 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 							x1*3/4+x0*1/4, y1*3/4+y0*1/4);
 
 					//indicate the direction
-					g.setColor(Color.RED);
-					g.fillOval(x1*7/8+x0*1/8, y1*7/8+y0*1/8, 8, 8);
+					//					g.setColor(Color.RED);
+					//					g.fillOval(x1*7/8+x0*1/8, y1*7/8+y0*1/8, 8, 8);
 					g.setColor(Color.BLACK);
 
 				}
 			}
-			catch(Exception e){
-
+			catch(Exception e){//don't do anything
 			}
 
 		}
+		
+		//set info to null
+		it = graph.get_Edge_Hash().keySet().iterator();
+		while (it.hasNext()) {
+			int v=it.next();
+			Iterator<Integer> neighbors = graph.get_Edge_Hash().get(v).keySet().iterator();
+			while(neighbors.hasNext()) {
+				int u=neighbors.next();
+				graph.get_Edge_Hash().get(v).get(u).setInfo(null);
+			}
+		}
+
+		
 	}
 
 
-	public Range rangeX() {
+	private Range rangeX() {
 		double max=Integer.MIN_VALUE;
 		double min=Integer.MAX_VALUE;
 
@@ -191,7 +211,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		return rx;
 	}
 
-	public Range rangeY() {
+	private Range rangeY() {
 		double max=Integer.MIN_VALUE;
 		double min=Integer.MAX_VALUE;
 
@@ -221,23 +241,50 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 
 		}
 
-		if(str.equals("Is Connected?"))
+		else if(str.equals("Is Connected?"))
 		{
 			Graph_Algo g=new Graph_Algo(graph);	
 			System.out.println(g.isConnected());
 			repaint();
 		}
 
-		if(str.equals("Shortest Path")) {
+		else if(str.equals("Shortest Path")) {
 
+			String s1=JOptionPane.showInputDialog(this, "Type in the ID of the source node:");
+			int src=Integer.parseInt(s1);
+			String s2=JOptionPane.showInputDialog(this, "Type in the ID of the destination node:");
+			int dest=Integer.parseInt(s2);
+			List<node_data> path=new ArrayList<node_data>();
+			Graph_Algo g=new Graph_Algo(graph);	
+			path=g.shortestPath(src, dest);
+
+			for (int i = 0; i < path.size()-1; i++) {
+				graph.get_Edge_Hash().get(path.get(i).getKey()).get(path.get(i+1).getKey()).setInfo("Selected");	
+			}
+			repaint();
 
 		}
 
-		if(str.equals("TSP")) {
-
+		else if(str.equals("TSP")) {
+			String s1=JOptionPane.showInputDialog(this, "Enter the number of nodes for TSP:");
+			int num=Integer.parseInt(s1);
+			int i=0;
+			List<Integer> targets=new ArrayList<Integer>();
+			while(i<num) {
+				String s2=JOptionPane.showInputDialog(this, "Type the ID of the node:");
+				int node=Integer.parseInt(s2);
+				targets.add(node);			
+				i++;
+			}
+			Graph_Algo g=new Graph_Algo(graph);	
+			List<node_data> tsp=g.TSP(targets);
+			for (i = 0; i < tsp.size()-1; i++) {
+				graph.get_Edge_Hash().get(tsp.get(i).getKey()).get(tsp.get(i+1).getKey()).setInfo("Selected");	
+			}
+			repaint();
 		}
-		
-		if(str.equals("Connect")) {
+
+		else if(str.equals("Connect")) {
 			String s1=JOptionPane.showInputDialog(this, "Type in the ID of the source node:");
 			int src=Integer.parseInt(s1);
 			String s2=JOptionPane.showInputDialog(this, "Type in the ID of the destination node:");
@@ -249,15 +296,15 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 
 		}
 
-		if(str.equals("Add a node")) {
+		else if(str.equals("Add a node")) {
 			state=true;
 		}
 
-		if(str.equals("Select Node")) {
+		else if(str.equals("Select Node")) {
 
 		}
 
-		if(str.equals("Select Edge")) {
+		else if(str.equals("Select Edge")) {
 
 		}
 
@@ -287,7 +334,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			} catch (Exception e2) {
 				return;
 			}
-			
+
 			int id = Integer.parseInt(s);
 			n=new NodeData(id,p);
 			graph.addNode(n);
