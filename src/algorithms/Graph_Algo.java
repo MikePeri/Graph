@@ -275,6 +275,9 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public List<node_data> TSP(List<Integer> targets) {
+		if(!isConnecectedSpecificNodes(targets))
+				return null;
+		if(isConnected())
 		if(targets.size()==0 ||targets.size()==1)
 			return null;
 		else if(targets.size()==2)
@@ -320,6 +323,7 @@ public class Graph_Algo implements graph_algorithms{
 			}//for
 			return null;
 		}//else
+		return null;
 	}//TSP
 
 	@Override
@@ -405,4 +409,21 @@ public class Graph_Algo implements graph_algorithms{
 		}//for
 		System.out.println("");
 	}//printForIlana
+	/**
+	 * By giving lists of nodes 
+	 * this function will receive If this set of nodes are SCC.
+	 * @param nodes
+	 * @return
+	 */
+	public boolean isConnecectedSpecificNodes(Collection<Integer> nodes)
+	{
+		Graph_Algo spTree=new Graph_Algo(this.Graph);
+		Collection<Integer> allNodes=this.Graph.get_Node_Hash().keySet();
+		for (Integer node : allNodes) {
+			if(!nodes.contains(node))
+				spTree.Graph.removeNode(node);
+		}//for
+		return spTree.isConnected();
+	}//specificSpanTree
+	
 }
