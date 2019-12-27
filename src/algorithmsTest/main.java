@@ -7,6 +7,7 @@ import algorithms.Graph_Algo;
 import dataStructure.DGraph;
 import dataStructure.NodeData;
 import dataStructure.node_data;
+import gui.Graph_GUI;
 import utils.Point3D;
 
 public class main {
@@ -52,7 +53,7 @@ public class main {
 		targets.add(2);
 		targets.add(1);
 		List<node_data> actual=algo.TSP(targets);
-		//System.out.println(actual);
+		
 	}
 
 }

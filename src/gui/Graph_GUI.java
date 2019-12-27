@@ -61,7 +61,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		//what will be on the menu bar
 		file=new Menu("File");  
 		options=new Menu("Options"); 
-		add=new Menu("Add");
+		add=new Menu("Action");
 		select=new Menu("Select");
 
 
