@@ -317,7 +317,7 @@ public class Graph_Algo implements graph_algorithms{
 					//System.out.println("This path: "+path);
 					if(path.isEmpty())//If there isnt shortest path next shuffle
 						break;
-					sp.addAll(path);
+					sp.addAll(path.subList(1,path.size()));
 					spKeys.add(targets.get(i-1));
 					spKeys.add(targets.get(i));
 					//System.out.println("Whole path: "+sp);
