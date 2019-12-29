@@ -315,8 +315,8 @@ public class Graph_Algo implements graph_algorithms{
 				for (int i = 1; i < targets.size(); i++) {
 					List<node_data> path=shortestPath(targets.get(i-1), targets.get(i));
 					//System.out.println("This path: "+path);
-					if(path.size()==0)//If there isnt shortest path next shuffle
-						i=targets.size();
+					if(path.isEmpty())//If there isnt shortest path next shuffle
+						break;
 					sp.addAll(path);
 					spKeys.add(targets.get(i-1));
 					spKeys.add(targets.get(i));
