@@ -68,7 +68,7 @@ class Graph_AlgoTest {
 		this.EXPECTED.connect(1, 2, 2);
 		this.EXPECTED.connect(2, 3, 3);
 		this.EXPECTED.connect(3, 4, 4);
-		this.EXPECTED.connect(0, 4, 4);
+		this.EXPECTED.connect(4, 0, 4);
 		this.graph_algo= new Graph_Algo((DGraph) this.EXPECTED);
 		
 		boolean e=this.graph_algo.isConnected();
