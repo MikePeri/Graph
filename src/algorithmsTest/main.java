@@ -50,11 +50,11 @@ public class main {
 		List<Integer> targets=new ArrayList<Integer>();
 		targets.add(3);
 		targets.add(4);
-//		targets.add(0);
-//		targets.add(2);
-//		targets.add(1);
-		//List<node_data> actual=algo.TSP(targets);
-		System.out.println(algo.isConnecectedSpecificNodes(targets));
+		targets.add(0);
+		targets.add(2);
+		targets.add(1);
+		List<node_data> actual=algo.TSP(targets);
+		System.out.println(actual);
 		
 		
 	}

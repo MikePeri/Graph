@@ -229,7 +229,7 @@ public class Graph_Algo implements graph_algorithms{
 			if(this.Graph.get_Edge_Hash().containsKey(min.getKey()))
 			{
 				//System.out.println("Neighbors of min: "+this.Graph.get_Edge_Hash().get(min.getKey()).values());
-				updateNeighbors(this.Graph.get_Edge_Hash().get(min.getKey()),min);
+				relaxation(this.Graph.get_Edge_Hash().get(min.getKey()),min);
 			}//if
 			//System.out.println("After: "+this.Graph.get_Node_Hash().values()+"\n");
 		}//while
@@ -275,9 +275,6 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public List<node_data> TSP(List<Integer> targets) {
-		if(!isConnecectedSpecificNodes(targets))
-				return null;
-		if(isConnected())
 		if(targets.size()==0 ||targets.size()==1)
 			return null;
 		else if(targets.size()==2)
@@ -323,7 +320,6 @@ public class Graph_Algo implements graph_algorithms{
 			}//for
 			return null;
 		}//else
-		return null;
 	}//TSP
 
 	@Override
@@ -353,7 +349,7 @@ public class Graph_Algo implements graph_algorithms{
 	 * Updating the value of the neighbors of given node data
 	 * @param hashMap
 	 */
-	private void updateNeighbors(HashMap<Integer, edge_data> n,node_data min) {
+	private void relaxation(HashMap<Integer, edge_data> n,node_data min) {
 		double minValue=min.getWeight();
 		Collection<edge_data> neighbors=n.values();
 		for (edge_data edge : neighbors) {
@@ -425,5 +421,5 @@ public class Graph_Algo implements graph_algorithms{
 		}//for
 		return spTree.isConnected();
 	}//specificSpanTree
-	
+
 }
