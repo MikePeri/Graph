@@ -84,16 +84,23 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public boolean isConnected() {
-		Queue<Integer> finished=DFS(this.Graph);
+		
+		
 		DGraph transpose = transpose(Graph);
+		return (isConnectedHelp(this.Graph) && isConnectedHelp(transpose));
+	}
+	
+	public boolean isConnectedHelp(DGraph g) {
+
+		Queue<Integer> finished=DFS(this.Graph);
 		int count=0;
 		Queue<Integer> forDFS=new LinkedList<>();
 
 		//initialize
-		Iterator<Integer> itr=transpose.get_Node_Hash().keySet().iterator();
+		Iterator<Integer> itr=g.get_Node_Hash().keySet().iterator();
 		while(itr.hasNext()) {
 			int node=itr.next();
-			transpose.getNode(node).setTag(1);
+			g.getNode(node).setTag(1);
 		}
 
 		//check all the nodes: if they are still white, do dfsVisit
@@ -101,18 +108,18 @@ public class Graph_Algo implements graph_algorithms{
 			int node=finished.poll();
 			count++;
 			//if the node is white
-			if(transpose.getNode(node).getTag()==1) {
-				dfsVisit(transpose,node,forDFS);
+			if(g.getNode(node).getTag()==1) {
+				dfsVisit(g,node,forDFS);
 				//remove all the nodes that are not white.
-				while(finished.peek()!=null && transpose.get_Node_Hash().get(finished.peek()).getTag()!=1)
+				while(finished.peek()!=null && g.get_Node_Hash().get(finished.peek()).getTag()!=1)
 					finished.remove();
 			}
 		}
 		if(count==1)
 			return true;
-
-
 		return false;
+		
+		
 	}
 
 	public Queue<Integer> DFS(DGraph g) {
@@ -167,6 +174,7 @@ public class Graph_Algo implements graph_algorithms{
 
 
 	public static DGraph transpose(DGraph g) {
+		//create a new graph with the same nodes but a new HashMap of edges
 		DGraph trans=new DGraph(g.get_Node_Hash(),new HashMap<Integer, HashMap<Integer,edge_data>>());
 		Iterator<Integer> itr=g.get_Edge_Hash().keySet().iterator();
 		while(itr.hasNext()) {
@@ -249,7 +257,7 @@ public class Graph_Algo implements graph_algorithms{
 		List<node_data> path=new ArrayList<node_data>();
 		if(this.Graph.getNode(dest).getWeight()==Integer.MAX_VALUE)
 			return path;
-		
+
 		node_data dst=this.Graph.getNode(dest);
 		path.add(dst);
 		while(dst.getKey()!=src)
@@ -258,9 +266,9 @@ public class Graph_Algo implements graph_algorithms{
 			path.add(dst);
 		}//while
 		if(path.size()>0) {
-		ArrayList<node_data> short_path=Reverse(path);
-		printForIlana(short_path);
-		return short_path;
+			ArrayList<node_data> short_path=Reverse(path);
+			printForIlana(short_path);
+			return short_path;
 		}//if
 		System.out.println("The isn't such a shortest path");
 		return path;
@@ -275,28 +283,28 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public List<node_data> TSP(List<Integer> targets) {
-		if(!isConnecectedSpecificNodes(targets))
-				return null;
-		if(isConnected())
+
 		if(targets.size()==0 ||targets.size()==1)
 			return null;
 		else if(targets.size()==2)
+		{
+			if(!isConnecectedSpecificNodes(targets))
+				return null;
+			List<node_data> sp1=shortestPath(targets.get(0), targets.get(1));
+			List<node_data> sp2=shortestPath(targets.get(1), targets.get(0));
+			if(sp1.size()!=0)
 			{
-				List<node_data> sp1=shortestPath(targets.get(0), targets.get(1));
-				List<node_data> sp2=shortestPath(targets.get(1), targets.get(0));
-				if(sp1.size()!=0)
-				{
-					printForIlana(sp1);
-					return sp1;
-				}//if
-				else if(sp2.size()!=0)
-				{
-					printForIlana(sp2);
-					return sp2;
-				}//else if
-				else
-					return null;
+				printForIlana(sp1);
+				return sp1;
+			}//if
+			else if(sp2.size()!=0)
+			{
+				printForIlana(sp2);
+				return sp2;
 			}//else if
+			else
+				return null;
+		}//else if
 		else
 		{
 			for (int j = 0; j < 1000; j++) {
@@ -323,7 +331,7 @@ public class Graph_Algo implements graph_algorithms{
 			}//for
 			return null;
 		}//else
-		return null;
+
 	}//TSP
 
 	@Override
@@ -425,5 +433,5 @@ public class Graph_Algo implements graph_algorithms{
 		}//for
 		return spTree.isConnected();
 	}//specificSpanTree
-	
+
 }
