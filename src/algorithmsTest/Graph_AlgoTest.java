@@ -47,9 +47,17 @@ class Graph_AlgoTest {
 	}
 
 
-	//@Test
+	@Test
 	void testInitGraph() {
-		fail("Not yet implemented");
+		graph_Factory();
+		this.EXPECTED.connect(0, 1, 1);
+		this.EXPECTED.connect(1, 2, 2);
+		this.EXPECTED.connect(2, 3, 3);
+		this.EXPECTED.connect(3, 4, 4);
+		this.EXPECTED.connect(0, 4, 4);
+		this.graphAlgo= new Graph_Algo();
+		this.graphAlgo.init(EXPECTED);
+		assertEquals(EXPECTED, graphAlgo.getGraph(),"ERR:Failing saving to init and save to file correctly.");
 	}
 
 
