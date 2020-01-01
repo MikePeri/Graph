@@ -1,11 +1,12 @@
 package dataStructure;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.HashMap;
 
 import utils.Point3D;
 
-public class NodeData implements node_data {
+public class NodeData implements node_data,Serializable {
 	private int KEY;
 	private Point3D LOC;
 	private double WEIGHT;
@@ -87,13 +88,13 @@ public class NodeData implements node_data {
 	@Override
 	public boolean equals(Object node)
 	{
-		if(node instanceof NodeData)
+		if(node instanceof node_data)
 		{
-			if(((NodeData) node).getInfo()==this.INFO&&
-					((NodeData) node).getKey()==this.KEY&&
-					((NodeData) node).getLocation()==this.LOC&&
-					((NodeData) node).getTag()==this.TAG&&
-					((NodeData) node).getWeight()==this.WEIGHT)
+			if(((node_data) node).getInfo()==this.INFO&&
+					((node_data) node).getKey()==this.KEY&&
+					((node_data) node).getLocation().equals(this.LOC)&&
+					((node_data) node).getTag()==this.TAG&&
+					((node_data) node).getWeight()==this.WEIGHT)
 				return true;
 			return false;
 		}//if

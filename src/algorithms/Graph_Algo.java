@@ -1,8 +1,14 @@
 package algorithms;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,26 +28,31 @@ import dataStructure.NodeData;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
+import gui.Graph_GUI;
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
  * @author
  *
  */
-public class Graph_Algo implements graph_algorithms{
+public class Graph_Algo implements graph_algorithms,Serializable{
 	private DGraph Graph;
 	private HashMap<node_data, node_data> predessesors;
 	/**
 	 * Constructor:
 	 */
-	public Graph_Algo (DGraph graph)
+	public Graph_Algo ()
 	{
-		this.Graph=new DGraph(graph);
+		this.Graph=new DGraph(new DGraph());
+	}//Graph_Algo
+	public Graph_Algo (graph g)
+	{
+		init(g);
 	}//Graph_Algo
 	@Override
 	public void init(graph g) {
 		this.Graph=new DGraph((DGraph) g);
-	}
+	}//init
 
 
 	/**
@@ -49,14 +60,29 @@ public class Graph_Algo implements graph_algorithms{
 	 * @param file_name
 	 */
 	public void init(String file_name) {
-		Gson gson=new Gson();
-		try {
-			FileReader reader=new FileReader(file_name);
-			this.Graph=gson.fromJson(reader, DGraph.class);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return;
-		}//catch
+		DGraph g = new DGraph(); 
+	       
+        try
+        {    
+            FileInputStream file = new FileInputStream(file_name); 
+            ObjectInputStream in = new ObjectInputStream(file); 
+              
+            g = (DGraph)in.readObject();  
+            in.close(); 
+            file.close(); 
+            this.Graph=new DGraph(g); 
+            //System.out.println("Object has been deserialized"); 
+        } 
+          
+        catch(IOException ex) 
+        { 
+            System.out.println("IOException is caught"); 
+        } 
+          
+        catch(ClassNotFoundException ex) 
+        { 
+            System.out.println("ClassNotFoundException is caught"); 
+        } 
 
 	}//init
 
@@ -66,18 +92,27 @@ public class Graph_Algo implements graph_algorithms{
 	 */
 	public void save(String file_name) {
 		// TODO Auto-generated method stub
-		Gson gson=new Gson();
-		String json=gson.toJson(Graph);
+		try
+        {    
+            FileOutputStream file = new FileOutputStream(file_name); 
+            ObjectOutputStream out = new ObjectOutputStream(file); 
+              
+            out.writeObject(Graph); 
+              
+            out.close(); 
+            file.close(); 
+              
+            //System.out.println("Object has been serialized"); 
+        }//try   
+        catch(IOException ex) 
+        { 
+        	System.out.println("IOException is caught"); 
+//            ex.printStackTrace();
+//            return;
+        }//catch 
+	}//save
 
-		try {
-			PrintWriter pw=new PrintWriter(file_name);
-			pw.write(json);
-			pw.close();	}//try
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return; }//catch
-	}
-
+	
 	/**
 	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
 	 * other node. NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
@@ -441,5 +476,19 @@ public class Graph_Algo implements graph_algorithms{
 		DGraph transpose = transpose(Graph);
 		return false;
 	}//specificSpanTree
+	/**
+	 * Equals Function
+	 */
+	@Override
+	public boolean equals(Object a)
+	{
+		if(a instanceof graph_algorithms)
+				return this.Graph.equals(((Graph_Algo) a).getGraph());
+		return false;
+	}//equals
 
+	public DGraph getGraph()
+	{
+		return Graph;
+	}//getGraph
 }
