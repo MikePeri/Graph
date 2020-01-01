@@ -56,6 +56,7 @@ public class main {
 		targets.add(6);
 		List<node_data> actual=algo.TSP(targets);
 		System.out.println(actual);
+		
 		//System.out.println(algo.shortestPath(4, 6));
 		
 		

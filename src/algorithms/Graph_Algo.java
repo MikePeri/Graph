@@ -88,7 +88,7 @@ public class Graph_Algo implements graph_algorithms{
 		
 		DGraph transpose = transpose(Graph);
 		return (isConnectedHelp(this.Graph) && isConnectedHelp(transpose));
-	}
+	}//isConnected
 	
 	public boolean isConnectedHelp(DGraph g) {
 
@@ -121,7 +121,11 @@ public class Graph_Algo implements graph_algorithms{
 		
 		
 	}
-
+/**
+ * 
+ * @param g
+ * @return
+ */
 	public Queue<Integer> DFS(DGraph g) {
 		Queue<Integer> finish = new LinkedList<>();
 
@@ -130,7 +134,7 @@ public class Graph_Algo implements graph_algorithms{
 		while(itr.hasNext()) {
 			int node=itr.next();
 			g.getNode(node).setTag(1);
-		}
+		}//while
 		//check all the nodes: if they are still white, do dfsVisit
 		itr=g.get_Node_Hash().keySet().iterator();
 		while(itr.hasNext()) {
@@ -138,12 +142,17 @@ public class Graph_Algo implements graph_algorithms{
 			//if the node is white
 			if(g.getNode(node).getTag()==1)
 				dfsVisit(g,node,finish);
-		}
+		}//while
 
 
 		return finish;
-	}
-
+	}//DFS
+	/**
+	 * 
+	 * @param g
+	 * @param node
+	 * @param finish
+	 */
 	public void dfsVisit(DGraph g,int node, Queue<Integer> finish){
 		HashMap<Integer, edge_data> neighbors=g.get_Edge_Hash().get(node);
 
@@ -156,7 +165,7 @@ public class Graph_Algo implements graph_algorithms{
 			finish.add(node);
 			g.get_Node_Hash().get(node).setTag(3);
 			return;
-		}
+		}//if
 
 		Iterator<Integer> itr=neighbors.keySet().iterator();
 		while (itr.hasNext()) {
@@ -164,15 +173,19 @@ public class Graph_Algo implements graph_algorithms{
 			//if the neighbors are white
 			if(g.get_Node_Hash().get(u).getTag()==1)
 				dfsVisit(g, u, finish);
-		}
+		}//while
 		finish.add(node);
 		g.get_Node_Hash().get(node).setTag(3);
 		return;
 
-	}
+	}//dfsVisit
 
 
-
+/**
+ * 
+ * @param g
+ * @return
+ */
 	public static DGraph transpose(DGraph g) {
 		//create a new graph with the same nodes but a new HashMap of edges
 		DGraph trans=new DGraph(g.get_Node_Hash(),new HashMap<Integer, HashMap<Integer,edge_data>>());
@@ -186,8 +199,8 @@ public class Graph_Algo implements graph_algorithms{
 				double weight=g.get_Edge_Hash().get(s).get(d).getWeight();
 				trans.connect(d, s, weight);
 
-			}
-		}
+			}//while
+		}//while
 
 		return trans;
 	}
@@ -267,7 +280,7 @@ public class Graph_Algo implements graph_algorithms{
 		}//while
 		if(path.size()>0) {
 			ArrayList<node_data> short_path=Reverse(path);
-			printForIlana(short_path);
+			//printForIlana(short_path);
 			return short_path;
 		}//if
 		System.out.println("The isn't such a shortest path");
@@ -294,12 +307,12 @@ public class Graph_Algo implements graph_algorithms{
 			List<node_data> sp2=shortestPath(targets.get(1), targets.get(0));
 			if(sp1.size()!=0)
 			{
-				printForIlana(sp1);
+				printPath(sp1);
 				return sp1;
 			}//if
 			else if(sp2.size()!=0)
 			{
-				printForIlana(sp2);
+				printPath(sp2);
 				return sp2;
 			}//else if
 			else
@@ -323,7 +336,7 @@ public class Graph_Algo implements graph_algorithms{
 					//System.out.println("Whole path: "+sp);
 					if (spKeys.containsAll(targets))
 					{
-						printForIlana(sp);
+						printPath(sp);
 						return sp;
 					}//if
 				}//for
@@ -359,7 +372,7 @@ public class Graph_Algo implements graph_algorithms{
 	}//chooseMin
 	/**
 	 * Updating the value of the neighbors of given node data
-	 * @param hashMap
+	 * @param hashMap - present fast access to neighbors
 	 */
 	private void relaxation(HashMap<Integer, edge_data> n,node_data min) {
 		double minValue=min.getWeight();
@@ -408,9 +421,9 @@ public class Graph_Algo implements graph_algorithms{
 		return reverse;
 	}//reverse
 	/**
-	 * For ilana print the given path in easy way
+	 * Printing the List path
 	 */
-	public void printForIlana(List<node_data> path)
+	public void printPath(List<node_data> path)
 	{
 		for (node_data node : path) {
 			System.out.print("->"+node.getKey());
@@ -425,13 +438,8 @@ public class Graph_Algo implements graph_algorithms{
 	 */
 	public boolean isConnecectedSpecificNodes(Collection<Integer> nodes)
 	{
-		Graph_Algo spTree=new Graph_Algo(this.Graph);
-		Collection<Integer> allNodes=this.Graph.get_Node_Hash().keySet();
-		for (Integer node : allNodes) {
-			if(!nodes.contains(node))
-				spTree.Graph.removeNode(node);
-		}//for
-		return spTree.isConnected();
+		DGraph transpose = transpose(Graph);
+		return false;
 	}//specificSpanTree
 
 }

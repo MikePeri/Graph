@@ -127,7 +127,7 @@ class Graph_AlgoTest {
 		//System.out.println(targets);
 		List<node_data> actual=this.graph_algo.TSP(targets);
 		List<node_data> expected=new ArrayList<node_data>();
-		System.out.println(actual);
+		//System.out.println(actual);
 	}
 
 		@Test
