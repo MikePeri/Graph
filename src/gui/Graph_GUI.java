@@ -26,13 +26,14 @@ import dataStructure.node_data;
 import utils.Point3D;
 import utils.Range;
 
-public class Graph_GUI extends JFrame implements ActionListener, MouseListener
+public class Graph_GUI extends JFrame implements ActionListener, MouseListener,Runnable
 {
 	private DGraph graph;
 	private int width;
 	private int height; 
 	private Range rx;
 	private Range ry;
+	private Integer mc;
 
 	//this variable is to decide whether to add node by clicking or not: 
 	private boolean state;
@@ -50,13 +51,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		rx=this.rangeX();
 		ry=this.rangeY();
 		state=false;
+		mc=graph.getMC();
 		initGUI();
 	}
 
 
 	private void initGUI() {
 		//declare all the options 
-		Menu file, options, add, select;  
+		Menu file, options, Action, select;  
 		MenuItem save, isConnected, ShortestPath, TSP, AddLine, AddPoint, SelectNode, SelectEdge;  
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MenuBar mb=new MenuBar();  
@@ -64,7 +66,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		//what will be on the menu bar
 		file=new Menu("File");  
 		options=new Menu("Options"); 
-		add=new Menu("Action");
+		Action=new Menu("Action");
 		select=new Menu("Select");
 
 
@@ -72,18 +74,25 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		//what will be the menu items
 		save=new MenuItem("Save to file");  
 		save.addActionListener(this);
+		
 		isConnected=new MenuItem("Is Connected?");  
 		isConnected.addActionListener(this);
+		
 		ShortestPath=new MenuItem("Shortest Path"); 
 		ShortestPath.addActionListener(this);
+		
 		TSP=new MenuItem("TSP");  
 		TSP.addActionListener(this);
+		
 		AddLine=new MenuItem("Connect");  
 		AddLine.addActionListener(this);
+		
 		AddPoint=new MenuItem("Add a node");
 		AddPoint.addActionListener(this);
+		
 		SelectNode=new MenuItem("Select Node");
 		SelectNode.addActionListener(this);
+		
 		SelectEdge=new MenuItem("Select Edge");   
 		SelectEdge.addActionListener(this);
 
@@ -95,15 +104,15 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		options.add(ShortestPath);  
 		options.add(TSP);
 
-		add.add(AddLine);  
-		add.add(AddPoint); 
+		Action.add(AddLine);  
+		Action.add(AddPoint); 
 
 		select.add(SelectEdge);
 		select.add(SelectNode);
 
 		mb.add(file); 
 		mb.add(options); 
-		mb.add(add); 
+		mb.add(Action); 
 		mb.add(select); 
 
 		//set the window
@@ -127,8 +136,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		double proportionY=(0-height)/ry.get_length();
 
 		g.setColor(Color.BLACK);
-
-
 
 		Iterator<Integer> it = graph.get_Node_Hash().keySet().iterator();
 		while (it.hasNext()) {
@@ -157,7 +164,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 							graph.get_Edge_Hash().get(v).get(u).getInfo().equals("Selected")) {
 						//g.setFont(Font.decode("BOLD"));
 						g.setColor(Color.RED);
-					}
+					}//if
 
 					g.drawLine(x0, y0, x1, y1);
 					g.drawString(Integer.toString(graph.get_Node_Hash().get(u).getKey()), x1, y1+20);
@@ -171,12 +178,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 					//					g.fillOval(x1*7/8+x0*1/8, y1*7/8+y0*1/8, 8, 8);
 					g.setColor(Color.BLACK);
 
-				}
-			}
+				}//Inner while
+			}//try
 			catch(Exception e){//don't do anything
-			}
+			}//catch
 
-		}
+		}//while
 		
 		//set info to null
 		it = graph.get_Edge_Hash().keySet().iterator();
@@ -186,13 +193,16 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			while(neighbors.hasNext()) {
 				int u=neighbors.next();
 				graph.get_Edge_Hash().get(v).get(u).setInfo(null);
-			}
-		}
+			}//while
+		}//while
 
 		
-	}
+	}//paint
 
-
+	/**
+	 * Finding the limits of x coordinate for Screen creator
+	 * @return
+	 */
 	private Range rangeX() {
 		double max=Integer.MIN_VALUE;
 		double min=Integer.MAX_VALUE;
@@ -204,13 +214,16 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				max=graph.get_Node_Hash().get(node).getLocation().x();
 			else if(graph.get_Node_Hash().get(node).getLocation().x()<min)
 				min=graph.get_Node_Hash().get(node).getLocation().x();
-		}
-		max=max*6/4;
-		min=min*6/4;
+		}//while
+		max=max*6/4;//?
+		min=min*6/4;//?
 		Range rx=new Range(min,max);
 		return rx;
-	}
-
+	}//RangeX
+	/**
+	 * Finding the limits of x coordinate for Screen creator
+	 * @return
+	 */
 	private Range rangeY() {
 		double max=Integer.MIN_VALUE;
 		double min=Integer.MAX_VALUE;
@@ -222,12 +235,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				max=graph.get_Node_Hash().get(node).getLocation().y();
 			else if(graph.get_Node_Hash().get(node).getLocation().y()<min)
 				min=graph.get_Node_Hash().get(node).getLocation().y();
-		}
+		}//while
 		max=max*6/4;
 		min=min*6/4;
 		Range ry=new Range(min,max);
 		return ry;
-	}
+	}//rangeY
 
 
 
@@ -238,15 +251,20 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		String str = e.getActionCommand();
 
 		if(str.equals("Save to file")) {
-
-		}
+			String s1=JOptionPane.showInputDialog(this, "Please write the file name:");
+			s1+=".txt";
+			Graph_Algo g=new Graph_Algo(graph);	
+			System.out.println("Save to file action");
+			repaint();
+		}//if
 
 		else if(str.equals("Is Connected?"))
 		{
 			Graph_Algo g=new Graph_Algo(graph);	
-			System.out.println(g.isConnected());
+			JOptionPane.showMessageDialog(null, g.isConnected());
+			System.out.println("Is connected? action");
 			repaint();
-		}
+		}//else if
 
 		else if(str.equals("Shortest Path")) {
 
@@ -260,7 +278,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 
 			for (int i = 0; i < path.size()-1; i++) {
 				graph.get_Edge_Hash().get(path.get(i).getKey()).get(path.get(i+1).getKey()).setInfo("Selected");	
-			}
+			}//for
 			repaint();
 
 		}
@@ -275,14 +293,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				int node=Integer.parseInt(s2);
 				targets.add(node);			
 				i++;
-			}
+			}//while
 			Graph_Algo g=new Graph_Algo(graph);	
 			List<node_data> tsp=g.TSP(targets);
 			for (i = 0; i < tsp.size()-1; i++) {
 				graph.get_Edge_Hash().get(tsp.get(i).getKey()).get(tsp.get(i+1).getKey()).setInfo("Selected");	
-			}
+			}//for
 			repaint();
-		}
+		}//else if
 
 		else if(str.equals("Connect")) {
 			String s1=JOptionPane.showInputDialog(this, "Type in the ID of the source node:");
@@ -293,20 +311,19 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			int w=Integer.parseInt(weight);
 			graph.connect(src, dest, w);
 			repaint();
-
-		}
+		}//else if
 
 		else if(str.equals("Add a node")) {
 			state=true;
-		}
+		}//else if
 
 		else if(str.equals("Select Node")) {
 
-		}
+		}//else if
 
 		else if(str.equals("Select Edge")) {
 
-		}
+		}//else if
 
 
 	}
@@ -341,9 +358,9 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 
 			repaint();
 			state=false;
-		}
+		}//if
 
-	}
+	}//mousePressed
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
@@ -361,4 +378,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 	public void mouseExited(MouseEvent e) {
 		//System.out.println("mouseExited");
 	}
+
+	@Override
+	public void run() {
+		while(true)
+		{
+			
+		}//while
+	}//run
 }
