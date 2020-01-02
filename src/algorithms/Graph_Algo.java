@@ -331,23 +331,43 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 * @return
 	 */
 	public List<node_data> TSP(List<Integer> targets) {
-
-		if(targets.size()==0 ||targets.size()==1)
+		double len=0;
+		targets=removeDuplicate(targets);//O(n) remove all the duplicates
+		if(targets.size()==0)
 			return null;
+		//If there is only one target
+		else if(targets.size()==1)
+		{
+			node_data v=this.Graph.get_Node_Hash().get(targets.get(0));
+			List<node_data> tsp=new ArrayList<node_data>();
+			tsp.add(v);
+			return tsp;
+		}//else if
+		//If there is only two targets: take the better path
 		else if(targets.size()==2)
 		{
-			if(!isConnecectedSpecificNodes(targets))
-				return null;
 			List<node_data> sp1=shortestPath(targets.get(0), targets.get(1));
+			double sp1Len=sp1.get(sp1.size()-1).getWeight();
 			List<node_data> sp2=shortestPath(targets.get(1), targets.get(0));
-			if(sp1.size()!=0)
+			double sp2Len =sp2.get(sp1.size()-1).getWeight();
+			if(sp1.size()!=0 && sp2.size()!=0)
 			{
-				printPath(sp1);
+				if(sp1Len>=sp2Len)
+				{
+					printPath(sp2,sp2Len);
+					return sp2;
+				}//if
+				printPath(sp1,sp1Len);
+				return sp1;
+			}//if
+			else if(sp1.size()!=0)
+			{
+				printPath(sp1,sp1Len);
 				return sp1;
 			}//if
 			else if(sp2.size()!=0)
 			{
-				printPath(sp2);
+				printPath(sp2,sp2Len);
 				return sp2;
 			}//else if
 			else
@@ -358,28 +378,31 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			for (int j = 0; j < 1000; j++) {
 				List<node_data> sp=new ArrayList<node_data>();
 				List<Integer> spKeys=new ArrayList<Integer>();
-				//System.out.println("Original List: ");
+				//System.out.println("Target List: ");
 				//System.out.println(targets);
 				for (int i = 1; i < targets.size(); i++) {
 					List<node_data> path=shortestPath(targets.get(i-1), targets.get(i));
+					len+=this.Graph.get_Node_Hash().get(targets.get(i)).getWeight();
 					//System.out.println("This path: "+path);
 					if(path.isEmpty())//If there isnt shortest path next shuffle
 						break;
-					sp.addAll(path.subList(1,path.size()));
-					spKeys.add(targets.get(i-1));
-					spKeys.add(targets.get(i));
+					if(i==1)
+						sp.addAll(path.subList(0,path.size()));
+					else
+						sp.addAll(path.subList(1,path.size()));
+					spKeys.addAll(NodeToKeyConverter(path));
 					//System.out.println("Whole path: "+sp);
 					if (spKeys.containsAll(targets))
 					{
-						printPath(sp);
+						printPath(sp,len);
 						return sp;
 					}//if
 				}//for
+				len=0;
 				Collections.shuffle(targets);
 			}//for
 			return null;
 		}//else
-
 	}//TSP
 
 	@Override
@@ -430,8 +453,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		//System.out.println("After: "+n.values());
 	}//updateNeighbors
 
-	/**
-	 * Set for all the node infinity weight.
+	/** 
+	 * Set all the weight nodes graph to infinity.
 	 * @param v - all the vertices
 	 */
 	private void setNodeInfinity(HashMap<Integer, node_data> v) {
@@ -458,24 +481,13 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	/**
 	 * Printing the List path
 	 */
-	public void printPath(List<node_data> path)
+	public void printPath(List<node_data> path,double len)
 	{
 		for (node_data node : path) {
 			System.out.print("->"+node.getKey());
 		}//for
-		System.out.println("");
+		System.out.println("\t Path len: "+len);
 	}//printForIlana
-	/**
-	 * By giving lists of nodes 
-	 * this function will receive If this set of nodes are SCC.
-	 * @param nodes
-	 * @return
-	 */
-	public boolean isConnecectedSpecificNodes(Collection<Integer> nodes)
-	{
-		DGraph transpose = transpose(Graph);
-		return false;
-	}//specificSpanTree
 	/**
 	 * Equals Function
 	 */
@@ -486,9 +498,39 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 				return this.Graph.equals(((Graph_Algo) a).getGraph());
 		return false;
 	}//equals
-
+	/**
+	 * Getters:
+	 * @return
+	 */
 	public DGraph getGraph()
 	{
 		return Graph;
 	}//getGraph
+	/**
+	 * TSP help function
+	 * @param list
+	 * @return the list without duplicates
+	 */
+	private List<Integer> removeDuplicate(List<Integer> list)
+	{
+		List<Integer> set=new ArrayList<Integer>();
+		for (Integer i : list) {
+			if(!set.contains(i))
+				set.add(i);
+		}//for
+		return set;
+	}//removeDuplicate
+	/**
+	 * Convert List of nodes to their keys
+	 * @param nodes
+	 * @return Integer key list of given nodes
+	 */
+	private List<Integer> NodeToKeyConverter(List<node_data> nodes)
+	{
+		List<Integer> keys=new ArrayList<Integer>();
+		for (node_data node : nodes) {
+			keys.add(node.getKey());
+		}//for
+		return keys;
+	}//NodeToKeyConverter
 }
