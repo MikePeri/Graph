@@ -1,6 +1,8 @@
 package dataStructure;
 
-public class EdgeData implements edge_data{
+import java.io.Serializable;
+
+public class EdgeData implements edge_data,Serializable{
 	private int SRC;
 	private int DST;
 	private String ID;
@@ -78,14 +80,13 @@ public class EdgeData implements edge_data{
 	@Override
 	public boolean equals(Object edge)
 	{
-		if(edge instanceof EdgeData)
+		if(edge instanceof edge_data)
 		{
-			if(((EdgeData) edge).getDest()==this.DST && 
-					((EdgeData) edge).getID()==this.ID&&
-					((EdgeData) edge).getInfo()==this.INFO &&
-					((EdgeData) edge).getSrc()==this.SRC &&
-					((EdgeData) edge).getTag()==this.getTag()&&
-					((EdgeData) edge).getWeight()==this.WEIGHT)
+			if(((edge_data) edge).getDest()==this.DST && 
+					((edge_data) edge).getInfo()==this.INFO &&
+					((edge_data) edge).getSrc()==this.SRC &&
+					((edge_data) edge).getTag()==this.TAG &&
+					((edge_data) edge).getWeight()==this.WEIGHT)
 				return true;
 			return false;
 		}//if

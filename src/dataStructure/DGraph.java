@@ -1,5 +1,6 @@
 package dataStructure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.Map.Entry;
 import javax.management.RuntimeErrorException;
 
 
-public class DGraph implements graph{
+public class DGraph implements graph,Serializable{
 	private HashMap<Integer, node_data> Node_Hash;
 	private HashMap<Integer, HashMap<Integer, edge_data>> Edge_Hash;
 	private int ModeCount;
@@ -24,24 +25,29 @@ public class DGraph implements graph{
 		this.ModeCount=0;
 		this.EdgeHashSize=0;
 	}
-	
+	/**
+	 * Shallow copy of given vertices and edges
+	 * @param Node_Hash
+	 * @param Edge_Hash
+	 */
 	public DGraph(HashMap<Integer, node_data> Node_Hash, HashMap<Integer, HashMap<Integer, edge_data>>Edge_Hash) {
 		this.Node_Hash=Node_Hash;
 		this.Edge_Hash = Edge_Hash;
 		
 		
-	}
+	}//DGraph
 	
-
+	/**
+	 * Shallow copy of given Graph
+	 * @param g
+	 */
 	public DGraph(DGraph g) {
 		
-		Node_Hash=new HashMap<Integer, node_data>(); 
-		Node_Hash.putAll(g.get_Node_Hash());
-		Edge_Hash=new HashMap<Integer, HashMap<Integer,edge_data>>();
-		Edge_Hash.putAll(g.get_Edge_Hash());
-		ModeCount = g.getMC();
-		EdgeHashSize = g.edgeSize();
-	}
+		this.Node_Hash=g.get_Node_Hash(); 
+		this.Edge_Hash=g.get_Edge_Hash();
+		this.ModeCount = g.getMC();
+		this.EdgeHashSize = g.edgeSize();
+	}//DGraph
 
 	/**
 	 * Getters.
@@ -80,8 +86,8 @@ public class DGraph implements graph{
 			HashMap<Integer,edge_data> h=Edge_Hash.get(src);
 			if(h.containsKey(dest)) {
 				return h.get(dest);
-			}
-		}	
+			}//if
+		}//if	
 		return null;
 	}//getEdge
 
@@ -172,7 +178,6 @@ public class DGraph implements graph{
 	 * @param key
 	 */
 	public node_data removeNode(int key) {
-		this.ModeCount++;
 		if(!this.Edge_Hash.isEmpty()) {
 			//remove all the edges that key is the source:
 			this.EdgeHashSize-=this.Edge_Hash.get(key).size();
@@ -188,6 +193,7 @@ public class DGraph implements graph{
 				}//if
 			}//while
 		}//if
+		this.ModeCount++;
 		return this.Node_Hash.remove(key);
 	}//removeNode
 

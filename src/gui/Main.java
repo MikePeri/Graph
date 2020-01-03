@@ -1,6 +1,8 @@
 package gui;
 import javax.swing.JFrame;
 
+import algorithms.Graph_Algo;
+import algorithms.graph_algorithms;
 import dataStructure.DGraph;
 import dataStructure.NodeData;
 import utils.Point3D;
@@ -43,15 +45,18 @@ public class Main
 		EXPECTED.connect(2, 0, 1);
 		EXPECTED.connect(1, 2, 2);
 		EXPECTED.connect(1, 3, 3);
+		EXPECTED.connect(0, 1, 4);
 		EXPECTED.connect(3, 0, 4);
-		EXPECTED.connect(0, 4, 4);
+		EXPECTED.connect(4, 0, 4);
 		EXPECTED.connect(1, 0, 7);
 		EXPECTED.connect(7, 4, 6);
 		EXPECTED.connect(6, 7, 1);
 		
-
-
-		Graph_GUI window = new Graph_GUI(EXPECTED);
+		Graph_Algo g=new Graph_Algo(EXPECTED);
+		g.save("saveTest.txt");
+		Graph_Algo g2=new Graph_Algo();
+		g2.init("saveTest.txt");
+		Graph_GUI window = new Graph_GUI(g2.getGraph());
 		window.setVisible(true);
 	}
 

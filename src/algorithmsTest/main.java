@@ -39,10 +39,12 @@ public class main {
 		
 		
 		EXPECTED.connect(2, 0, 1);
+		EXPECTED.connect(2, 4, 1);
 		EXPECTED.connect(1, 2, 2);
 		EXPECTED.connect(1, 3, 3);
+		EXPECTED.connect(0, 1, 4);
 		EXPECTED.connect(3, 0, 4);
-		EXPECTED.connect(0, 4, 4);
+		EXPECTED.connect(4, 0, 4);
 		EXPECTED.connect(1, 0, 7);
 		EXPECTED.connect(7, 4, 6);
 		EXPECTED.connect(6, 7, 1);
@@ -55,6 +57,8 @@ public class main {
 		targets.add(6);
 		List<node_data> actual=algo.TSP(targets);
 		System.out.println(actual);
+		Graph_GUI window = new Graph_GUI(EXPECTED);
+		window.setVisible(true);
 		//System.out.println(algo.shortestPath(4, 6));
 		
 		

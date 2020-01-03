@@ -1,8 +1,14 @@
 package algorithms;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,26 +28,31 @@ import dataStructure.NodeData;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
+import gui.Graph_GUI;
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
  * @author
  *
  */
-public class Graph_Algo implements graph_algorithms{
+public class Graph_Algo implements graph_algorithms,Serializable{
 	private DGraph Graph;
 	private HashMap<node_data, node_data> predessesors;
 	/**
 	 * Constructor:
 	 */
-	public Graph_Algo (DGraph graph)
+	public Graph_Algo ()
 	{
-		this.Graph=new DGraph(graph);
+		this.Graph=new DGraph(new DGraph());
+	}//Graph_Algo
+	public Graph_Algo (graph g)
+	{
+		init(g);
 	}//Graph_Algo
 	@Override
 	public void init(graph g) {
 		this.Graph=new DGraph((DGraph) g);
-	}
+	}//init
 
 
 	/**
@@ -49,14 +60,29 @@ public class Graph_Algo implements graph_algorithms{
 	 * @param file_name
 	 */
 	public void init(String file_name) {
-		Gson gson=new Gson();
-		try {
-			FileReader reader=new FileReader(file_name);
-			this.Graph=gson.fromJson(reader, DGraph.class);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return;
-		}//catch
+		DGraph g = new DGraph(); 
+	       
+        try
+        {    
+            FileInputStream file = new FileInputStream(file_name); 
+            ObjectInputStream in = new ObjectInputStream(file); 
+              
+            g = (DGraph)in.readObject();  
+            in.close(); 
+            file.close(); 
+            this.Graph=new DGraph(g); 
+            //System.out.println("Object has been deserialized"); 
+        } 
+          
+        catch(IOException ex) 
+        { 
+            System.out.println("IOException is caught"); 
+        } 
+          
+        catch(ClassNotFoundException ex) 
+        { 
+            System.out.println("ClassNotFoundException is caught"); 
+        } 
 
 	}//init
 
@@ -66,18 +92,27 @@ public class Graph_Algo implements graph_algorithms{
 	 */
 	public void save(String file_name) {
 		// TODO Auto-generated method stub
-		Gson gson=new Gson();
-		String json=gson.toJson(Graph);
+		try
+        {    
+            FileOutputStream file = new FileOutputStream(file_name); 
+            ObjectOutputStream out = new ObjectOutputStream(file); 
+              
+            out.writeObject(Graph); 
+              
+            out.close(); 
+            file.close(); 
+              
+            //System.out.println("Object has been serialized"); 
+        }//try   
+        catch(IOException ex) 
+        { 
+        	System.out.println("IOException is caught"); 
+//            ex.printStackTrace();
+//            return;
+        }//catch 
+	}//save
 
-		try {
-			PrintWriter pw=new PrintWriter(file_name);
-			pw.write(json);
-			pw.close();	}//try
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return; }//catch
-	}
-
+	
 	/**
 	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
 	 * other node. NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
@@ -88,7 +123,7 @@ public class Graph_Algo implements graph_algorithms{
 		
 		DGraph transpose = transpose(Graph);
 		return (isConnectedHelp(this.Graph) && isConnectedHelp(transpose));
-	}
+	}//isConnected
 	
 	public boolean isConnectedHelp(DGraph g) {
 
@@ -121,7 +156,11 @@ public class Graph_Algo implements graph_algorithms{
 		
 		
 	}
-
+/**
+ * 
+ * @param g
+ * @return
+ */
 	public Queue<Integer> DFS(DGraph g) {
 		Queue<Integer> finish = new LinkedList<>();
 
@@ -130,7 +169,7 @@ public class Graph_Algo implements graph_algorithms{
 		while(itr.hasNext()) {
 			int node=itr.next();
 			g.getNode(node).setTag(1);
-		}
+		}//while
 		//check all the nodes: if they are still white, do dfsVisit
 		itr=g.get_Node_Hash().keySet().iterator();
 		while(itr.hasNext()) {
@@ -138,12 +177,17 @@ public class Graph_Algo implements graph_algorithms{
 			//if the node is white
 			if(g.getNode(node).getTag()==1)
 				dfsVisit(g,node,finish);
-		}
+		}//while
 
 
 		return finish;
-	}
-
+	}//DFS
+	/**
+	 * 
+	 * @param g
+	 * @param node
+	 * @param finish
+	 */
 	public void dfsVisit(DGraph g,int node, Queue<Integer> finish){
 		HashMap<Integer, edge_data> neighbors=g.get_Edge_Hash().get(node);
 
@@ -156,7 +200,7 @@ public class Graph_Algo implements graph_algorithms{
 			finish.add(node);
 			g.get_Node_Hash().get(node).setTag(3);
 			return;
-		}
+		}//if
 
 		Iterator<Integer> itr=neighbors.keySet().iterator();
 		while (itr.hasNext()) {
@@ -164,15 +208,19 @@ public class Graph_Algo implements graph_algorithms{
 			//if the neighbors are white
 			if(g.get_Node_Hash().get(u).getTag()==1)
 				dfsVisit(g, u, finish);
-		}
+		}//while
 		finish.add(node);
 		g.get_Node_Hash().get(node).setTag(3);
 		return;
 
-	}
+	}//dfsVisit
 
 
-
+/**
+ * 
+ * @param g
+ * @return
+ */
 	public static DGraph transpose(DGraph g) {
 		//create a new graph with the same nodes but a new HashMap of edges
 		DGraph trans=new DGraph(g.get_Node_Hash(),new HashMap<Integer, HashMap<Integer,edge_data>>());
@@ -186,8 +234,8 @@ public class Graph_Algo implements graph_algorithms{
 				double weight=g.get_Edge_Hash().get(s).get(d).getWeight();
 				trans.connect(d, s, weight);
 
-			}
-		}
+			}//while
+		}//while
 
 		return trans;
 	}
@@ -267,7 +315,7 @@ public class Graph_Algo implements graph_algorithms{
 		}//while
 		if(path.size()>0) {
 			ArrayList<node_data> short_path=Reverse(path);
-			printForIlana(short_path);
+			//printForIlana(short_path);
 			return short_path;
 		}//if
 		System.out.println("The isn't such a shortest path");
@@ -283,23 +331,43 @@ public class Graph_Algo implements graph_algorithms{
 	 * @return
 	 */
 	public List<node_data> TSP(List<Integer> targets) {
-
-		if(targets.size()==0 ||targets.size()==1)
+		double len=0;
+		targets=removeDuplicate(targets);//O(n) remove all the duplicates
+		if(targets.size()==0)
 			return null;
+		//If there is only one target
+		else if(targets.size()==1)
+		{
+			node_data v=this.Graph.get_Node_Hash().get(targets.get(0));
+			List<node_data> tsp=new ArrayList<node_data>();
+			tsp.add(v);
+			return tsp;
+		}//else if
+		//If there is only two targets: take the better path
 		else if(targets.size()==2)
 		{
-			if(!isConnecectedSpecificNodes(targets))
-				return null;
 			List<node_data> sp1=shortestPath(targets.get(0), targets.get(1));
+			double sp1Len=sp1.get(sp1.size()-1).getWeight();
 			List<node_data> sp2=shortestPath(targets.get(1), targets.get(0));
-			if(sp1.size()!=0)
+			double sp2Len =sp2.get(sp1.size()-1).getWeight();
+			if(sp1.size()!=0 && sp2.size()!=0)
 			{
-				printForIlana(sp1);
+				if(sp1Len>=sp2Len)
+				{
+					printPath(sp2,sp2Len);
+					return sp2;
+				}//if
+				printPath(sp1,sp1Len);
+				return sp1;
+			}//if
+			else if(sp1.size()!=0)
+			{
+				printPath(sp1,sp1Len);
 				return sp1;
 			}//if
 			else if(sp2.size()!=0)
 			{
-				printForIlana(sp2);
+				printPath(sp2,sp2Len);
 				return sp2;
 			}//else if
 			else
@@ -310,28 +378,31 @@ public class Graph_Algo implements graph_algorithms{
 			for (int j = 0; j < 1000; j++) {
 				List<node_data> sp=new ArrayList<node_data>();
 				List<Integer> spKeys=new ArrayList<Integer>();
-				//System.out.println("Original List: ");
+				//System.out.println("Target List: ");
 				//System.out.println(targets);
 				for (int i = 1; i < targets.size(); i++) {
 					List<node_data> path=shortestPath(targets.get(i-1), targets.get(i));
+					len+=this.Graph.get_Node_Hash().get(targets.get(i)).getWeight();
 					//System.out.println("This path: "+path);
 					if(path.isEmpty())//If there isnt shortest path next shuffle
 						break;
-					sp.addAll(path);
-					spKeys.add(targets.get(i-1));
-					spKeys.add(targets.get(i));
+					if(i==1)
+						sp.addAll(path.subList(0,path.size()));
+					else
+						sp.addAll(path.subList(1,path.size()));
+					spKeys.addAll(NodeToKeyConverter(path));
 					//System.out.println("Whole path: "+sp);
 					if (spKeys.containsAll(targets))
 					{
-						printForIlana(sp);
+						printPath(sp,len);
 						return sp;
 					}//if
 				}//for
+				len=0;
 				Collections.shuffle(targets);
 			}//for
 			return null;
 		}//else
-
 	}//TSP
 
 	@Override
@@ -359,7 +430,7 @@ public class Graph_Algo implements graph_algorithms{
 	}//chooseMin
 	/**
 	 * Updating the value of the neighbors of given node data
-	 * @param hashMap
+	 * @param hashMap - present fast access to neighbors
 	 */
 	private void relaxation(HashMap<Integer, edge_data> n,node_data min) {
 		double minValue=min.getWeight();
@@ -382,8 +453,8 @@ public class Graph_Algo implements graph_algorithms{
 		//System.out.println("After: "+n.values());
 	}//updateNeighbors
 
-	/**
-	 * Set for all the node infinity weight.
+	/** 
+	 * Set all the weight nodes graph to infinity.
 	 * @param v - all the vertices
 	 */
 	private void setNodeInfinity(HashMap<Integer, node_data> v) {
@@ -408,30 +479,58 @@ public class Graph_Algo implements graph_algorithms{
 		return reverse;
 	}//reverse
 	/**
-	 * For ilana print the given path in easy way
+	 * Printing the List path
 	 */
-	public void printForIlana(List<node_data> path)
+	public void printPath(List<node_data> path,double len)
 	{
 		for (node_data node : path) {
 			System.out.print("->"+node.getKey());
 		}//for
-		System.out.println("");
+		System.out.println("\t Path len: "+len);
 	}//printForIlana
 	/**
-	 * By giving lists of nodes 
-	 * this function will receive If this set of nodes are SCC.
-	 * @param nodes
+	 * Equals Function
+	 */
+	@Override
+	public boolean equals(Object a)
+	{
+		if(a instanceof graph_algorithms)
+				return this.Graph.equals(((Graph_Algo) a).getGraph());
+		return false;
+	}//equals
+	/**
+	 * Getters:
 	 * @return
 	 */
-	public boolean isConnecectedSpecificNodes(Collection<Integer> nodes)
+	public DGraph getGraph()
 	{
-		Graph_Algo spTree=new Graph_Algo(this.Graph);
-		Collection<Integer> allNodes=this.Graph.get_Node_Hash().keySet();
-		for (Integer node : allNodes) {
-			if(!nodes.contains(node))
-				spTree.Graph.removeNode(node);
+		return Graph;
+	}//getGraph
+	/**
+	 * TSP help function
+	 * @param list
+	 * @return the list without duplicates
+	 */
+	private List<Integer> removeDuplicate(List<Integer> list)
+	{
+		List<Integer> set=new ArrayList<Integer>();
+		for (Integer i : list) {
+			if(!set.contains(i))
+				set.add(i);
 		}//for
-		return spTree.isConnected();
-	}//specificSpanTree
-
+		return set;
+	}//removeDuplicate
+	/**
+	 * Convert List of nodes to their keys
+	 * @param nodes
+	 * @return Integer key list of given nodes
+	 */
+	private List<Integer> NodeToKeyConverter(List<node_data> nodes)
+	{
+		List<Integer> keys=new ArrayList<Integer>();
+		for (node_data node : nodes) {
+			keys.add(node.getKey());
+		}//for
+		return keys;
+	}//NodeToKeyConverter
 }
