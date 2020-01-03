@@ -50,6 +50,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		ry=this.rangeY();
 		state=false;
 		mc=graph.getMC();
+
 		Thread t=new Thread(this);
 		t.start();
 	}
@@ -115,7 +116,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 		this.addMouseListener(this);
 		repaint();
-		
+
 	}//initGUI
 
 	private void paintVertices() {
@@ -208,11 +209,23 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			Integer node=it.next();
 			if(graph.get_Node_Hash().get(node).getLocation().x()>max)
 				max=graph.get_Node_Hash().get(node).getLocation().x();
-			else if(graph.get_Node_Hash().get(node).getLocation().x()<min)
+			if(graph.get_Node_Hash().get(node).getLocation().x()<min)
 				min=graph.get_Node_Hash().get(node).getLocation().x();
 		}//while
-		max=max*6/4;//?
-		min=min*6/4;//?
+		if(max==0 && min == 0) {
+			max=1;
+			min=-1;
+		}
+		else {
+			if(max==0)
+				max=0-min;
+			else
+				max+=Math.abs(max/4);
+			if(min==0)
+				min=0-max;
+			else
+				min-=Math.abs(min/4);
+		}
 		Range rx=new Range(min,max);
 		return rx;
 	}//RangeX
@@ -229,11 +242,23 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			Integer node=it.next();
 			if(graph.get_Node_Hash().get(node).getLocation().y()>max)
 				max=graph.get_Node_Hash().get(node).getLocation().y();
-			else if(graph.get_Node_Hash().get(node).getLocation().y()<min)
+			if(graph.get_Node_Hash().get(node).getLocation().y()<min)
 				min=graph.get_Node_Hash().get(node).getLocation().y();
 		}//while
-		max=max*6/4;
-		min=min*6/4;
+		if(max==0 && min == 0) {
+			max=1;
+			min=-1;
+		}
+		else {
+			if(max==0)
+				max=0-min;
+			else
+				max+=Math.abs(max/4);
+			if(min==0)
+				min=0-max;
+			else
+				min-=Math.abs(min/4);
+		}
 		Range ry=new Range(min,max);
 		return ry;
 	}//rangeY
@@ -314,17 +339,24 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		}//else if
 
 		else if(str.equals("Add a node with coordinates")){
-			String s1=JOptionPane.showInputDialog(this, "Type in x:");
-			int x=Integer.parseInt(s1);
-			String s2=JOptionPane.showInputDialog(this, "Type in y:");
-			int y=Integer.parseInt(s2);
-			String id=JOptionPane.showInputDialog(this, "Type in ID:");
-			int key=Integer.parseInt(id);
+			try {
+				String s1=JOptionPane.showInputDialog(this, "Type in x:");
+				int x=Integer.parseInt(s1);
+				String s2=JOptionPane.showInputDialog(this, "Type in y:");
+				int y=Integer.parseInt(s2);
+				String id=JOptionPane.showInputDialog(this, "Type in ID:");
+				int key=Integer.parseInt(id);
+				Point3D p=new Point3D(x,y);
+				node_data n=new NodeData(key,p);
+				this.graph.addNode(n);
+				rx=this.rangeX();
+				ry=this.rangeY();
+				repaint();
+			} catch (Exception ex) {
 
-			Point3D p=new Point3D(x,y);
-			node_data n=new NodeData(key,p);
-			this.graph.addNode(n);
-			repaint();
+			}
+
+
 
 
 		}
