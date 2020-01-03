@@ -93,14 +93,7 @@ class DGraphTest {
 
 	//@Test
 	void testAddNode() {
-		boolean flag=false;
-		try {//try adding a node which already exists
-			g.addNode(n3);
-		} catch (RuntimeException runtimeException) {
-			flag=true;
-		}
-		assertTrue(flag,"ERR: failed to return error");
-
+		g.addNode(n3);
 
 	}
 

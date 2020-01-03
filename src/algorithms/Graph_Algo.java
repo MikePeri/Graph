@@ -120,7 +120,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 */
 	public boolean isConnected() {
 		
-		
+		if(Graph.get_Node_Hash().size()==1 || Graph.get_Node_Hash().size()==0)
+			return true;
 		DGraph transpose = transpose(Graph);
 		return (isConnectedHelp(this.Graph) && isConnectedHelp(transpose));
 	}//isConnected
@@ -261,7 +262,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return -1;
 	}//shortestPathDist
 	/**
-	 * 
+	 * This algo present the shortest path between src node and dest node
+	 * Time Complexity isn't O(E+Vlog(V)) Because we dont use Min Heap DS
 	 * @param src - SRC node to start the Algo
 	 */
 	public void Dijkstra(int src,int dest)
@@ -533,4 +535,13 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//for
 		return keys;
 	}//NodeToKeyConverter
+	/**
+	 * This function will pop the graph presentation
+	 */
+	public void show() {
+		Graph_GUI window=new Graph_GUI(this.Graph);
+		window.setVisible(true);
+	}//show
+	
+	
 }

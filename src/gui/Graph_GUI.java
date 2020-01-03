@@ -53,7 +53,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 		Thread t=new Thread(this);
 		t.start();
-	}
+	}//
 
 
 	private void initGUI() {
@@ -423,7 +423,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			if(graph.getMC()!=this.mc) {
 				this.mc=graph.getMC();
 				repaint();
-			}
+			}//if
 		}//while
 	}//run
 }
