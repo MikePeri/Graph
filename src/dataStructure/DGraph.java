@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 
 import javax.management.RuntimeErrorException;
 
+import gui.Graph_GUI;
+
 
 public class DGraph implements graph,Serializable{
 	private HashMap<Integer, node_data> Node_Hash;
@@ -238,7 +240,7 @@ public class DGraph implements graph,Serializable{
 	}//getMC
 	
 	/**
-	 * 
+	 * Compare Graphs.
 	 */
 	@Override
 	public boolean equals(Object a)
@@ -251,4 +253,16 @@ public class DGraph implements graph,Serializable{
 		}//if
 		return false;
 	}//equals
+	/**
+	 * This function will pop the graph presentation
+	 */
+	public void show() {
+		Graph_GUI window=new Graph_GUI(this);
+		window.setVisible(true);
+	}//show
+	@Override
+	public String toString() {
+		return "DGraph [Node_Hash=" + Node_Hash + "\nEdge_Hash=" + Edge_Hash + "\nModeCount=" + ModeCount
+				+ "\nEdgeHashSize=" + EdgeHashSize + "]";
+	}
 }
