@@ -348,7 +348,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 				int key=Integer.parseInt(id);
 				Point3D p=new Point3D(x,y);
 				node_data n=new NodeData(key,p);
-				this.graph.addNode(n);
+				try {
+					this.graph.addNode(n);
+				}catch(Exception ex) {
+					System.out.println("This node already exist. Please try again!");
+				}
 				rx=this.rangeX();
 				ry=this.rangeY();
 				repaint();
@@ -390,7 +394,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 			int id = Integer.parseInt(s);
 			n=new NodeData(id,p);
-			graph.addNode(n);
+			try {
+				this.graph.addNode(n);
+			}catch(Exception ex) {
+				System.out.println("This node already exist. Please try again!");
+			}
 
 			repaint();
 			state=false;

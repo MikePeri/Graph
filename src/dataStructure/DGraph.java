@@ -104,8 +104,7 @@ public class DGraph implements graph,Serializable{
 			throw new RuntimeException("ERR: Weight cannot be negative");
 		if(Node_Hash.containsKey(key)) {
 			//throw new RuntimeException("ERR: This node already exist");
-			System.out.println("This node already exist. Please try again!");
-			return;
+			throw new RuntimeException("ERR:Cannot connect between unknown node");
 		}
 		Node_Hash.put(key,n);
 		this.ModeCount++;
