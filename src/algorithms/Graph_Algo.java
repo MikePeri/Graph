@@ -76,12 +76,14 @@ public class Graph_Algo implements graph_algorithms,Serializable{
           
         catch(IOException ex) 
         { 
-            ex.printStackTrace();
+            //ex.printStackTrace();
+        	System.out.println("IOException");
         } 
           
         catch(ClassNotFoundException ex) 
         { 
-            ex.printStackTrace();
+            //ex.printStackTrace();
+        	System.out.println("ClassNotFoundException");
         } 
 
 	}//init
@@ -106,8 +108,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
         }//try   
         catch(IOException ex) 
         { 
-        	//System.out.println("IOException is caught"); 
-            ex.printStackTrace();
+        	System.out.println("IOException is caught"); 
+            //ex.printStackTrace();
 //            return;
         }//catch 
 	}//save

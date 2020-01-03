@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -59,7 +60,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	private void initGUI() {
 		//declare all the options
 		Menu file, options, add;
-		MenuItem save, isConnected, ShortestPath, TSP, AddLine, AddPoint, AddPointCo;
+		MenuItem save,open, isConnected, ShortestPath, TSP, AddLine, AddPoint, AddPointCo;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MenuBar mb=new MenuBar();
 
@@ -73,6 +74,9 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		//what will be the menu items
 		save=new MenuItem("Save to file");
 		save.addActionListener(this);
+		
+		open=new MenuItem("open from file");
+		open.addActionListener(this);
 
 		isConnected=new MenuItem("Is Connected?");
 		isConnected.addActionListener(this);
@@ -94,6 +98,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 		//for each option in the menu bar, add its item
 		file.add(save);
+		file.add(open);
 
 		options.add(isConnected);
 		options.add(ShortestPath);
@@ -272,17 +277,35 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		String str = e.getActionCommand();
 
 		if(str.equals("Save to file")) {
-			String s1=JOptionPane.showInputDialog(this, "Please write the file name:");
-			s1+=".txt";
+			String s1=JOptionPane.showInputDialog(this, "Notice that the context is: name.txt\nPlease write down the name of the file that you want to save");
 			Graph_Algo g=new Graph_Algo(graph);
+			try {
+				g.save(s1);
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(this,"Sorry but we can't save this file.");
+			}
+			
 			System.out.println("Save to file action");
-			//repaint();
 		}//if
-
+		else if(str.equals("open from file"))
+		{
+			String s1=JOptionPane.showInputDialog(this, "Notice that the context is: name.txt\nWhat the name of the file that you want to open?");
+			Graph_Algo g=new Graph_Algo(graph);
+			try {
+				g.init(s1);
+			} catch (Exception e2) {
+				if(e2 instanceof IOException)
+					JOptionPane.showMessageDialog(this,"Sorry but we can't read this file.");
+				if(e2 instanceof ClassNotFoundException)
+					JOptionPane.showMessageDialog(this,"Sorry but we can't find this file.");
+			}
+			System.out.println("open from file action");
+			repaint();
+		}//else if
 		else if(str.equals("Is Connected?"))
 		{
 			Graph_Algo g=new Graph_Algo(graph);
-			JOptionPane.showMessageDialog(null, g.isConnected());
+			JOptionPane.showMessageDialog(this, g.isConnected());
 			System.out.println("Is connected? action");
 			//repaint();
 		}//else if
