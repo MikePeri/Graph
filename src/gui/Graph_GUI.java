@@ -56,8 +56,8 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 
 	private void initGUI() {
 		//declare all the options 
-		Menu file, options, add, select;  
-		MenuItem save, isConnected, ShortestPath, TSP, AddLine, AddPoint, SelectNode, SelectEdge;  
+		Menu file, options, add; 
+		MenuItem save, isConnected, ShortestPath, TSP, AddLine, AddPoint, AddPointCo;  
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MenuBar mb=new MenuBar();  
 
@@ -65,7 +65,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		file=new Menu("File");  
 		options=new Menu("Options"); 
 		add=new Menu("Action");
-		select=new Menu("Select");
 
 
 
@@ -80,13 +79,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		TSP.addActionListener(this);
 		AddLine=new MenuItem("Connect");  
 		AddLine.addActionListener(this);
-		AddPoint=new MenuItem("Add a node");
+		AddPoint=new MenuItem("Add a node by clicking");
 		AddPoint.addActionListener(this);
-		SelectNode=new MenuItem("Select Node");
-		SelectNode.addActionListener(this);
-		SelectEdge=new MenuItem("Select Edge");   
-		SelectEdge.addActionListener(this);
-
+		AddPointCo=new MenuItem("Add a node with coordinates");
+		AddPointCo.addActionListener(this);
+		
 
 		//for each option in the menu bar, add its item
 		file.add(save);
@@ -97,14 +94,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 
 		add.add(AddLine);  
 		add.add(AddPoint); 
-
-		select.add(SelectEdge);
-		select.add(SelectNode);
+		add.add(AddPointCo);
 
 		mb.add(file); 
 		mb.add(options); 
 		mb.add(add); 
-		mb.add(select); 
 
 		//set the window
 		this.setMenuBar(mb);  
@@ -296,16 +290,24 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 
 		}
 
-		else if(str.equals("Add a node")) {
+		else if(str.equals("Add a node by clicking")) {
 			state=true;
 		}
 
-		else if(str.equals("Select Node")) {
-
-		}
-
-		else if(str.equals("Select Edge")) {
-
+		else if(str.equals("Add a node with coordinates")){
+			String s1=JOptionPane.showInputDialog(this, "Type in x:");
+			int x=Integer.parseInt(s1);
+			String s2=JOptionPane.showInputDialog(this, "Type in y:");
+			int y=Integer.parseInt(s2);
+			String id=JOptionPane.showInputDialog(this, "Type in ID:");
+			int key=Integer.parseInt(id);
+			
+			Point3D p=new Point3D(x,y);
+			node_data n=new NodeData(key,p);
+			this.graph.addNode(n);
+			repaint();
+			
+			
 		}
 
 
