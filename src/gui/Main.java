@@ -72,6 +72,10 @@ public class Main
 		EXPECTED.connect(1, 0, 7);
 		EXPECTED.connect(7, 4, 6);
 		EXPECTED.connect(6, 7, 1);
+
+		
+		
+
 		window.setVisible(true);
 	}
 
