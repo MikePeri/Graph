@@ -283,15 +283,25 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		{
 			Graph_Algo g=new Graph_Algo(graph);
 			JOptionPane.showMessageDialog(null, g.isConnected());
-			System.out.println("Is connected? action");
+			//System.out.println("Is connected? action");
 			//repaint();
 		}//else if
 
 		else if(str.equals("Shortest Path")) {
 
 			String s1=JOptionPane.showInputDialog(this, "Type in the ID of the source node:");
+
+			//if the user canceled
+			if(s1==null) {
+				return;
+			}
 			int src=Integer.parseInt(s1);
 			String s2=JOptionPane.showInputDialog(this, "Type in the ID of the destination node:");
+
+			//if the user canceled
+			if(s2==null) {
+				return;
+			}
 			int dest=Integer.parseInt(s2);
 			List<node_data> path=new ArrayList<node_data>();
 			Graph_Algo g=new Graph_Algo(graph);
@@ -306,11 +316,21 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 		else if(str.equals("TSP")) {
 			String s1=JOptionPane.showInputDialog(this, "Enter the number of nodes for TSP:");
+
+			//if the user canceled
+			if(s1==null) {
+				return;
+			}
 			int num=Integer.parseInt(s1);
 			int i=0;
 			List<Integer> targets=new ArrayList<Integer>();
 			while(i<num) {
 				String s2=JOptionPane.showInputDialog(this, "Type the ID of the node:");
+
+				//if the user canceled
+				if(s2==null) {
+					return;
+				}
 				int node=Integer.parseInt(s2);
 				targets.add(node);
 				i++;
@@ -325,10 +345,25 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 		else if(str.equals("Connect")) {
 			String s1=JOptionPane.showInputDialog(this, "Type in the ID of the source node:");
+
+			//if the user canceled
+			if(s1==null) {
+				return;
+			}
 			int src=Integer.parseInt(s1);
 			String s2=JOptionPane.showInputDialog(this, "Type in the ID of the destination node:");
+
+			//if the user canceled
+			if(s2==null) {
+				return;
+			}
 			int dest=Integer.parseInt(s2);
 			String weight=JOptionPane.showInputDialog(this, "Type in the weight of this edge:");
+
+			//if the user canceled
+			if(weight==null) {
+				return;
+			}
 			int w=Integer.parseInt(weight);
 			graph.connect(src, dest, w);
 			repaint();
@@ -339,26 +374,39 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		}//else if
 
 		else if(str.equals("Add a node with coordinates")){
-			try {
-				String s1=JOptionPane.showInputDialog(this, "Type in x:");
-				int x=Integer.parseInt(s1);
-				String s2=JOptionPane.showInputDialog(this, "Type in y:");
-				int y=Integer.parseInt(s2);
-				String id=JOptionPane.showInputDialog(this, "Type in ID:");
-				int key=Integer.parseInt(id);
-				Point3D p=new Point3D(x,y);
-				node_data n=new NodeData(key,p);
-				try {
-					this.graph.addNode(n);
-				}catch(Exception ex) {
-					System.out.println("This node already exist. Please try again!");
-				}
-				rx=this.rangeX();
-				ry=this.rangeY();
-				repaint();
-			} catch (Exception ex) {
 
+			String s1=JOptionPane.showInputDialog(this, "Type in x:");
+
+			//if the user canceled
+			if(s1==null) {
+				return;
 			}
+			int x=Integer.parseInt(s1);
+			String s2=JOptionPane.showInputDialog(this, "Type in y:");
+
+			//if the user canceled
+			if(s2==null) {
+				return;
+			}
+			int y=Integer.parseInt(s2);
+			String id=JOptionPane.showInputDialog(this, "Type in ID:");
+
+			//if the user canceled
+			if(id==null) {
+				return;
+			}
+			int key=Integer.parseInt(id);
+			Point3D p=new Point3D(x,y);
+			node_data n=new NodeData(key,p);
+			try {
+				this.graph.addNode(n);
+			}catch(Exception ex) {
+				System.out.println("This node already exist. Please try again!");
+			}
+			rx=this.rangeX();
+			ry=this.rangeY();
+			repaint();
+
 
 
 
@@ -384,15 +432,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			Point3D p = new Point3D(x,y);
 
 			node_data n;
-			String s;
-			//if user canceled
-			try {
-				s=JOptionPane.showInputDialog(this, "The coordinates are:"+ x+" , "+ y +", Type in Id:");
-			} catch (Exception e2) {
+			String s=JOptionPane.showInputDialog(this, "The coordinates are:"+ x+" , "+ y +", Type in Id:");
+			int id = Integer.parseInt(s);
+			//if the user canceled
+			if(s==null) {
 				return;
 			}
-
-			int id = Integer.parseInt(s);
 			n=new NodeData(id,p);
 			try {
 				this.graph.addNode(n);
