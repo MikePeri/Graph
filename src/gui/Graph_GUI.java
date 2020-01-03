@@ -38,21 +38,18 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	//this variable is to decide whether to add node by clicking or not:
 	private boolean state;
 
-	public Graph_GUI()
-	{
+	public Graph_GUI(){
 		this(new DGraph());
 	}
 
-	public Graph_GUI(DGraph g)
-	{
+	public Graph_GUI(DGraph g){
 		width=800;
 		height=600;
-		graph=new DGraph(g);
+		graph=g;
 		rx=this.rangeX();
 		ry=this.rangeY();
 		state=false;
 		mc=graph.getMC();
-		initGUI();
 	}
 
 
@@ -116,8 +113,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 		this.addMouseListener(this);
 		repaint();
-	}
+		
+	}//initGUI
 
+	private void paintVertices() {
+
+	}
 
 
 
@@ -151,6 +152,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 					Point3D dest=graph.get_Node_Hash().get(u).getLocation();
 					int x1=(int) ((dest.x()-rx.get_min())*proportionX);
 					int y1=(int) ((dest.y()-ry.get_max())*proportionY);
+
 
 					if(graph.get_Edge_Hash().get(v).get(u).getInfo()!=null &&
 							graph.get_Edge_Hash().get(v).get(u).getInfo().equals("Selected")) {
@@ -247,7 +249,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			s1+=".txt";
 			Graph_Algo g=new Graph_Algo(graph);
 			System.out.println("Save to file action");
-			repaint();
+			//repaint();
 		}//if
 
 		else if(str.equals("Is Connected?"))
@@ -255,7 +257,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			Graph_Algo g=new Graph_Algo(graph);
 			JOptionPane.showMessageDialog(null, g.isConnected());
 			System.out.println("Is connected? action");
-			repaint();
+			//repaint();
 		}//else if
 
 		else if(str.equals("Shortest Path")) {
@@ -305,7 +307,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			repaint();
 		}//else if
 
-		else if(str.equals("Add a node by clicking")) {
+		else if(str.equals("Add a node")) {
 			state=true;
 		}//else if
 
@@ -381,11 +383,13 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 	@Override
 	public void run() {
+		initGUI();
 		while(true)
 		{
-			if(graph.getMC()>this.mc)
+			if(graph.getMC()>this.mc) {
 				this.mc=graph.getMC();
-			repaint();
+				repaint();
+			}
 		}//while
 	}//run
 }
