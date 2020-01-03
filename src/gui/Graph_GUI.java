@@ -50,6 +50,8 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		ry=this.rangeY();
 		state=false;
 		mc=graph.getMC();
+		Thread t=new Thread(this);
+		t.start();
 	}
 
 

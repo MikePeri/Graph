@@ -67,12 +67,11 @@ public class Main
 		
 		
 		Graph_GUI window = new Graph_GUI(EXPECTED);
-		Thread t=new Thread(window);
-		t.start();
-		EXPECTED.connect(4, 0, 4);
-		EXPECTED.connect(1, 0, 7);
-		EXPECTED.connect(7, 4, 6);
-		EXPECTED.connect(6, 7, 1);
+		
+//		EXPECTED.connect(4, 0, 4);
+//		EXPECTED.connect(1, 0, 7);
+//		EXPECTED.connect(7, 4, 6);
+//		EXPECTED.connect(6, 7, 1);
 		
 		window.setVisible(true);
 	}
