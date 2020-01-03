@@ -383,7 +383,9 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	public void run() {
 		while(true)
 		{
-			
+			if(graph.getMC()>this.mc)
+				this.mc=graph.getMC();
+			repaint();
 		}//while
 	}//run
 }
