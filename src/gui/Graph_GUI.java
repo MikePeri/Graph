@@ -30,12 +30,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 {
 	private DGraph graph;
 	private int width;
-	private int height; 
+	private int height;
 	private Range rx;
 	private Range ry;
 	private Integer mc;
 
-	//this variable is to decide whether to add node by clicking or not: 
+	//this variable is to decide whether to add node by clicking or not:
 	private boolean state;
 
 	public Graph_GUI()
@@ -57,70 +57,62 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 
 	private void initGUI() {
-		//declare all the options 
-		Menu file, options, Action, select;  
-		MenuItem save, isConnected, ShortestPath, TSP, AddLine, AddPoint, SelectNode, SelectEdge;  
+		//declare all the options
+		Menu file, options, add;
+		MenuItem save, isConnected, ShortestPath, TSP, AddLine, AddPoint, AddPointCo;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		MenuBar mb=new MenuBar();  
+		MenuBar mb=new MenuBar();
 
 		//what will be on the menu bar
-		file=new Menu("File");  
-		options=new Menu("Options"); 
-		Action=new Menu("Action");
-		select=new Menu("Select");
+		file=new Menu("File");
+		options=new Menu("Options");
+		add=new Menu("Action");
 
 
 
 		//what will be the menu items
-		save=new MenuItem("Save to file");  
+		save=new MenuItem("Save to file");
 		save.addActionListener(this);
-		
-		isConnected=new MenuItem("Is Connected?");  
+
+		isConnected=new MenuItem("Is Connected?");
 		isConnected.addActionListener(this);
-		
-		ShortestPath=new MenuItem("Shortest Path"); 
+
+		ShortestPath=new MenuItem("Shortest Path");
 		ShortestPath.addActionListener(this);
-		
-		TSP=new MenuItem("TSP");  
+
+		TSP=new MenuItem("TSP");
 		TSP.addActionListener(this);
-		
-		AddLine=new MenuItem("Connect");  
+
+		AddLine=new MenuItem("Connect");
 		AddLine.addActionListener(this);
-		
+
 		AddPoint=new MenuItem("Add a node");
 		AddPoint.addActionListener(this);
-		
-		SelectNode=new MenuItem("Select Node");
-		SelectNode.addActionListener(this);
-		
-		SelectEdge=new MenuItem("Select Edge");   
-		SelectEdge.addActionListener(this);
+		AddPointCo=new MenuItem("Add a node with coordinates");
+		AddPointCo.addActionListener(this);
 
 
 		//for each option in the menu bar, add its item
 		file.add(save);
 
 		options.add(isConnected);
-		options.add(ShortestPath);  
+		options.add(ShortestPath);
 		options.add(TSP);
 
-		Action.add(AddLine);  
-		Action.add(AddPoint); 
+		add.add(AddLine);
+		add.add(AddPoint);
+		add.add(AddPointCo);
 
-		select.add(SelectEdge);
-		select.add(SelectNode);
-
-		mb.add(file); 
-		mb.add(options); 
-		mb.add(Action); 
-		mb.add(select); 
+		mb.add(file);
+		mb.add(options);
+		mb.add(add);
 
 		//set the window
-		this.setMenuBar(mb);  
-		this.setSize(width,height);  
+		this.setMenuBar(mb);
+		this.setSize(width,height);
 		this.setBackground(Color.WHITE);
-		this.setLayout(null);  
-		this.setVisible(true);  
+		this.setLayout(null);
+		this.setVisible(true);
 
 		this.addMouseListener(this);
 		repaint();
@@ -184,7 +176,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			}//catch
 
 		}//while
-		
+
 		//set info to null
 		it = graph.get_Edge_Hash().keySet().iterator();
 		while (it.hasNext()) {
@@ -196,7 +188,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			}//while
 		}//while
 
-		
+
 	}//paint
 
 	/**
@@ -246,21 +238,21 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 
 	@Override
-	public void actionPerformed(ActionEvent e) 
+	public void actionPerformed(ActionEvent e)
 	{
 		String str = e.getActionCommand();
 
 		if(str.equals("Save to file")) {
 			String s1=JOptionPane.showInputDialog(this, "Please write the file name:");
 			s1+=".txt";
-			Graph_Algo g=new Graph_Algo(graph);	
+			Graph_Algo g=new Graph_Algo(graph);
 			System.out.println("Save to file action");
 			repaint();
 		}//if
 
 		else if(str.equals("Is Connected?"))
 		{
-			Graph_Algo g=new Graph_Algo(graph);	
+			Graph_Algo g=new Graph_Algo(graph);
 			JOptionPane.showMessageDialog(null, g.isConnected());
 			System.out.println("Is connected? action");
 			repaint();
@@ -273,11 +265,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			String s2=JOptionPane.showInputDialog(this, "Type in the ID of the destination node:");
 			int dest=Integer.parseInt(s2);
 			List<node_data> path=new ArrayList<node_data>();
-			Graph_Algo g=new Graph_Algo(graph);	
+			Graph_Algo g=new Graph_Algo(graph);
 			path=g.shortestPath(src, dest);
 
 			for (int i = 0; i < path.size()-1; i++) {
-				graph.get_Edge_Hash().get(path.get(i).getKey()).get(path.get(i+1).getKey()).setInfo("Selected");	
+				graph.get_Edge_Hash().get(path.get(i).getKey()).get(path.get(i+1).getKey()).setInfo("Selected");
 			}//for
 			repaint();
 
@@ -291,13 +283,13 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			while(i<num) {
 				String s2=JOptionPane.showInputDialog(this, "Type the ID of the node:");
 				int node=Integer.parseInt(s2);
-				targets.add(node);			
+				targets.add(node);
 				i++;
 			}//while
-			Graph_Algo g=new Graph_Algo(graph);	
+			Graph_Algo g=new Graph_Algo(graph);
 			List<node_data> tsp=g.TSP(targets);
 			for (i = 0; i < tsp.size()-1; i++) {
-				graph.get_Edge_Hash().get(tsp.get(i).getKey()).get(tsp.get(i+1).getKey()).setInfo("Selected");	
+				graph.get_Edge_Hash().get(tsp.get(i).getKey()).get(tsp.get(i+1).getKey()).setInfo("Selected");
 			}//for
 			repaint();
 		}//else if
@@ -313,17 +305,25 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			repaint();
 		}//else if
 
-		else if(str.equals("Add a node")) {
+		else if(str.equals("Add a node by clicking")) {
 			state=true;
 		}//else if
 
-		else if(str.equals("Select Node")) {
+		else if(str.equals("Add a node with coordinates")){
+			String s1=JOptionPane.showInputDialog(this, "Type in x:");
+			int x=Integer.parseInt(s1);
+			String s2=JOptionPane.showInputDialog(this, "Type in y:");
+			int y=Integer.parseInt(s2);
+			String id=JOptionPane.showInputDialog(this, "Type in ID:");
+			int key=Integer.parseInt(id);
 
-		}//else if
+			Point3D p=new Point3D(x,y);
+			node_data n=new NodeData(key,p);
+			this.graph.addNode(n);
+			repaint();
 
-		else if(str.equals("Select Edge")) {
 
-		}//else if
+		}
 
 
 	}
@@ -383,9 +383,13 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	public void run() {
 		while(true)
 		{
+<<<<<<< HEAD
 			if(graph.getMC()>this.mc)
 				this.mc=graph.getMC();
 			repaint();
+=======
+
+>>>>>>> 246827dadb4b5488ac0d80384bf4a3f6965e3fab
 		}//while
 	}//run
 }
