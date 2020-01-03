@@ -11,7 +11,14 @@ public class EdgeData implements edge_data,Serializable{
 	private int TAG;
 	
 	
-	
+	/**
+	 * Constructors:
+	 * @param sRC - SRC node
+	 * @param dST - Dest node
+	 * @param wEIGHT - Length fron src to dst
+	 * @param iNFO - Algorithms indicator
+	 * @param tAG - Algorithms indicator
+	 */
 	public EdgeData(int sRC, int dST, double wEIGHT, String iNFO, int tAG) {
 		if(sRC==dST)
 			throw new RuntimeException("ERR: This isn't ,multy graph");
@@ -23,6 +30,12 @@ public class EdgeData implements edge_data,Serializable{
 		TAG = tAG;
 		
 	}
+	/**
+	 * Constructor:
+	 * @param sRC - SRC node
+	 * @param dST - Dest node
+	 * @param wEIGHT - Length fron src to dst
+	 */
 	public EdgeData(int sRC, int dST, double wEIGHT) {
 		super();
 		SRC = sRC;
@@ -67,16 +80,20 @@ public class EdgeData implements edge_data,Serializable{
 		this.TAG=t;
 		
 	}
-	
+	@Override
 	public String toString() {
 		String str="";
 		str="Source: "+SRC+", Destination: "+DST+", Weight: "+WEIGHT;
 		return str;
 	}
+	
 	public String getID()
 	{
 		return this.ID;
 	}//String
+	/**
+	 * Compare Edges
+	 */
 	@Override
 	public boolean equals(Object edge)
 	{

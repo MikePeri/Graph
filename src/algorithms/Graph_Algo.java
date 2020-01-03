@@ -72,16 +72,16 @@ public class Graph_Algo implements graph_algorithms,Serializable{
             file.close(); 
             this.Graph=new DGraph(g); 
             //System.out.println("Object has been deserialized"); 
-        } 
+        }//try 
           
         catch(IOException ex) 
         { 
-            System.out.println("IOException is caught"); 
+            ex.printStackTrace();
         } 
           
         catch(ClassNotFoundException ex) 
         { 
-            System.out.println("ClassNotFoundException is caught"); 
+            ex.printStackTrace();
         } 
 
 	}//init
@@ -106,8 +106,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
         }//try   
         catch(IOException ex) 
         { 
-        	System.out.println("IOException is caught"); 
-//            ex.printStackTrace();
+        	//System.out.println("IOException is caught"); 
+            ex.printStackTrace();
 //            return;
         }//catch 
 	}//save
@@ -158,9 +158,9 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		
 	}
 /**
- * 
- * @param g
- * @return
+ * DFS Algo for discovering the given graph
+ * @param g - given graph
+ * @return Queue of discovered node
  */
 	public Queue<Integer> DFS(DGraph g) {
 		Queue<Integer> finish = new LinkedList<>();
@@ -184,10 +184,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return finish;
 	}//DFS
 	/**
-	 * 
-	 * @param g
-	 * @param node
-	 * @param finish
+	 * Visit neighbors path and select them
+	 * @param g - Given Graph
+	 * @param node - Start node discovering
+	 * @param finish - All the Discoverd Vertices
 	 */
 	public void dfsVisit(DGraph g,int node, Queue<Integer> finish){
 		HashMap<Integer, edge_data> neighbors=g.get_Edge_Hash().get(node);
@@ -218,9 +218,9 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 
 /**
- * 
- * @param g
- * @return
+ * Transpose all the edges in this graph
+ * @param g - given graph
+ * @return Transpose Graph
  */
 	public static DGraph transpose(DGraph g) {
 		//create a new graph with the same nodes but a new HashMap of edges

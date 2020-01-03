@@ -12,7 +12,14 @@ public class NodeData implements node_data,Serializable {
 	private double WEIGHT;
 	private String INFO;
 	private int TAG;
-	
+	/**
+	 * Constructor:
+	 * @param kEY - Similar to ID
+	 * @param lOC - Location on graph
+	 * @param wEIGHT - Algorithms indicator
+	 * @param iNFO - Algorithms indicator
+	 * @param tAG - Algorithms indicator
+	 */
 	public NodeData(int kEY, Point3D lOC, double wEIGHT, String iNFO, int tAG) {
 		KEY = kEY;
 		LOC = lOC;
@@ -20,7 +27,11 @@ public class NodeData implements node_data,Serializable {
 		INFO = iNFO;
 		TAG = tAG;
 	}//NodeData
-	
+	/**
+	 * Constructor:
+	 * @param key - Similar to ID
+	 * @param loc - Location on graph
+	 */
 	public NodeData(int key, Point3D loc) {
 		this.KEY = key;
 		this.LOC = loc;
@@ -85,6 +96,9 @@ public class NodeData implements node_data,Serializable {
 		str+="ID: "+KEY+", Location: ("+LOC.toString()+") , Weight: "+WEIGHT;
 		return str;
 	}//toString
+	/**
+	 * Compare to nodes
+	 */
 	@Override
 	public boolean equals(Object node)
 	{
