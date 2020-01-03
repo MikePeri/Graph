@@ -305,13 +305,9 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		else if(str.equals("Is Connected?"))
 		{
 			Graph_Algo g=new Graph_Algo(graph);
-<<<<<<< HEAD
 			JOptionPane.showMessageDialog(this, g.isConnected());
 			System.out.println("Is connected? action");
-=======
 			JOptionPane.showMessageDialog(null, g.isConnected());
-			//System.out.println("Is connected? action");
->>>>>>> 74a8bef95e604919caa66e33ce2e70f9131110cd
 			//repaint();
 		}//else if
 
