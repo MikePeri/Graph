@@ -42,7 +42,35 @@ class DGraphTest {
 		g.addNode(n5);
 	}
 
+	@Test
+	void testDGraphTime() {
+		DGraph graph=new DGraph();
+		int i=0;
+		while(i<100000) {
+			Point3D p=new Point3D(i,i,i);
+			node_data n=new NodeData(i,p);
+			graph.addNode(n);
+			System.out.println(i);
+			i++;
+		}
+		i=0;
+		int j;
+		while(i<100000) {
+			for (int k = 0; k < 10; k++) {
+				j=(int) Math.random()*100000;
+				if(i!=j)
+					graph.connect(i, j, 5);
+				else {
+					j++;
+					graph.connect(i, j, 5);
+				}
+			}
+			System.out.println(i);
+			
+			i++;
+		}
 
+	}
 
 	@Test
 	void testGetNode() {
@@ -63,7 +91,7 @@ class DGraphTest {
 
 	}
 
-	@Test
+	//@Test
 	void testAddNode() {
 		boolean flag=false;
 		try {//try adding a node which already exists
@@ -131,7 +159,7 @@ class DGraphTest {
 		ACTUAL=g.nodeSize();
 		EXPECTED=4;
 		assertEquals(ACTUAL,EXPECTED,"ERR: falied to return the right size of node graph");
-		
+
 	}
 
 	@Test
@@ -161,5 +189,5 @@ class DGraphTest {
 		assertEquals(ACTUAL,EXPECTED,"ERR: falied to return the MC");
 	}
 
-	
+
 }
