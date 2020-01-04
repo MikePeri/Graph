@@ -295,26 +295,20 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		if(str.equals("Save to file")) {
 			String s1=JOptionPane.showInputDialog(this, "Notice that the context is: name.txt\nPlease write down the name of the file that you want to save");
 			Graph_Algo g=new Graph_Algo(graph);
-			try {
 				g.save(s1);
-			} catch (Exception e2) {
-				JOptionPane.showMessageDialog(this,"Sorry, can't save this file.");
-			}
-			
+				if(g.getIOException())
+					JOptionPane.showMessageDialog(this,"Sorry, can't save this file.");
 			System.out.println("Save to file action");
 		}//if
 		else if(str.equals("open from file"))
 		{
 			String s1=JOptionPane.showInputDialog(this, "Notice that the context is: name.txt\nWhat the name of the file that you want to open?");
 			Graph_Algo g=new Graph_Algo(graph);
-			try {
 				g.init(s1);
-			} catch (Exception e2) {
-				if(e2 instanceof IOException)
+				if(g.getIOException())
 					JOptionPane.showMessageDialog(this,"Sorry but we can't read this file.");
-				if(e2 instanceof ClassNotFoundException)
+				if(g.getClassNotFoundException())
 					JOptionPane.showMessageDialog(this,"Sorry but we can't find this file.");
-			}
 			System.out.println("open from file action");
 			repaint();
 		}//else if

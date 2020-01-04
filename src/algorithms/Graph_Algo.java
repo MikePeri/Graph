@@ -40,8 +40,10 @@ import gui.Graph_GUI;
  *
  */
 public class Graph_Algo implements graph_algorithms,Serializable{
+	private boolean ClassNotFoundException;
 	private DGraph Graph;
 	private HashMap<node_data, node_data> predessesors;
+	private boolean IOException;
 	/**
 	 * Constructors:
 	 */
@@ -64,6 +66,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 * @param file_name
 	 */
 	public void init(String file_name) {
+		this.IOException=false;
+		this.ClassNotFoundException=false;
 		DGraph g = new DGraph(); 
 
 		try
@@ -80,12 +84,14 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 		catch(IOException ex) 
 		{ 
+			IOException=true;
 			//ex.printStackTrace();
 			System.out.println("IOException");
 		} 
 
 		catch(ClassNotFoundException ex) 
 		{ 
+			this.ClassNotFoundException=true;
 			//ex.printStackTrace();
 			System.out.println("ClassNotFoundException");
 		} 
@@ -99,6 +105,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	public void save(String file_name) {
 		try
 		{    
+			IOException=false;
 			FileOutputStream file = new FileOutputStream(file_name); 
 			ObjectOutputStream out = new ObjectOutputStream(file); 
 
@@ -111,6 +118,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//try   
 		catch(IOException ex) 
 		{ 
+			IOException=true;
 			System.out.println("IOException is caught"); 
 			//ex.printStackTrace();
 			//            return;
@@ -259,13 +267,14 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	}//shortestPathDist
 	/**
 	 * This function represent the shortest path between src node and dest node
-	 * Time Complexity isn't O(E+V*log(V)) Because we dont use Min Heap DS
+	 * Time Complexity isn't the calssic O(E+V*log(V)) Because we don't use Min Heap DS
+	 * Time Complexity: O(n^2)
 	 * @param src - source node
 	 * @param dest - destination node
 	 */
 	public void Dijkstra(int src,int dest)
 	{
-		setNodeInfinity(this.Graph.get_Node_Hash());
+		setNodeInfinity(this.Graph.get_Node_Hash());//o(n)
 		Collection<node_data> sptSet=new ArrayList<node_data>();
 		node_data start=this.Graph.getNode(src);
 		start.setWeight(0);
@@ -274,19 +283,14 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		//Second step
 		while(sptSet.size()!=this.Graph.nodeSize())
 		{
-			//System.out.println("sptSet: "+sptSet+"\n");
-			node_data min=chooseMin(this.Graph.getV(),sptSet);
+			node_data min=chooseMin(this.Graph.getV(),sptSet);//O(n)
 			if(min.getKey()==dest)
 				break;
-			//System.out.println("key min node: "+min.getKey()+"\n");
 			sptSet.add(min);
-			//System.out.println("Before: "+this.Graph.get_Node_Hash().values());
 			if(this.Graph.get_Edge_Hash().containsKey(min.getKey()))
 			{
-				//System.out.println("Neighbors of min: "+this.Graph.get_Edge_Hash().get(min.getKey()).values());
-				relaxation(this.Graph.get_Edge_Hash().get(min.getKey()),min);
+				relaxation(this.Graph.get_Edge_Hash().get(min.getKey()),min);//O(n)
 			}//if
-			//System.out.println("After: "+this.Graph.get_Node_Hash().values()+"\n");
 		}//while
 	}//Dijkstra
 
@@ -294,6 +298,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 * returns the the shortest path between src to dest - as an ordered List of nodes:
 	 * src--> n1-->n2-->...dest
 	 * see: https://en.wikipedia.org/wiki/Shortest_path_problem
+	 * Time Complexity: O(n^2) We use the path of the Shortest path dist made
 	 * @param src - start node
 	 * @param dest - end (target) node
 	 * @return
@@ -326,6 +331,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 * Note: this is NOT the classical traveling salesman problem,
 	 * as you can visit a node more than once, and there is no need to return to source node -
 	 * just a simple path going over all nodes in the list.
+	 * We simply go with the flow of the list and use Shortest Path on pair of each pair of vertices with n shuffles
+	 * Assume that the targets is a set of k vertices so:
+	 * Time Complexity is about: O(k*n^3)
+	 * Time Complexity: O(n^4) iff k=n.
 	 * @param targets
 	 * @return
 	 */
@@ -374,7 +383,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//else if
 		else
 		{
-			for (int j = 0; j < 1000; j++) {
+			for (int j = 0; j < this.Graph.get_Node_Hash().size(); j++) {
 				List<node_data> sp=new ArrayList<node_data>();
 				List<Integer> spKeys=new ArrayList<Integer>();
 				//System.out.println("Target List: ");
@@ -429,10 +438,11 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	}//chooseMin
 	/**
 	 * Updating the value of the neighbors of given node data
+	 * Complexity: O(n)
 	 * @param hashMap - present fast access to neighbors
 	 */
 	private void relaxation(HashMap<Integer, edge_data> n,node_data min) {
-		double minValue=min.getWeight();
+		double minValue=min.getWeight();//O(1)
 		Collection<edge_data> neighbors=n.values();
 		for (edge_data edge : neighbors) {
 			int dstKey=edge.getDest();
@@ -447,10 +457,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 					predessesors.put(dst, min);
 				this.Graph.getNode(dstKey).setWeight(minValue+edgeWeight);
 			}//if
-			//System.out.println(edge.getSrc()+" weight: "+this.Graph.getNode(dstKey).getWeight());
 		}//for
-		//System.out.println("After: "+n.values());
-	}//updateNeighbors
+}//updateNeighbors
 
 	/** 
 	 * Set all the weight nodes graph to infinity.
@@ -506,6 +514,14 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	{
 		return Graph;
 	}//getGraph
+	public boolean getIOException()
+	{
+		return this.IOException;
+	}//getFilesERR
+	public boolean getClassNotFoundException()
+	{
+		return this.ClassNotFoundException;
+	}//getFilesERR
 	/**
 	 * TSP help function
 	 * @param list

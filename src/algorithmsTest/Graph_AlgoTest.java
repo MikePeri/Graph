@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+
+
 import algorithms.Graph_Algo;
 import dataStructure.DGraph;
 import dataStructure.NodeData;
@@ -123,10 +125,9 @@ class Graph_AlgoTest {
 		assertEquals(expected, actual,"ERR: Failing to save the shortest path. Expected: "+expected+" Actual: "+actual);
 	}
 
-	//@Test
+	@Test
 	void testTSP() {
 		graph_Factory();
-		this.EXPECTED.connect(0, 1, 1);
 		this.EXPECTED.connect(1, 0, 2);
 		this.EXPECTED.connect(0, 2, 3);
 		this.EXPECTED.connect(2, 0, 4);
@@ -136,10 +137,14 @@ class Graph_AlgoTest {
 		targets.add(0);
 		targets.add(1);
 		targets.add(2);
-		targets.add(3);
-		//System.out.println(targets);
 		List<node_data> actual=this.graphAlgo.TSP(targets);
 		List<node_data> expected=new ArrayList<node_data>();
+		expected.add(this.EXPECTED.getNode(1));
+		expected.add(this.EXPECTED.getNode(0));
+		expected.add(this.EXPECTED.getNode(2));
+		//System.out.println(actual.toString());
+		//System.out.println(expected.toString());
+		assertEquals(expected, actual,"ERR:Failing to TSP");
 	}
 
 	@Test

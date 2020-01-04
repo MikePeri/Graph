@@ -60,7 +60,7 @@ public class Main
 		
 		
 		
-		Graph_GUI window = new Graph_GUI();
+		Graph_GUI window = new Graph_GUI(EXPECTED);
 		
 		EXPECTED.connect(4, 0, 4);
 		EXPECTED.connect(1, 0, 7);
