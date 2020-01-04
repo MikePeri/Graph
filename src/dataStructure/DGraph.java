@@ -11,7 +11,12 @@ import javax.management.RuntimeErrorException;
 
 import gui.Graph_GUI;
 
-
+/**
+ * This class represents a directional weighted graph.
+ * The interface has a road-system or communication network in mind - and should support a large number of nodes (over 100,000).
+ * The implementation is based on HashMap, which allows most of the functions to run in O(1) time.
+ *
+ */
 public class DGraph implements graph,Serializable{
 	private HashMap<Integer, node_data> Node_Hash;
 	private HashMap<Integer, HashMap<Integer, edge_data>> Edge_Hash;

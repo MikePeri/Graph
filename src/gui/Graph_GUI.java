@@ -27,6 +27,21 @@ import dataStructure.node_data;
 import utils.Point3D;
 import utils.Range;
 
+/**
+ * This class represents a simple gui for the class DGraph and Graph_Algo. 
+ * It uses a simple graphics model that
+ * allows you to create graphs in a window on your computer from the scratch, 
+ * or see an existing one on the screen.
+ * It also allows you to save the graph to a file,
+ * execute the algorithms: isConnected, ShortestPath and TSP, which are in the package "algorithms",
+ * You can either add a node by clicking on "Actions" -> "add a node", and then placing it on the screen
+ * or by clicking on "add a node by coordinated" in the Actions menu, and entering the desired place.
+ * You can also connect two nodes in the Actions menu.
+ * 
+ * @author Ilana
+ *
+ */
+
 public class Graph_GUI extends JFrame implements ActionListener, MouseListener,Runnable
 {
 	private DGraph graph;
@@ -54,7 +69,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 		Thread t=new Thread(this);
 		t.start();
-	}//
+	}//Graph_GUI
 
 
 	private void initGUI() {
@@ -234,6 +249,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		Range rx=new Range(min,max);
 		return rx;
 	}//RangeX
+	
 	/**
 	 * Finding the limits of x coordinate for Screen creator
 	 * @return
@@ -282,7 +298,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			try {
 				g.save(s1);
 			} catch (Exception e2) {
-				JOptionPane.showMessageDialog(this,"Sorry but we can't save this file.");
+				JOptionPane.showMessageDialog(this,"Sorry, can't save this file.");
 			}
 			
 			System.out.println("Save to file action");

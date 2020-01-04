@@ -50,7 +50,6 @@ class DGraphTest {
 			Point3D p=new Point3D(i,i,i);
 			node_data n=new NodeData(i,p);
 			graph.addNode(n);
-			System.out.println(i);
 			i++;
 		}
 		i=0;
@@ -65,7 +64,6 @@ class DGraphTest {
 					graph.connect(i, j, 5);
 				}
 			}
-			System.out.println(i);
 			
 			i++;
 		}

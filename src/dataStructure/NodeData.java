@@ -14,22 +14,22 @@ public class NodeData implements node_data,Serializable {
 	private int TAG;
 	/**
 	 * Constructor:
-	 * @param kEY - Similar to ID
-	 * @param lOC - Location on graph
-	 * @param wEIGHT - Algorithms indicator
-	 * @param iNFO - Algorithms indicator
-	 * @param tAG - Algorithms indicator
+	 * @param key - Similar to ID
+	 * @param loc - Location on graph
+	 * @param weight - Algorithms indicator
+	 * @param info - Algorithms indicator
+	 * @param tag - Algorithms indicator
 	 */
-	public NodeData(int kEY, Point3D lOC, double wEIGHT, String iNFO, int tAG) {
-		KEY = kEY;
-		LOC = lOC;
-		WEIGHT = wEIGHT;
-		INFO = iNFO;
-		TAG = tAG;
+	public NodeData(int key, Point3D loc, double weight, String info, int tag) {
+		KEY = key;
+		LOC = loc;
+		WEIGHT = weight;
+		INFO = info;
+		TAG = tag;
 	}//NodeData
 	/**
 	 * Constructor:
-	 * @param key - Similar to ID
+	 * @param key - ID
 	 * @param loc - Location on graph
 	 */
 	public NodeData(int key, Point3D loc) {

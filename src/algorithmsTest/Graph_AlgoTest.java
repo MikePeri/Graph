@@ -1,26 +1,13 @@
 package algorithmsTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import java.util.Queue;
-
 import java.util.List;
-
-
 import org.junit.jupiter.api.Test;
-
-
 import algorithms.Graph_Algo;
 import dataStructure.DGraph;
-import dataStructure.EdgeData;
 import dataStructure.NodeData;
-import dataStructure.edge_data;
-import dataStructure.graph;
 import dataStructure.node_data;
-import gui.Graph_GUI;
 import utils.Point3D;
 
 class Graph_AlgoTest {
@@ -87,6 +74,7 @@ class Graph_AlgoTest {
 		Graph_Algo g=new Graph_Algo(EXPECTED);
 		assertEquals(graphAlgo, g);
 	}//equalsTest
+	
 	@Test
 	void testIsConnected() {
 		graph_Factory();
@@ -96,15 +84,14 @@ class Graph_AlgoTest {
 		this.EXPECTED.connect(3, 4, 4);
 		this.EXPECTED.connect(4, 0, 4);
 		this.graphAlgo= new Graph_Algo((DGraph) this.EXPECTED);
-		
+
 		boolean e=this.graphAlgo.isConnected();
 		assertTrue(e,"ERR:Failed to return false when graph is not connected");
 
 	}
 
-		@Test
+	@Test
 	void testShortestPathDist() {
-
 		graph_Factory();
 		//System.out.println(this.EXPECTED.get_Node_Hash().containsKey(0));
 		this.EXPECTED.connect(0, 1, 1);
@@ -136,7 +123,7 @@ class Graph_AlgoTest {
 		assertEquals(expected, actual,"ERR: Failing to save the shortest path. Expected: "+expected+" Actual: "+actual);
 	}
 
-	@Test
+	//@Test
 	void testTSP() {
 		graph_Factory();
 		this.EXPECTED.connect(0, 1, 1);
@@ -153,14 +140,13 @@ class Graph_AlgoTest {
 		//System.out.println(targets);
 		List<node_data> actual=this.graphAlgo.TSP(targets);
 		List<node_data> expected=new ArrayList<node_data>();
-		//System.out.println(actual);
 	}
 
-		@Test
+	@Test
 	void testCopy() {
 		graph_Factory();
 		this.ACTUAL=new DGraph(this.EXPECTED);
 		assertEquals(this.EXPECTED, this.ACTUAL,"ERR: Failing to copy Graph");
 	}//testCopy
-		
+
 }

@@ -30,8 +30,12 @@ import dataStructure.graph;
 import dataStructure.node_data;
 import gui.Graph_GUI;
 /**
- * This empty class represents the set of graph-theory algorithms
- * which should be implemented as part of Ex2 - Do edit this class.
+ * This class represents the set of graph-theory algorithms,
+ * such as: isConnected, which should return true if there is a path between every node
+ * shortestPath, which returns the shortest path, given a source node and a destination node
+ * and TSP, which returns a path between a list of nodes.
+ * This class has an empty constructor and a constructor from a given graph, 
+ * can load a DGraph from file and save to file. 
  * @author
  *
  */
@@ -39,16 +43,16 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	private DGraph Graph;
 	private HashMap<node_data, node_data> predessesors;
 	/**
-	 * Constructor:
+	 * Constructors:
 	 */
-	public Graph_Algo ()
-	{
+	public Graph_Algo (){
 		this.Graph=new DGraph(new DGraph());
 	}//Graph_Algo
-	public Graph_Algo (graph g)
-	{
+
+	public Graph_Algo (graph g){
 		init(g);
 	}//Graph_Algo
+
 	@Override
 	public void init(graph g) {
 		this.Graph=new DGraph((DGraph) g);
@@ -61,30 +65,30 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 */
 	public void init(String file_name) {
 		DGraph g = new DGraph(); 
-	       
-        try
-        {    
-            FileInputStream file = new FileInputStream(file_name); 
-            ObjectInputStream in = new ObjectInputStream(file); 
-              
-            g = (DGraph)in.readObject();  
-            in.close(); 
-            file.close(); 
-            this.Graph=new DGraph(g); 
-            //System.out.println("Object has been deserialized"); 
-        }//try 
-          
-        catch(IOException ex) 
-        { 
-            //ex.printStackTrace();
-        	System.out.println("IOException");
-        } 
-          
-        catch(ClassNotFoundException ex) 
-        { 
-            //ex.printStackTrace();
-        	System.out.println("ClassNotFoundException");
-        } 
+
+		try
+		{    
+			FileInputStream file = new FileInputStream(file_name); 
+			ObjectInputStream in = new ObjectInputStream(file); 
+
+			g = (DGraph)in.readObject();  
+			in.close(); 
+			file.close(); 
+			this.Graph=new DGraph(g); 
+			//System.out.println("Object has been deserialized"); 
+		}//try 
+
+		catch(IOException ex) 
+		{ 
+			//ex.printStackTrace();
+			System.out.println("IOException");
+		} 
+
+		catch(ClassNotFoundException ex) 
+		{ 
+			//ex.printStackTrace();
+			System.out.println("ClassNotFoundException");
+		} 
 
 	}//init
 
@@ -93,51 +97,49 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 * @param file_name
 	 */
 	public void save(String file_name) {
-		// TODO Auto-generated method stub
 		try
-        {    
-            FileOutputStream file = new FileOutputStream(file_name); 
-            ObjectOutputStream out = new ObjectOutputStream(file); 
-              
-            out.writeObject(Graph); 
-              
-            out.close(); 
-            file.close(); 
-              
-            //System.out.println("Object has been serialized"); 
-        }//try   
-        catch(IOException ex) 
-        { 
-        	System.out.println("IOException is caught"); 
-            //ex.printStackTrace();
-//            return;
-        }//catch 
+		{    
+			FileOutputStream file = new FileOutputStream(file_name); 
+			ObjectOutputStream out = new ObjectOutputStream(file); 
+
+			out.writeObject(Graph); 
+
+			out.close(); 
+			file.close(); 
+
+			//System.out.println("Object has been serialized"); 
+		}//try   
+		catch(IOException ex) 
+		{ 
+			System.out.println("IOException is caught"); 
+			//ex.printStackTrace();
+			//            return;
+		}//catch 
 	}//save
 
-	
+
 	/**
 	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
 	 * other node. NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
 	 * @return
 	 */
 	public boolean isConnected() {
-		
+
 		if(Graph.get_Node_Hash().size()==1 || Graph.get_Node_Hash().size()==0)
 			return true;
+
 		DGraph transpose = transpose(Graph);
 		return (isConnectedHelp(this.Graph) && isConnectedHelp(transpose));
 	}//isConnected
-	
-	public boolean isConnectedHelp(DGraph g) {
+
+	private boolean isConnectedHelp(DGraph g) {
 
 		Queue<Integer> finished=DFS(this.Graph);
 		int count=0;
 		Queue<Integer> forDFS=new LinkedList<>();
 
 		//initialize
-		Iterator<Integer> itr=g.get_Node_Hash().keySet().iterator();
-		while(itr.hasNext()) {
-			int node=itr.next();
+		for(Integer node : g.get_Node_Hash().keySet()) {
 			g.getNode(node).setTag(1);
 		}
 
@@ -156,27 +158,23 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		if(count==1)
 			return true;
 		return false;
-		
-		
+
+
 	}
-/**
- * DFS Algo for discovering the given graph
- * @param g - given graph
- * @return Queue of discovered node
- */
-	public Queue<Integer> DFS(DGraph g) {
+	/**
+	 * DFS Algo for discovering the given graph
+	 * @param g - given graph
+	 * @return Queue of discovered node
+	 */
+	private Queue<Integer> DFS(DGraph g) {
 		Queue<Integer> finish = new LinkedList<>();
 
 		//initialize
-		Iterator<Integer> itr=g.get_Node_Hash().keySet().iterator();
-		while(itr.hasNext()) {
-			int node=itr.next();
+		for(Integer node : g.get_Node_Hash().keySet()) {
 			g.getNode(node).setTag(1);
 		}//while
 		//check all the nodes: if they are still white, do dfsVisit
-		itr=g.get_Node_Hash().keySet().iterator();
-		while(itr.hasNext()) {
-			int node=itr.next();
+		for(Integer node : g.get_Node_Hash().keySet()) {
 			//if the node is white
 			if(g.getNode(node).getTag()==1)
 				dfsVisit(g,node,finish);
@@ -191,7 +189,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 * @param node - Start node discovering
 	 * @param finish - All the Discoverd Vertices
 	 */
-	public void dfsVisit(DGraph g,int node, Queue<Integer> finish){
+	private void dfsVisit(DGraph g,int node, Queue<Integer> finish){
 		HashMap<Integer, edge_data> neighbors=g.get_Edge_Hash().get(node);
 
 		//change color to gray
@@ -205,9 +203,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			return;
 		}//if
 
-		Iterator<Integer> itr=neighbors.keySet().iterator();
-		while (itr.hasNext()) {
-			int u=itr.next();
+		for(Integer u : neighbors.keySet()) {
 			//if the neighbors are white
 			if(g.get_Node_Hash().get(u).getTag()==1)
 				dfsVisit(g, u, finish);
@@ -219,21 +215,18 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	}//dfsVisit
 
 
-/**
- * Transpose all the edges in this graph
- * @param g - given graph
- * @return Transpose Graph
- */
+	/**
+	 * Transpose all the edges in this graph
+	 * @param g - given graph
+	 * @return Transpose Graph
+	 */
 	public static DGraph transpose(DGraph g) {
 		//create a new graph with the same nodes but a new HashMap of edges
 		DGraph trans=new DGraph(g.get_Node_Hash(),new HashMap<Integer, HashMap<Integer,edge_data>>());
-		Iterator<Integer> itr=g.get_Edge_Hash().keySet().iterator();
-		while(itr.hasNext()) {
-			int s=itr.next();
+		
+		for(Integer s : g.get_Edge_Hash().keySet()) {
 			HashMap<Integer,edge_data> src=g.get_Edge_Hash().get(s);
-			Iterator<Integer> neighbors=src.keySet().iterator();
-			while(neighbors.hasNext()) {
-				int d=neighbors.next();
+			for(Integer d : src.keySet()) {
 				double weight=g.get_Edge_Hash().get(s).get(d).getWeight();
 				trans.connect(d, s, weight);
 
@@ -255,6 +248,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			throw new RuntimeException("ERR: One of the nodes aren't exist!");
 		else if(src==dest)//If they are the same vertices
 			return 0;
+		
 		else//We need to find the path if it's exist by Dijkstra Algo
 		{
 			Dijkstra(src,dest);
@@ -264,9 +258,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return -1;
 	}//shortestPathDist
 	/**
-	 * This algo present the shortest path between src node and dest node
-	 * Time Complexity isn't O(E+Vlog(V)) Because we dont use Min Heap DS
-	 * @param src - SRC node to start the Algo
+	 * This function represent the shortest path between src node and dest node
+	 * Time Complexity isn't O(E+V*log(V)) Because we dont use Min Heap DS
+	 * @param src - source node
+	 * @param dest - destination node
 	 */
 	public void Dijkstra(int src,int dest)
 	{
@@ -322,7 +317,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			//printForIlana(short_path);
 			return short_path;
 		}//if
-		System.out.println("The isn't such a shortest path");
+		System.out.println("There isn't such a path");
 		return path;
 	}//shortestPath
 
@@ -499,9 +494,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	public boolean equals(Object a)
 	{
 		if(a instanceof graph_algorithms)
-				return this.Graph.equals(((Graph_Algo) a).getGraph());
+			return this.Graph.equals(((Graph_Algo) a).getGraph());
 		return false;
 	}//equals
+	
 	/**
 	 * Getters:
 	 * @return
@@ -544,6 +540,6 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		Graph_GUI window=new Graph_GUI(this.Graph);
 		window.setVisible(true);
 	}//show
-	
-	
+
+
 }

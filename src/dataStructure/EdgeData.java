@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class EdgeData implements edge_data,Serializable{
 	private int SRC;
 	private int DST;
-	private String ID;
 	private double WEIGHT;
 	private String INFO;
 	private int TAG;
@@ -13,35 +12,34 @@ public class EdgeData implements edge_data,Serializable{
 	
 	/**
 	 * Constructors:
-	 * @param sRC - SRC node
-	 * @param dST - Dest node
-	 * @param wEIGHT - Length fron src to dst
-	 * @param iNFO - Algorithms indicator
-	 * @param tAG - Algorithms indicator
+	 * @param src - SRC node
+	 * @param dst - Dest node
+	 * @param weight - Length fron src to dst
+	 * @param info - Algorithms indicator
+	 * @param tag - Algorithms indicator
 	 */
-	public EdgeData(int sRC, int dST, double wEIGHT, String iNFO, int tAG) {
-		if(sRC==dST)
-			throw new RuntimeException("ERR: This isn't ,multy graph");
-		SRC = sRC;
-		DST = dST;
-		ID = String.valueOf(sRC)+"->"+String.valueOf(dST);
-		WEIGHT = wEIGHT;
-		INFO = iNFO;
-		TAG = tAG;
+	public EdgeData(int src, int dst, double weight, String info, int tag) {
+		if(src==dst)
+			throw new RuntimeException("ERR: This isn't multy graph");
+		SRC = src;
+		DST = dst;
+		WEIGHT = weight;
+		INFO = info;
+		TAG = tag;
 		
 	}
+	
 	/**
 	 * Constructor:
-	 * @param sRC - SRC node
-	 * @param dST - Dest node
-	 * @param wEIGHT - Length fron src to dst
+	 * @param src - SRC node
+	 * @param dst - Dest node
+	 * @param weight - Length fron src to dst
 	 */
-	public EdgeData(int sRC, int dST, double wEIGHT) {
+	public EdgeData(int src, int dst, double weight) {
 		super();
-		SRC = sRC;
-		DST = dST;
-		ID = String.valueOf(sRC)+"->"+String.valueOf(dST);
-		WEIGHT = wEIGHT;
+		SRC = src;
+		DST = dst;
+		WEIGHT = weight;
 	}
 
 	@Override
@@ -87,10 +85,7 @@ public class EdgeData implements edge_data,Serializable{
 		return str;
 	}
 	
-	public String getID()
-	{
-		return this.ID;
-	}//String
+	
 	/**
 	 * Compare Edges
 	 */

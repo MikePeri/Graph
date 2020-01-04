@@ -12,13 +12,7 @@ public class Main
 
 	public static void main(String[] args) 
 	{
-		/*
-		 * run the main, then click on options -> TSP.
-		 * in the first window, enter 3
-		 * then 1
-		 * then 4
-		 * then 6
-		 */
+		
 		DGraph EXPECTED=new DGraph();
 		Point3D p0=new Point3D(-25,0);
 		Point3D p1=new Point3D(20,20);
@@ -66,7 +60,7 @@ public class Main
 		
 		
 		
-		Graph_GUI window = new Graph_GUI(EXPECTED);
+		Graph_GUI window = new Graph_GUI();
 		
 		EXPECTED.connect(4, 0, 4);
 		EXPECTED.connect(1, 0, 7);
