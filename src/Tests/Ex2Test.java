@@ -57,7 +57,9 @@ class Ex2Test {
 		return ans;
 	}
 	boolean drawGraph(graph g) { 
-		// YOUR GUI graph draw 
+		
+		Graph_GUI window = new Graph_GUI();
+		window.setVisible(true);
 		return true;
 		
 	}
