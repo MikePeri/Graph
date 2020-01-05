@@ -29,14 +29,15 @@ import utils.Range;
 
 /**
  * This class represents a simple gui for the class DGraph and Graph_Algo. 
- * It uses a simple graphics model that
- * allows you to create graphs in a window on your computer from the scratch, 
+ * It uses a simple graphics model that allows you to create graphs in a window on your computer from the scratch, 
  * or see an existing one on the screen.
  * It also allows you to save the graph to a file,
  * execute the algorithms: isConnected, ShortestPath and TSP, which are in the package "algorithms",
  * You can either add a node by clicking on "Actions" -> "add a node", and then placing it on the screen
  * or by clicking on "add a node by coordinated" in the Actions menu, and entering the desired place.
  * You can also connect two nodes in the Actions menu.
+ * 
+ * If you initialize an empty graph, the default range will by -1<x<1 and -1<y<1.
  * 
  * @author Ilana
  *
@@ -62,10 +63,10 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		width=800;
 		height=600;
 		graph=g;
-		rx=this.rangeX();
-		ry=this.rangeY();
 		state=false;
 		mc=graph.getMC();
+		rx=this.rangeX();
+		ry=this.rangeY();
 
 		Thread t=new Thread(this);
 		t.start();
@@ -139,14 +140,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 	}//initGUI
 
-	private void paintVertices() {
-
-	}
-
-
+	
 
 	public void paint(Graphics g){
 		super.paint(g);
+		
+		
 
 		double proportionX=width/rx.get_length();
 		double proportionY=(0-height)/ry.get_length();
@@ -179,8 +178,8 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 					if(graph.get_Edge_Hash().get(v).get(u).getInfo()!=null &&
 							graph.get_Edge_Hash().get(v).get(u).getInfo().equals("Selected")) {
-						//g.setFont(Font.decode("BOLD"));
 						g.setColor(Color.RED);
+						
 					}//if
 
 					g.drawLine(x0, y0, x1, y1);
@@ -190,9 +189,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 					g.drawString(Double.toString(graph.get_Edge_Hash().get(v).get(u).getWeight()),
 							x1*3/4+x0*1/4, y1*3/4+y0*1/4);
 
-					//indicate the direction
-					//					g.setColor(Color.RED);
-					//					g.fillOval(x1*7/8+x0*1/8, y1*7/8+y0*1/8, 8, 8);
 					g.setColor(Color.BLACK);
 
 				}//Inner while
@@ -223,10 +219,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	private Range rangeX() {
 		double max=Integer.MIN_VALUE;
 		double min=Integer.MAX_VALUE;
+		
+		//default range for an empty graph
+		if(graph.get_Node_Hash().isEmpty()) {
+			Range rx=new Range(-1,1);
+			return rx;
+		}
 
-		Iterator<Integer> it = graph.get_Node_Hash().keySet().iterator();
-		while (it.hasNext()) {
-			Integer node=it.next();
+		for(Integer node : graph.get_Node_Hash().keySet()) {
 			if(graph.get_Node_Hash().get(node).getLocation().x()>max)
 				max=graph.get_Node_Hash().get(node).getLocation().x();
 			if(graph.get_Node_Hash().get(node).getLocation().x()<min)
@@ -257,15 +257,19 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	private Range rangeY() {
 		double max=Integer.MIN_VALUE;
 		double min=Integer.MAX_VALUE;
-
-		Iterator<Integer> it = graph.get_Node_Hash().keySet().iterator();
-		while (it.hasNext()) {
-			Integer node=it.next();
+		
+		//default range for an empty graph
+		if(graph.get_Node_Hash().isEmpty()) {
+			Range rx=new Range(-1,1);
+			return rx;
+		}
+		
+		for(Integer node : graph.get_Node_Hash().keySet()) {
 			if(graph.get_Node_Hash().get(node).getLocation().y()>max)
 				max=graph.get_Node_Hash().get(node).getLocation().y();
 			if(graph.get_Node_Hash().get(node).getLocation().y()<min)
 				min=graph.get_Node_Hash().get(node).getLocation().y();
-		}//while
+		}//for each
 		if(max==0 && min == 0) {
 			max=1;
 			min=-1;
@@ -342,7 +346,15 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			path=g.shortestPath(src, dest);
 
 			for (int i = 0; i < path.size()-1; i++) {
-				graph.get_Edge_Hash().get(path.get(i).getKey()).get(path.get(i+1).getKey()).setInfo("Selected");
+				int u=path.get(i).getKey();
+				int v=path.get(i+1).getKey();
+				
+				graph.get_Edge_Hash().get(u).get(v).setInfo("Selected");
+				
+				if(graph.get_Edge_Hash().containsKey(v))
+					if(graph.get_Edge_Hash().get(v).containsKey(u))
+						graph.get_Edge_Hash().get(v).get(u).setInfo("Selected");
+						
 			}//for
 			repaint();
 
@@ -467,11 +479,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 			node_data n;
 			String s=JOptionPane.showInputDialog(this, "The coordinates are:"+ x+" , "+ y +", Type in Id:");
-			int id = Integer.parseInt(s);
 			//if the user canceled
 			if(s==null) {
 				return;
 			}
+			int id = Integer.parseInt(s);
+			
 			n=new NodeData(id,p);
 			try {
 				this.graph.addNode(n);
