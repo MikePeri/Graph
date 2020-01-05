@@ -51,26 +51,27 @@ public class Main
 		
 		
 		
-		g.save("saveTest.txt");
-		
+				
 		Graph_Algo g2=new Graph_Algo();
-		g2.init("saveTest.txt");
 		
 		
 		
 		
 		
-		Graph_GUI window = new Graph_GUI(EXPECTED);
+		
+		//Graph_GUI window = new Graph_GUI(g.getGraph());
+		
 		
 		EXPECTED.connect(4, 0, 4);
 		EXPECTED.connect(1, 0, 7);
 		EXPECTED.connect(7, 4, 6);
 		EXPECTED.connect(6, 7, 1);
-
+		g.save("saveTest.txt");
+		g2.init("saveTest.txt");
+		Graph_GUI window2 = new Graph_GUI();
 		
-		
-
-		window.setVisible(true);
+		window2.setVisible(true);
+		//window.setVisible(true);
 	}
 
 }
