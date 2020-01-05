@@ -1,9 +1,9 @@
-# Graph
+# The maze of waze
 
 This project's main purpose is to create a directed graph with a road map in mind - resembling the waze algorithm.
 
 After you clone this project into your workspace, you can make your own directed graph. Make sure to download all the packages.
-For each package, there will be a test package, where you can understang how to use thier respective classes. 
+For each package, there will be a test package, where you can understand how to use their respective classes. 
 
 For the gui part, you can initialize an empty window, and by clicking on the "Actions" option, 
 you can create your own Directed Graph through it.
