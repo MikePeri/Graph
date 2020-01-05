@@ -394,7 +394,12 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//else if
 		else
 		{
-			for (int j = 0; j < this.Graph.get_Node_Hash().size(); j++) {
+			int num=0;
+			if(this.getGraph().get_Node_Hash().size()<1000)
+				num=1000;
+			else
+				num=this.getGraph().get_Node_Hash().size();
+			for (int j = 0; j < num; j++) {
 				List<node_data> sp=new ArrayList<node_data>();
 				List<Integer> spKeys=new ArrayList<Integer>();
 				//System.out.println("Target List: ");
