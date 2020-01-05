@@ -60,7 +60,9 @@ public class Main
 		
 		
 		
-		Graph_GUI window = new Graph_GUI(EXPECTED);
+		Graph_GUI window = new Graph_GUI(g2.getGraph());
+		Graph_GUI window2 = new Graph_GUI(g.getGraph());
+//		Graph_GUI window2 = new Graph_GUI();
 		
 		EXPECTED.connect(4, 0, 4);
 		EXPECTED.connect(1, 0, 7);
@@ -71,6 +73,7 @@ public class Main
 		
 
 		window.setVisible(true);
+		window2.setVisible(true);
 	}
 
 }
