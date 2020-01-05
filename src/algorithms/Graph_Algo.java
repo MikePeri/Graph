@@ -140,11 +140,17 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return (isConnectedHelp(this.Graph) && isConnectedHelp(transpose));
 	}//isConnected
 
+	/**
+	 * A private function to determine if you can reach all nodes
+	 * by doing a DFS search. 
+	 * @param g is a given DGraph.
+	 * @return true if all the nodes are reachable when doing DFS search.
+	 */
 	private boolean isConnectedHelp(DGraph g) {
 
 		Queue<Integer> finished=DFS(this.Graph);
 		int count=0;
-		Queue<Integer> forDFS=new LinkedList<>();
+		//Queue<Integer> forDFS=new LinkedList<>();
 
 		//initialize
 		for(Integer node : g.get_Node_Hash().keySet()) {
@@ -155,9 +161,11 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		while(finished.peek()!=null) {
 			int node=finished.poll();
 			count++;
+			
 			//if the node is white
 			if(g.getNode(node).getTag()==1) {
-				dfsVisit(g,node,forDFS);
+				dfsVisit(g,node,new LinkedList<>());
+				
 				//remove all the nodes that are not white.
 				while(finished.peek()!=null && g.get_Node_Hash().get(finished.peek()).getTag()!=1)
 					finished.remove();
@@ -170,9 +178,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 	}
 	/**
-	 * DFS Algo for discovering the given graph
+	 * This private function will check if a node is white or not. 
+	 * If it is white, will call dfsVisit.
 	 * @param g - given graph
-	 * @return Queue of discovered node
+	 * @return Queue of discovered nodes in a decreasing time.
 	 */
 	private Queue<Integer> DFS(DGraph g) {
 		Queue<Integer> finish = new LinkedList<>();
@@ -181,8 +190,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		for(Integer node : g.get_Node_Hash().keySet()) {
 			g.getNode(node).setTag(1);
 		}//while
+		
 		//check all the nodes: if they are still white, do dfsVisit
 		for(Integer node : g.get_Node_Hash().keySet()) {
+			
 			//if the node is white
 			if(g.getNode(node).getTag()==1)
 				dfsVisit(g,node,finish);
@@ -192,10 +203,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return finish;
 	}//DFS
 	/**
-	 * Visit neighbors path and select them
+	 * This private function will start at node, and do a DFS search. 
 	 * @param g - Given Graph
 	 * @param node - Start node discovering
-	 * @param finish - All the Discoverd Vertices
+	 * @param finish - a Queue with the discovered node in a decreasing finishing time.
 	 */
 	private void dfsVisit(DGraph g,int node, Queue<Integer> finish){
 		HashMap<Integer, edge_data> neighbors=g.get_Edge_Hash().get(node);
@@ -231,7 +242,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	public static DGraph transpose(DGraph g) {
 		//create a new graph with the same nodes but a new HashMap of edges
 		DGraph trans=new DGraph(g.get_Node_Hash(),new HashMap<Integer, HashMap<Integer,edge_data>>());
-		
+
 		for(Integer s : g.get_Edge_Hash().keySet()) {
 			HashMap<Integer,edge_data> src=g.get_Edge_Hash().get(s);
 			for(Integer d : src.keySet()) {
@@ -242,7 +253,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//while
 
 		return trans;
-	}
+	}//transpose
 
 	/**
 	 * returns the length of the shortest path between src to dest
@@ -256,7 +267,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			throw new RuntimeException("ERR: One of the nodes aren't exist!");
 		else if(src==dest)//If they are the same vertices
 			return 0;
-		
+
 		else//We need to find the path if it's exist by Dijkstra Algo
 		{
 			Dijkstra(src,dest);
@@ -458,7 +469,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 				this.Graph.getNode(dstKey).setWeight(minValue+edgeWeight);
 			}//if
 		}//for
-}//updateNeighbors
+	}//updateNeighbors
 
 	/** 
 	 * Set all the weight nodes graph to infinity.
@@ -505,7 +516,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			return this.Graph.equals(((Graph_Algo) a).getGraph());
 		return false;
 	}//equals
-	
+
 	/**
 	 * Getters:
 	 * @return

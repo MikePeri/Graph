@@ -10,7 +10,7 @@ import utils.Point3D;
 public class Main
 {
 
-	public static void main(String[] args) 
+	public static void main(String[] args) throws InterruptedException 
 	{
 		
 		DGraph EXPECTED=new DGraph();
@@ -61,16 +61,20 @@ public class Main
 		
 		//Graph_GUI window = new Graph_GUI(g.getGraph());
 		
-		Graph_GUI window = new Graph_GUI();
+		Graph_GUI window = new Graph_GUI(EXPECTED);
 		//Graph_GUI window2 = new Graph_GUI(g.getGraph());
 //		Graph_GUI window2 = new Graph_GUI();
 		
+		
+		
+		
 		EXPECTED.connect(4, 0, 4);
 		EXPECTED.connect(1, 0, 7);
+
 		EXPECTED.connect(7, 4, 6);
 		EXPECTED.connect(6, 7, 1);
 		
-		
+
 		//g.save("saveTest.txt");
 		//g2.init("saveTest.txt");
 		//Graph_GUI window2 = new Graph_GUI();

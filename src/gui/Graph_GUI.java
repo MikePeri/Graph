@@ -39,7 +39,7 @@ import utils.Range;
  * 
  * If you initialize an empty graph, the default range will by -1<x<1 and -1<y<1.
  * 
- * @author Ilana
+ * @author Ilana & Michael
  *
  */
 
@@ -51,7 +51,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	private Range rx;
 	private Range ry;
 	private Integer mc;
-
 	//this variable is to decide whether to add node by clicking or not:
 	private boolean state;
 

@@ -142,8 +142,8 @@ class Graph_AlgoTest {
 		expected.add(this.EXPECTED.getNode(1));
 		expected.add(this.EXPECTED.getNode(0));
 		expected.add(this.EXPECTED.getNode(2));
-		//System.out.println(actual.toString());
-		//System.out.println(expected.toString());
+//		System.out.println(actual.toString());
+//		System.out.println(expected.toString());
 		assertEquals(expected, actual,"ERR:Failing to TSP");
 	}
 
