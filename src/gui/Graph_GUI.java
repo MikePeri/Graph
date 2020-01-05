@@ -151,6 +151,8 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		double proportionY=(0-height)/ry.get_length();
 
 		g.setColor(Color.BLACK);
+		
+		g.fillOval(width/2, height/2, 5, 5);
 
 		Iterator<Integer> it = graph.get_Node_Hash().keySet().iterator();
 		while (it.hasNext()) {
@@ -314,6 +316,9 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 				if(g.getClassNotFoundException())
 					JOptionPane.showMessageDialog(this,"Sorry but we can't find this file.");
 			System.out.println("open from file action");
+			graph=g.getGraph();
+			rx=rangeX();
+			ry=rangeY();
 			repaint();
 		}//else if
 		else if(str.equals("Is Connected?"))

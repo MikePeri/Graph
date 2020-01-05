@@ -58,32 +58,28 @@ public class Main
 		
 		
 		
-<<<<<<< HEAD
 		
 		//Graph_GUI window = new Graph_GUI(g.getGraph());
 		
-=======
-		Graph_GUI window = new Graph_GUI(g2.getGraph());
-		Graph_GUI window2 = new Graph_GUI(g.getGraph());
+		Graph_GUI window = new Graph_GUI();
+		//Graph_GUI window2 = new Graph_GUI(g.getGraph());
 //		Graph_GUI window2 = new Graph_GUI();
->>>>>>> 29c4ef1e921e11c1ec216e653742a7f758030e08
 		
 		EXPECTED.connect(4, 0, 4);
 		EXPECTED.connect(1, 0, 7);
 		EXPECTED.connect(7, 4, 6);
 		EXPECTED.connect(6, 7, 1);
-		g.save("saveTest.txt");
-		g2.init("saveTest.txt");
-		Graph_GUI window2 = new Graph_GUI();
 		
-<<<<<<< HEAD
-		window2.setVisible(true);
+		
+		//g.save("saveTest.txt");
+		//g2.init("saveTest.txt");
+		//Graph_GUI window2 = new Graph_GUI();
+		
+		//window2.setVisible(true);
 		//window.setVisible(true);
-=======
 
 		window.setVisible(true);
-		window2.setVisible(true);
->>>>>>> 29c4ef1e921e11c1ec216e653742a7f758030e08
+		//window2.setVisible(true);
 	}
 
 }
