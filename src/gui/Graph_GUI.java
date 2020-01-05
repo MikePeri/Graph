@@ -507,17 +507,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 
 
-	@Override
-	public void run() {
-		initGUI();
-		while(true)
-		{
-			if(graph.getMC()!=this.mc) {
-				this.mc=graph.getMC();
-				repaint();
-			}//if
-		}//while
-	}//run
 
 	@Override
 	public void mouseReleased(MouseEvent e) {

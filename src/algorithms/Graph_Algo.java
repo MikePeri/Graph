@@ -133,10 +133,9 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 */
 	public boolean isConnected() {
 
-		if(Graph.get_Node_Hash().size()==1)
+		if(Graph.get_Node_Hash().size()==1 || Graph.get_Node_Hash().size()==0)
 			return true;
-		else if(Graph.get_Node_Hash().size()==0)
-			return false;
+		
 
 		DGraph transpose = transpose(Graph);
 		return (isConnectedHelp(this.Graph) && isConnectedHelp(transpose));
