@@ -37,53 +37,34 @@ public class Main
 		
 		
 		EXPECTED.connect(2, 0, 1);
+		Thread.sleep(1000);
 		EXPECTED.connect(1, 2, 2);
+		Thread.sleep(1000);
 		EXPECTED.connect(1, 3, 3);
+		Thread.sleep(1000);
 		EXPECTED.connect(0, 1, 4);
+		Thread.sleep(1000);
 		EXPECTED.connect(5, 6, 2);
+		Thread.sleep(1000);
 		EXPECTED.connect(3, 0, 4);
 		
 		
 		Graph_Algo g=new Graph_Algo(EXPECTED);
-		
-		
-		
-		
-		
-		
-				
+					
 		Graph_Algo g2=new Graph_Algo();
 		
-		
-		
-		
-		
-		
-		//Graph_GUI window = new Graph_GUI(g.getGraph());
-		
+
 		Graph_GUI window = new Graph_GUI(EXPECTED);
-		//Graph_GUI window2 = new Graph_GUI(g.getGraph());
-//		Graph_GUI window2 = new Graph_GUI();
-		
-		
-		
-		
+		Thread.sleep(1000);
 		EXPECTED.connect(4, 0, 4);
+		Thread.sleep(1000);
 		EXPECTED.connect(1, 0, 7);
-
+		Thread.sleep(1000);
 		EXPECTED.connect(7, 4, 6);
+		Thread.sleep(1000);
 		EXPECTED.connect(6, 7, 1);
-		
-
-		//g.save("saveTest.txt");
-		//g2.init("saveTest.txt");
-		//Graph_GUI window2 = new Graph_GUI();
-		
-		//window2.setVisible(true);
-		//window.setVisible(true);
 
 		window.setVisible(true);
-		//window2.setVisible(true);
 	}
 
 }
