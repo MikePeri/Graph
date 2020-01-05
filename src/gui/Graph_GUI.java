@@ -28,17 +28,17 @@ import utils.Point3D;
 import utils.Range;
 
 /**
- * This class represents a simple gui for the class DGraph and Graph_Algo. 
- * It uses a simple graphics model that allows you to create graphs in a window on your computer from the scratch, 
+ * This class represents a simple gui for the class DGraph and Graph_Algo.
+ * It uses a simple graphics model that allows you to create graphs in a window on your computer from the scratch,
  * or see an existing one on the screen.
  * It also allows you to save the graph to a file,
  * execute the algorithms: isConnected, ShortestPath and TSP, which are in the package "algorithms",
  * You can either add a node by clicking on "Actions" -> "add a node", and then placing it on the screen
  * or by clicking on "add a node by coordinated" in the Actions menu, and entering the desired place.
  * You can also connect two nodes in the Actions menu.
- * 
+ *
  * If you initialize an empty graph, the default range will by -1<x<1 and -1<y<1.
- * 
+ *
  * @author Ilana & Michael
  *
  */
@@ -147,7 +147,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 
 	/**
-	 * This function will draw the DGraph on the window. Every time a change occurred, 
+	 * This function will draw the DGraph on the window. Every time a change occurred,
 	 * this function will be called and repaint the graph.
 	 */
 	public void paint(Graphics g){
@@ -535,5 +535,18 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	public void mouseExited(MouseEvent e) {
 		//System.out.println("mouseExited");
 	}
-}
 
+	@Override
+	public void run() {
+		initGUI();
+		while(true)
+		{
+			synchronized (this) {
+				if(graph.getMC()!=this.mc) {
+					this.mc=graph.getMC();
+					repaint();
+				}//if
+			}
+		}//while
+	}//run
+}

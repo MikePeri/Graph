@@ -10,7 +10,7 @@ import utils.Point3D;
 public class Main
 {
 
-	public static void main(String[] args) throws InterruptedException 
+	public static void main(String[] args) throws InterruptedException
 	{
 		//create points
 		DGraph EXPECTED=new DGraph();
@@ -32,23 +32,30 @@ public class Main
 		EXPECTED.addNode(new NodeData(5, p5));
 		EXPECTED.addNode(new NodeData(6, p6));
 		EXPECTED.addNode(new NodeData(7, p7));
-		
+
 		//add edges
 		EXPECTED.connect(2, 0, 1);
+		Thread.sleep(1000);
 		EXPECTED.connect(1, 2, 2);
+		Thread.sleep(1000);
 		EXPECTED.connect(1, 3, 3);
+		Thread.sleep(1000);
 		EXPECTED.connect(0, 1, 4);
+		Thread.sleep(1000);
 		EXPECTED.connect(5, 6, 2);
+		Thread.sleep(1000);
 		EXPECTED.connect(3, 0, 4);
 		EXPECTED.connect(4, 0, 4);
+		Thread.sleep(1000);
 		EXPECTED.connect(1, 0, 7);
 		EXPECTED.connect(7, 4, 6);
+		Thread.sleep(1000);
 		EXPECTED.connect(6, 7, 1);
-		
+
 		//call the gui function
 		Graph_GUI window = new Graph_GUI(EXPECTED);
 		window.setVisible(true);
-		
+
 	}
 
 }
