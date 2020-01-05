@@ -133,8 +133,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 */
 	public boolean isConnected() {
 
-		if(Graph.get_Node_Hash().size()==1 || Graph.get_Node_Hash().size()==0)
+		if(Graph.get_Node_Hash().size()==1)
 			return true;
+		else if(Graph.get_Node_Hash().size()==0)
+			return false;
 
 		DGraph transpose = transpose(Graph);
 		return (isConnectedHelp(this.Graph) && isConnectedHelp(transpose));
@@ -150,7 +152,6 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 		Queue<Integer> finished=DFS(this.Graph);
 		int count=0;
-		//Queue<Integer> forDFS=new LinkedList<>();
 
 		//initialize
 		for(Integer node : g.get_Node_Hash().keySet()) {
@@ -161,11 +162,11 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		while(finished.peek()!=null) {
 			int node=finished.poll();
 			count++;
-			
+
 			//if the node is white
 			if(g.getNode(node).getTag()==1) {
 				dfsVisit(g,node,new LinkedList<>());
-				
+
 				//remove all the nodes that are not white.
 				while(finished.peek()!=null && g.get_Node_Hash().get(finished.peek()).getTag()!=1)
 					finished.remove();
@@ -190,10 +191,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		for(Integer node : g.get_Node_Hash().keySet()) {
 			g.getNode(node).setTag(1);
 		}//while
-		
+
 		//check all the nodes: if they are still white, do dfsVisit
 		for(Integer node : g.get_Node_Hash().keySet()) {
-			
+
 			//if the node is white
 			if(g.getNode(node).getTag()==1)
 				dfsVisit(g,node,finish);
@@ -316,7 +317,6 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	 */
 	public List<node_data> shortestPath(int src, int dest) {
 		double num=shortestPathDist(src, dest);
-		//System.out.println("("+src+","+dest+")= "+num);
 		List<node_data> path=new ArrayList<node_data>();
 		if(this.Graph.getNode(dest).getWeight()==Integer.MAX_VALUE)
 			return path;
@@ -330,7 +330,6 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//while
 		if(path.size()>0) {
 			ArrayList<node_data> short_path=Reverse(path);
-			//printForIlana(short_path);
 			return short_path;
 		}//if
 		System.out.println("There isn't such a path");
@@ -402,12 +401,9 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			for (int j = 0; j < num; j++) {
 				List<node_data> sp=new ArrayList<node_data>();
 				List<Integer> spKeys=new ArrayList<Integer>();
-				//System.out.println("Target List: ");
-				//System.out.println(targets);
 				for (int i = 1; i < targets.size(); i++) {
 					List<node_data> path=shortestPath(targets.get(i-1), targets.get(i));
 					len+=this.Graph.get_Node_Hash().get(targets.get(i)).getWeight();
-					//System.out.println("This path: "+path);
 					if(path.isEmpty())//If there isnt shortest path next shuffle
 						break;
 					if(i==1)
@@ -415,10 +411,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 					else
 						sp.addAll(path.subList(1,path.size()));
 					spKeys.addAll(NodeToKeyConverter(path));
-					//System.out.println("Whole path: "+sp);
 					if (spKeys.containsAll(targets))
 					{
-						printPath(sp,len);
 						return sp;
 					}//if
 				}//for
@@ -429,6 +423,9 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//else
 	}//TSP
 
+	/**
+	 * Return a deep copy of this graph.
+	 */
 	@Override
 	public graph copy() {
 		graph g= new DGraph(this.Graph);
@@ -510,7 +507,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			System.out.print("->"+node.getKey());
 		}//for
 		System.out.println("\t Path len: "+len);
-	}//printForIlana
+	}//printPath
+	
 	/**
 	 * Equals Function
 	 */

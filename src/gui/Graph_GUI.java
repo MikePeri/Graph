@@ -54,6 +54,9 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	//this variable is to decide whether to add node by clicking or not:
 	private boolean state;
 
+	/**
+	 * Constructors
+	 */
 	public Graph_GUI(){
 		this(new DGraph());
 	}
@@ -71,8 +74,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		t.start();
 	}//Graph_GUI
 
-
+	/**
+	 * Initialize the gui window.
+	 */
 	private void initGUI() {
+
 		//declare all the options
 		Menu file, options, add;
 		MenuItem save,open, isConnected, ShortestPath, TSP, AddLine, AddPoint, AddPointCo;
@@ -89,7 +95,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		//what will be the menu items
 		save=new MenuItem("Save to file");
 		save.addActionListener(this);
-		
+
 		open=new MenuItem("open from file");
 		open.addActionListener(this);
 
@@ -139,18 +145,18 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 	}//initGUI
 
-	
 
+	/**
+	 * This function will draw the DGraph on the window. Every time a change occurred, 
+	 * this function will be called and repaint the graph.
+	 */
 	public void paint(Graphics g){
 		super.paint(g);
-		
-		
-
 		double proportionX=width/rx.get_length();
 		double proportionY=(0-height)/ry.get_length();
 
 		g.setColor(Color.BLACK);
-		
+
 		g.fillOval(width/2, height/2, 5, 5);
 
 		Iterator<Integer> it = graph.get_Node_Hash().keySet().iterator();
@@ -180,7 +186,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 					if(graph.get_Edge_Hash().get(v).get(u).getInfo()!=null &&
 							graph.get_Edge_Hash().get(v).get(u).getInfo().equals("Selected")) {
 						g.setColor(Color.RED);
-						
+
 					}//if
 
 					g.drawLine(x0, y0, x1, y1);
@@ -220,7 +226,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	private Range rangeX() {
 		double max=Integer.MIN_VALUE;
 		double min=Integer.MAX_VALUE;
-		
+
 		//default range for an empty graph
 		if(graph.get_Node_Hash().isEmpty()) {
 			Range rx=new Range(-1,1);
@@ -250,7 +256,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		Range rx=new Range(min,max);
 		return rx;
 	}//RangeX
-	
+
 	/**
 	 * Finding the limits of x coordinate for Screen creator
 	 * @return
@@ -258,13 +264,13 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	private Range rangeY() {
 		double max=Integer.MIN_VALUE;
 		double min=Integer.MAX_VALUE;
-		
+
 		//default range for an empty graph
 		if(graph.get_Node_Hash().isEmpty()) {
 			Range rx=new Range(-1,1);
 			return rx;
 		}
-		
+
 		for(Integer node : graph.get_Node_Hash().keySet()) {
 			if(graph.get_Node_Hash().get(node).getLocation().y()>max)
 				max=graph.get_Node_Hash().get(node).getLocation().y();
@@ -291,7 +297,9 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 
 
 
-
+	/**
+	 * Choose which menu bar was selected, and execute the selected command.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -300,20 +308,20 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		if(str.equals("Save to file")) {
 			String s1=JOptionPane.showInputDialog(this, "Notice that the context is: name.txt\nPlease write down the name of the file that you want to save");
 			Graph_Algo g=new Graph_Algo(graph);
-				g.save(s1);
-				if(g.getIOException())
-					JOptionPane.showMessageDialog(this,"Sorry, can't save this file.");
+			g.save(s1);
+			if(g.getIOException())
+				JOptionPane.showMessageDialog(this,"Sorry, can't save this file.");
 			System.out.println("Save to file action");
 		}//if
 		else if(str.equals("open from file"))
 		{
 			String s1=JOptionPane.showInputDialog(this, "Notice that the context is: name.txt\nWhat the name of the file that you want to open?");
 			Graph_Algo g=new Graph_Algo(graph);
-				g.init(s1);
-				if(g.getIOException())
-					JOptionPane.showMessageDialog(this,"Sorry but we can't read this file.");
-				if(g.getClassNotFoundException())
-					JOptionPane.showMessageDialog(this,"Sorry but we can't find this file.");
+			g.init(s1);
+			if(g.getIOException())
+				JOptionPane.showMessageDialog(this,"Sorry but we can't read this file.");
+			if(g.getClassNotFoundException())
+				JOptionPane.showMessageDialog(this,"Sorry but we can't find this file.");
 			System.out.println("open from file action");
 			graph=g.getGraph();
 			rx=rangeX();
@@ -352,13 +360,13 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			for (int i = 0; i < path.size()-1; i++) {
 				int u=path.get(i).getKey();
 				int v=path.get(i+1).getKey();
-				
+
 				graph.get_Edge_Hash().get(u).get(v).setInfo("Selected");
-				
+
 				if(graph.get_Edge_Hash().containsKey(v))
 					if(graph.get_Edge_Hash().get(v).containsKey(u))
 						graph.get_Edge_Hash().get(v).get(u).setInfo("Selected");
-						
+
 			}//for
 			repaint();
 
@@ -456,11 +464,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 			rx=this.rangeX();
 			ry=this.rangeY();
 			repaint();
-
-
-
-
-
 		}
 
 
@@ -488,7 +491,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 				return;
 			}
 			int id = Integer.parseInt(s);
-			
+
 			n=new NodeData(id,p);
 			try {
 				this.graph.addNode(n);
@@ -501,6 +504,20 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 		}//if
 
 	}//mousePressed
+
+
+
+	@Override
+	public void run() {
+		initGUI();
+		while(true)
+		{
+			if(graph.getMC()!=this.mc) {
+				this.mc=graph.getMC();
+				repaint();
+			}//if
+		}//while
+	}//run
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
@@ -518,16 +535,5 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener,R
 	public void mouseExited(MouseEvent e) {
 		//System.out.println("mouseExited");
 	}
-
-	@Override
-	public void run() {
-		initGUI();
-		while(true)
-		{
-			if(graph.getMC()!=this.mc) {
-				this.mc=graph.getMC();
-				repaint();
-			}//if
-		}//while
-	}//run
 }
+

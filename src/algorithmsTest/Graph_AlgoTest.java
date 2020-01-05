@@ -32,6 +32,12 @@ class Graph_AlgoTest {
 		this.EXPECTED.addNode(new NodeData(2, p2));
 		this.EXPECTED.addNode(new NodeData(3, p3));
 		this.EXPECTED.addNode(new NodeData(4, p4));
+		
+		this.EXPECTED.connect(0, 1, 1);
+		this.EXPECTED.connect(1, 2, 2);
+		this.EXPECTED.connect(2, 3, 3);
+		this.EXPECTED.connect(3, 4, 4);
+		this.EXPECTED.connect(0, 4, 4);
 
 	}
 
@@ -39,11 +45,7 @@ class Graph_AlgoTest {
 	@Test
 	void testInitGraph() {
 		graph_Factory();
-		this.EXPECTED.connect(0, 1, 1);
-		this.EXPECTED.connect(1, 2, 2);
-		this.EXPECTED.connect(2, 3, 3);
-		this.EXPECTED.connect(3, 4, 4);
-		this.EXPECTED.connect(0, 4, 4);
+		
 		this.graphAlgo= new Graph_Algo();
 		this.graphAlgo.init(EXPECTED);
 		assertEquals(EXPECTED, graphAlgo.getGraph(),"ERR:Failing saving to init and save to file correctly.");
@@ -53,11 +55,6 @@ class Graph_AlgoTest {
 	@Test
 	void testSaveAndInit() {
 		graph_Factory();
-		this.EXPECTED.connect(0, 1, 1);
-		this.EXPECTED.connect(1, 2, 2);
-		this.EXPECTED.connect(2, 3, 3);
-		this.EXPECTED.connect(3, 4, 4);
-		this.EXPECTED.connect(0, 4, 4);
 		this.graphAlgo= new Graph_Algo((DGraph) this.EXPECTED);
 		this.graphAlgo.save("saveTest.txt");
 		Graph_Algo expected=new Graph_Algo();
@@ -67,12 +64,7 @@ class Graph_AlgoTest {
 	@Test
 	void equalsTest() {
 		graph_Factory();
-		this.EXPECTED.connect(0, 1, 1);
-		this.EXPECTED.connect(1, 2, 2);
-		this.EXPECTED.connect(2, 3, 3);
-		this.EXPECTED.connect(3, 4, 4);
-		this.EXPECTED.connect(0, 4, 4);
-		this.graphAlgo= new Graph_Algo((DGraph) this.EXPECTED);
+		this.graphAlgo= new Graph_Algo(this.EXPECTED);
 		Graph_Algo g=new Graph_Algo(EXPECTED);
 		assertEquals(graphAlgo, g);
 	}//equalsTest
@@ -80,13 +72,8 @@ class Graph_AlgoTest {
 	@Test
 	void testIsConnected() {
 		graph_Factory();
-		this.EXPECTED.connect(0, 1, 1);
-		this.EXPECTED.connect(1, 2, 2);
-		this.EXPECTED.connect(2, 3, 3);
-		this.EXPECTED.connect(3, 4, 4);
-		this.EXPECTED.connect(4, 0, 4);
+		EXPECTED.connect(4, 0, 5);
 		this.graphAlgo= new Graph_Algo((DGraph) this.EXPECTED);
-
 		boolean e=this.graphAlgo.isConnected();
 		assertTrue(e,"ERR:Failed to return false when graph is not connected");
 
@@ -95,14 +82,8 @@ class Graph_AlgoTest {
 	@Test
 	void testShortestPathDist() {
 		graph_Factory();
-		//System.out.println(this.EXPECTED.get_Node_Hash().containsKey(0));
-		this.EXPECTED.connect(0, 1, 1);
-		this.EXPECTED.connect(1, 2, 2);
-		this.EXPECTED.connect(2, 3, 3);
-		this.EXPECTED.connect(3, 4, 4);
 		this.EXPECTED.connect(0, 4, 11);
 		this.graphAlgo= new Graph_Algo((DGraph) this.EXPECTED);
-		//System.out.println(this.EXPECTED.get_Edge_Hash().get(0).values());
 		double actual=this.graphAlgo.shortestPathDist(0, 4);
 		double expected=10;
 		assertEquals(expected, actual,"ERR: Failing to get length of shortest path distination. Expected: "+expected+" Actual: "+actual);
@@ -111,16 +92,10 @@ class Graph_AlgoTest {
 	@Test
 	void testShortestPath() {
 		graph_Factory();
-		this.EXPECTED.connect(0, 1, 1);
-		this.EXPECTED.connect(1, 2, 2);
-		this.EXPECTED.connect(2, 3, 3);
-		this.EXPECTED.connect(3, 4, 4);
-		this.EXPECTED.connect(0, 4, 4);
 		this.graphAlgo= new Graph_Algo((DGraph) this.EXPECTED);
 		List<node_data> expected=new ArrayList<node_data>();
 		expected.add(this.EXPECTED.get_Node_Hash().get(0));
 		expected.add(this.EXPECTED.get_Node_Hash().get(4));
-		//Need to save in lexographic way
 		List<node_data> actual=this.graphAlgo.shortestPath(0, 4);
 		assertEquals(expected, actual,"ERR: Failing to save the shortest path. Expected: "+expected+" Actual: "+actual);
 	}
@@ -139,11 +114,9 @@ class Graph_AlgoTest {
 		targets.add(2);
 		List<node_data> actual=this.graphAlgo.TSP(targets);
 		List<node_data> expected=new ArrayList<node_data>();
-		expected.add(this.EXPECTED.getNode(1));
 		expected.add(this.EXPECTED.getNode(0));
+		expected.add(this.EXPECTED.getNode(1));
 		expected.add(this.EXPECTED.getNode(2));
-//		System.out.println(actual.toString());
-//		System.out.println(expected.toString());
 		assertEquals(expected, actual,"ERR:Failing to TSP");
 	}
 

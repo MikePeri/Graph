@@ -40,8 +40,14 @@ class DGraphTest {
 		g.addNode(n3);
 		g.addNode(n4);
 		g.addNode(n5);
+		g.connect(n2.getKey(), n3.getKey(), 4);
+		g.connect(n4.getKey(), n3.getKey(), 5);
+		g.connect(n3.getKey(), n4.getKey(), 1);
+		g.connect(n1.getKey(), n5.getKey(), 5);
+		g.connect(n4.getKey(), n2.getKey(), 5);
 	}
 
+	//test for running time: 100,000 nodes and 1,000,000 edges
 	@Test
 	void testDGraphTime() {
 		DGraph graph=new DGraph();
@@ -79,10 +85,6 @@ class DGraphTest {
 
 	@Test
 	void testGetEdge() {
-		g.connect(n2.getKey(), n3.getKey(), 4);
-		g.connect(n4.getKey(), n3.getKey(), 5);
-		g.connect(n3.getKey(), n4.getKey(), 1);
-		g.connect(n1.getKey(), n5.getKey(), 5);
 		ACTUAL=g.getEdge(n2.getKey(), n3.getKey()).toString();
 		EXPECTED=new EdgeData(n2.getKey(),n3.getKey(),4).toString();
 		assertEquals(ACTUAL,EXPECTED,"ERR: GetEdge failed to compare between the same edges");
@@ -108,11 +110,7 @@ class DGraphTest {
 
 	@Test
 	void testRemoveNode() {
-		g.connect(n2.getKey(), n3.getKey(), 4);
-		g.connect(n4.getKey(), n3.getKey(), 5);
-		g.connect(n3.getKey(), n4.getKey(), 1);
-		g.connect(n1.getKey(), n5.getKey(), 5);
-		g.connect(n4.getKey(), n2.getKey(), 5);
+		
 
 		g.removeNode(n3.getKey());
 		boolean flag= true;
@@ -126,10 +124,6 @@ class DGraphTest {
 
 	@Test
 	void testRemoveEdge() {
-		g.connect(n2.getKey(), n3.getKey(), 4);
-		g.connect(n4.getKey(), n3.getKey(), 5);
-		g.connect(n3.getKey(), n4.getKey(), 1);
-		g.connect(n1.getKey(), n5.getKey(), 5);
 		g.removeEdge(21, 1);
 		boolean flag=false;
 		try {
@@ -155,28 +149,20 @@ class DGraphTest {
 
 	@Test
 	void testEdgeSize() {
-		g.connect(n2.getKey(), n3.getKey(), 4);
-		g.connect(n4.getKey(), n3.getKey(), 5);
-		g.connect(n3.getKey(), n4.getKey(), 1);
-		g.connect(n4.getKey(), n5.getKey(), 5);
 		int ACTUAL=g.edgeSize();
-		int EXPECTED=4;
+		int EXPECTED=5;
 		assertEquals(ACTUAL,EXPECTED,"ERR: falied to return the right size of edge graph");
 		g.removeNode(n4.getKey());
 		ACTUAL=g.edgeSize();
-		EXPECTED=1;
+		EXPECTED=2;
 		assertEquals(ACTUAL,EXPECTED,"ERR: falied to return the right size of edge graph");
 
 	}
 
 	@Test
 	void testGetMC() {
-		g.connect(n2.getKey(), n3.getKey(), 4);
-		g.connect(n4.getKey(), n3.getKey(), 5);
-		g.connect(n3.getKey(), n4.getKey(), 1);
-		g.connect(n1.getKey(), n5.getKey(), 5);
 		int ACTUAL=g.getMC();
-		int EXPECTED=9;
+		int EXPECTED=11;
 		assertEquals(ACTUAL,EXPECTED,"ERR: falied to return the MC");
 	}
 
