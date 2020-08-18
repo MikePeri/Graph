@@ -1,4 +1,4 @@
-# The maze of waze
+# Graph Gui
 
 This project's main purpose is to create a directed graph with a road map in mind - resembling the waze algorithm.
 
